@@ -111,9 +111,9 @@ public class WorldRequest {
 <details><summary><h2>Resources</h2></summary>
 <p>
 
-### RSResourceCallable and RSResourceWorker
+### RSResource and RSResourceWorker
 
-The *ResourceCallable* class is meant to handle any file loading/saving or large calculations you might want done off the main thread. This can include loading account files, caches, xteas, or maybe creating dynamic maps/instances for your server. The ```queue()``` method in the *ResourceCallable* class is used to queue the resource to the *RSResourceWorker* class for loading. This is equivalent to calling ```RSFramework.queueResource(RSResourceCallabe)``` Below is show an example of the *RSResourceCallable* in action...
+The *Resource* class is meant to handle any file loading/saving or large calculations you might want done off the main thread. This can include loading account files, caches, xteas, or maybe creating dynamic maps/instances for your server. The ```queue()``` method in the *Resource* class is used to queue the resource to the *RSResourceWorker* class for loading. This is equivalent to calling ```RSFramework.queueResource(RSResource)``` Below is show an example of the *RSResource* in action...
 ```java
 @RequiredArgsConstructor
 public class AccountResource implements RSResource<Account> {
