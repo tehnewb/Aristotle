@@ -1,7 +1,17 @@
-![aristotle](logo.png)
+<p align="center">
+  <img src="Logo.png">
+</p>
 
-Aristotle is an open-source rs framework meant to increase RSPS server productivity and efficiency. This project uses [gradle](https://gradle.org/) for building, and for the dependencies, you can take a look at the build.gradle file in the root of this project to see what's being used.
 
+<p align="center">
+Aristotle is an open-source rs framework meant to increase RSPS server productivity and efficiency. This project uses <a href="https://gradle.org/">gradle</a> for building, and for the dependencies, you can take a look at the build.gradle file in the root of this project to see what's being used.
+</p>
+<br>
+<br>
+<p align="center">Click on any of the dropdown arrows below to learn about RSFramework</p>
+
+<details><summary><h2>Starting</h2></summary>
+<p>
 
 ### Starting the framework from your server
 ```java
@@ -16,8 +26,8 @@ Aristotle is an open-source rs framework meant to increase RSPS server productiv
    */
   System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "DEBUG");
 ```
-<br><br>
-<p align="center">Click on any of the dropdown arrows below to learn about RSFramework</p>
+</p>
+</details>
 
 <details><summary><h2>Network</h2></summary>
 <p>
