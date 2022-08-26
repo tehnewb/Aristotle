@@ -223,3 +223,21 @@ RSFramework.post(event);
 
 </p>
 </details>
+
+
+<details><summary><h2>Plugin</h2></summary>
+<p>
+
+### Loading Plugins
+
+*Plugins allow for a modular-type project where you can keep content separated from the core project.*
+
+Jar files are the only supported way for plugins and can be loaded as such...
+```java
+	File dir = new File(ClassLoader.getSystemResource("MyPlugin.jar").toURI());
+	RSFramework.loadPlugin(dir);
+```
+
+</p>
+</details>
+
