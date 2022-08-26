@@ -1,0 +1,54 @@
+
+plugins {
+	id 'java'
+	id 'eclipse'
+}
+
+sourceCompatibility = 17
+ 
+repositories {
+    mavenCentral()
+}
+ 
+dependencies {
+	// https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+	implementation 'org.slf4j:slf4j-api:1.7.36'
+	implementation 'org.slf4j:slf4j-simple:1.7.36'
+	
+	// https://mvnrepository.com/artifact/com.google.guava/guava
+	implementation 'com.google.guava:guava:31.1-jre'
+	
+	// https://mvnrepository.com/artifact/com.google.code.gson/gson
+	implementation 'com.google.code.gson:gson:2.9.1'	
+	
+	// https://mvnrepository.com/artifact/io.netty/netty-all
+	implementation 'io.netty:netty-all:4.1.36.Final'
+
+	compileOnly 'org.projectlombok:lombok:1.18.24'
+	annotationProcessor 'org.projectlombok:lombok:1.18.24'
+}
+
+configurations.all {
+    exclude module: 'slf4j-log4j12'
+}
+
+sourceSets {
+	main.java.srcDirs = ['src/main']
+    main.resources.srcDirs = ['resources']
+    
+    test.java.srcDirs = ['src/test']
+    test.resources.srcDirs = ['resources']
+}
+
+jar {
+    doFirst {
+        from { 
+        	configurations {
+    			exclude 'slf4j-log4j12'
+        		runtimeClasspath.collect {
+        			it.isDirectory() ? it : zipTree(it)
+        		}
+        	} 
+        }
+    }
+}
