@@ -41,13 +41,14 @@ public class RSMap {
 	}
 
 	/**
-	 * Returns the chunk surrounding the given absolute coordinates. This value will
-	 * return null if the chunk has not been set.
+	 * Returns the chunk surrounding the given absolute coordinates. If a chunk with
+	 * valid coordinates has not already been set to the region, it will
+	 * automatically be created and stored so as to return a non-null chunk.
 	 * 
 	 * @param absoluteX the absolute x coordinate
 	 * @param absoluteY the absolute y coordinate
 	 * @param absoluteZ the absolute z coordinate
-	 * @return the chunk at the given coordinates; possibly null
+	 * @return the chunk at the given coordinates
 	 */
 	public RSChunk getChunk(int absoluteX, int absoluteY, int absoluteZ) {
 		RSLocation location = new RSLocation(absoluteX, absoluteY, absoluteZ);

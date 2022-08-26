@@ -1,4 +1,4 @@
-package com.framework;
+package com.framework.event;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,8 +7,8 @@ import java.lang.annotation.Target;
 
 /**
  * The {@code RSController} is a class that functions under the
- * {@code RSFramework} and will be automatically loaded when the program is
- * started.
+ * {@code RSFramework} and will load any classes with this annotation type
+ * automatically.
  * 
  * @author Albert Beaupre
  */

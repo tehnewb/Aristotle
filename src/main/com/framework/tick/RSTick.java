@@ -42,10 +42,9 @@ public abstract class RSTick {
 	 * also re-adding it to the RSTickWorker.
 	 */
 	public final void restart() {
+		this.occurrences = 0;
 		this.stopPredicate = p -> false;
 		this.gap = Instant.now().plusMillis(delay);
-
-		start();
 	}
 
 	/**

@@ -33,7 +33,7 @@ public class RSNetworkSession {
 	 * 
 	 * @param object the object to write
 	 */
-	public void writeAndFlush(@NonNull Object object) {
+	public void write(@NonNull Object object) {
 		channel.writeAndFlush(object);
 	}
 

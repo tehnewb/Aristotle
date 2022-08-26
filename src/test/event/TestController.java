@@ -1,6 +1,6 @@
 package event;
 
-import com.framework.RSController;
+import com.framework.event.RSController;
 import com.framework.event.RSEventMethod;
 
 @RSController

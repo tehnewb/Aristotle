@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
+import com.framework.event.RSController;
 import com.framework.event.RSEventBus;
 import com.framework.event.RSEventInvoker;
 import com.framework.event.RSEventMethod;
@@ -28,7 +29,6 @@ import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.reflect.ClassPath;
 import com.google.common.reflect.ClassPath.ClassInfo;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -38,13 +38,13 @@ import lombok.extern.slf4j.Slf4j;
  * Any class using the RSController will be loaded into the RSFramework.
  * 
  * @author Albert Beaupre
- * @see com.framework.RSController
+ * @see com.framework.event.RSController
  */
 @Slf4j
 public final class RSFramework {
 
-	private static final ScheduledExecutorService TickScheduler = Executors.newSingleThreadScheduledExecutor(new ThreadFactoryBuilder().setNameFormat("Tick-Thread").build());
-	private static final ExecutorService ResourceService = Executors.newSingleThreadExecutor(new ThreadFactoryBuilder().setNameFormat("Resrource-Worker-%d").build());
+	private static final ScheduledExecutorService TickScheduler = Executors.newSingleThreadScheduledExecutor(d -> new Thread(d, "Tick-Thread"));
+	private static final ExecutorService ResourceService = Executors.newSingleThreadExecutor(d -> new Thread(d, "Resrource-Worker-%d"));
 
 	private static final RSResourceWorker ResourceWorker = new RSResourceWorker();
 	private static final RSTickWorker TickWorker = new RSTickWorker();
