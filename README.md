@@ -15,6 +15,8 @@ Open-Source RS Server Framework meant to increase RSPS server productivity and e
    */
   System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "DEBUG");
 ```
+<br><br>
+<p align="center">Click on any of the dropdown arrows below to learn about RSFramework</p>
 
 <details><summary><h2>Network</h2></summary>
 <p>
