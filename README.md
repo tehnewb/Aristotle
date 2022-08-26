@@ -1,5 +1,6 @@
-# RSServer-Framework</h1>
-Open-Source RS Server Framework meant to increase RSPS server productivity and efficiency. This project uses [gradle](https://gradle.org/) for building, and for the dependencies, you can take a look at the build.gradle file in the root of this project to see what's being used.
+![aristotle](logo.png)
+
+Aristotle is an open-source rs framework meant to increase RSPS server productivity and efficiency. This project uses [gradle](https://gradle.org/) for building, and for the dependencies, you can take a look at the build.gradle file in the root of this project to see what's being used.
 
 
 ### Starting the framework from your server
