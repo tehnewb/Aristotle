@@ -1,0 +1,73 @@
+package versions.ver637.map;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class LocaleData {
+	private String[] options = new String[5];
+	private int[][] anIntArrayArray3916;
+	private int[] anIntArray3908;
+	private int[] childrenIds;
+	private int[] anIntArray3833;
+	private int[] anIntArray3859;
+	private int[] anIntArray3869;
+	private short[] originalColors;
+	private short[] modifiedColors;
+	private short[] aShortArray3919;
+	private short[] aShortArray3920;
+	private byte[] aByteArray3858;
+	private byte[] aByteArray3899;
+	private String name = "null";
+	private int configFileID = -1;
+	private int configID = -1;
+	private int actionType = 2;
+	private int sizeX = 1;
+	private int sizeY = 1;
+	private int ID;
+	private int walkBitFlag;
+	private int secondInt = -1;
+	private int thirdInt;
+	private int anInt3913 = -1;
+	private int anInt3921;
+	private int anInt3846;
+	private int anInt3850;
+	private int anInt3851 = -1;
+	private int anInt3855 = -1;
+	private int anInt3857 = -1;
+	private int anInt3860 = -1;
+	private int anInt3865 = 255;
+	private int anInt3876 = -1;
+	private int anInt3881;
+	private int anInt3892 = 64;
+	private int anInt3896;
+	private int anInt3900;
+	private int anInt3904;
+	private int anInt3905;
+	private int anInt3832;
+	private int anInt3835;
+	private int anInt3836;
+	private int anInt3838 = -1;
+	private int anInt3842;
+	private int anInt3843;
+	private int anInt3844 = -1;
+	private byte aByte3912;
+	private boolean blockRangeFlag;
+	private boolean solid;
+	private boolean aBoolean3839;
+	private boolean aBoolean3845;
+	private boolean secondBool;
+	private boolean aBoolean3853;
+	private boolean aBoolean3866;
+	private boolean aBoolean3867;
+	private boolean aBoolean3870;
+	private boolean aBoolean3872 = true;
+	private boolean aBoolean3873;
+	private boolean aBoolean3891;
+	private boolean aBoolean3894;
+	private boolean aBoolean3895;
+	private boolean aBoolean3906;
+	private boolean aBoolean3923;
+	private boolean aBoolean3924;
+}

@@ -15,13 +15,11 @@ public final class RSTickWorker implements Runnable {
 
 	@Override
 	public void run() {
-		int count = 0;
 		for (int tickIndex = 0; tickIndex < ticks.length; tickIndex++) {
 			RSTick tick = this.ticks[tickIndex];
 
 			if (tick == null)
 				continue;
-			count++;
 
 			tick.update();
 
@@ -29,7 +27,6 @@ public final class RSTickWorker implements Runnable {
 				this.ticks[tickIndex] = null;
 			}
 		}
-		System.out.println("TICKS RUNNING: " + count);
 	}
 
 	/**

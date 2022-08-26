@@ -10,7 +10,10 @@ repositories {
     mavenCentral()
 }
  
-dependencies {
+dependencies {	
+	// https://github.com/Displee/rs-cache-library
+	implementation 'com.displee:rs-cache-library:6.9-RC2'
+	
 	// https://mvnrepository.com/artifact/org.slf4j/slf4j-api
 	implementation 'org.slf4j:slf4j-api:1.7.36'
 	implementation 'org.slf4j:slf4j-simple:1.7.36'

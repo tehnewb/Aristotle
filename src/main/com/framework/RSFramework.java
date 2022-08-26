@@ -44,7 +44,7 @@ import lombok.extern.slf4j.Slf4j;
 public final class RSFramework {
 
 	private static final ScheduledExecutorService TickScheduler = Executors.newSingleThreadScheduledExecutor(d -> new Thread(d, "Tick-Thread"));
-	private static final ExecutorService ResourceService = Executors.newSingleThreadExecutor(d -> new Thread(d, "Resrource-Worker-%d"));
+	private static final ExecutorService ResourceService = Executors.newSingleThreadExecutor(d -> new Thread(d, "Resrource-Worker"));
 
 	private static final RSResourceWorker ResourceWorker = new RSResourceWorker();
 	private static final RSTickWorker TickWorker = new RSTickWorker();
