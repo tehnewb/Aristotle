@@ -159,8 +159,7 @@ public class PlayerModel extends UpdateModel {
 	}
 
 	@Override
-	public void reset() {
-	}
+	public void reset() {}
 
 	/**
 	 * Returns an array of local players.

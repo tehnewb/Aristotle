@@ -4,6 +4,7 @@ import com.framework.map.RSDirection;
 import com.framework.map.RSLocation;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
@@ -19,12 +20,19 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true)
 public class RSRouteStep {
 
+	@NonNull
 	private final RSDirection direction;
+
+	@NonNull
 	private final RSLocation location;
 
 	@Override
 	public String toString() {
 		return "RSRouteStep[direction=%s, location=%s]".formatted(direction, location);
+	}
+
+	public boolean isValid() {
+		return !direction.equals(RSDirection.None);
 	}
 
 }

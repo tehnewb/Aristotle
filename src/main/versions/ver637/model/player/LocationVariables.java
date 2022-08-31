@@ -53,30 +53,21 @@ public class LocationVariables {
 	public static void processRoute(Player player) {
 		LocationVariables variables = player.getAccount().getLocationVariables();
 		RSRoute route = variables.getRoute();
-		if (!route.isEmpty()) {
-			RSRouteStep firstStep = route.next();
-
-			if (firstStep != null) {
-				if (!firstStep.location().equals(player.getLocation())) {
-
-					if (variables.isRunning() && !route.isEmpty()) {
-						RSRouteStep secondStep = route.next();
-						if (secondStep != null) {
-
-							player.setLocation(secondStep.location());
-							player.getModel().registerFlag(new MovementFlag(firstStep, secondStep, variables.isRunning()));
-						}
-					} else {
-						player.setLocation(firstStep.location());
-						player.getModel().registerFlag(new MovementFlag(firstStep, null, variables.isRunning()));
-					}
-				}
-			}
-		}
-		if (route.isEmpty() && !route.failed()) {
+		if (route.reachedLastCheckpoint() || (route.isEmpty() && !route.failed())) {
 			route.reachRequest().accept(route);
 
 			variables.setRoute(EmptyRoute);
+		}
+		if (route.hasNext()) {
+			RSRouteStep firstStep = route.next();
+			RSRouteStep secondStep = null;
+			if (firstStep.isValid()) {
+				if (variables.isRunning() && route.hasNext())
+					secondStep = route.next();
+
+				player.setLocation(secondStep == null ? firstStep.location() : secondStep.location());
+				player.getModel().registerFlag(new MovementFlag(firstStep, secondStep, variables.isRunning()));
+			}
 		}
 	}
 

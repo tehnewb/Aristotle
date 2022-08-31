@@ -1,7 +1,7 @@
 package versions.ver637.network.coders.handlers;
 
 import com.framework.map.RSLocation;
-import com.framework.map.path.RSPathFinderBuilder;
+import com.framework.map.path.RSRouteBuilder;
 import com.framework.network.RSFrame;
 import com.google.common.primitives.Ints;
 
@@ -13,7 +13,7 @@ import versions.ver637.model.player.Player;
 import versions.ver637.network.coders.FrameHandler;
 
 @Slf4j
-public class LocaleHandler implements FrameHandler {
+public class GameObjectHandler implements FrameHandler {
 
 	@Override
 	public void handleFrame(Player player, RSFrame frame) {
@@ -64,7 +64,7 @@ public class LocaleHandler implements FrameHandler {
 			return;
 		}
 
-		RSPathFinderBuilder builder = new RSPathFinderBuilder();
+		RSRouteBuilder builder = new RSRouteBuilder();
 		builder.startingAt(player.getLocation());
 		builder.endingAt(location);
 		builder.target(locale);
@@ -74,7 +74,6 @@ public class LocaleHandler implements FrameHandler {
 		builder.objectShape(locale.getType());
 		builder.accessBitMask(locale.getAccessFlag());
 		builder.reachRequest(new GameObjectReachRequest(player, locale.getData().getOptions()[index]));
-
 		player.getAccount().getLocationVariables().setRunning(running);
 		player.getAccount().getLocationVariables().setRoute(builder.findPath());
 	}

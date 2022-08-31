@@ -1,7 +1,7 @@
 package versions.ver637.network.coders.handlers;
 
 import com.framework.map.RSLocation;
-import com.framework.map.path.RSPathFinderBuilder;
+import com.framework.map.path.RSRouteBuilder;
 import com.framework.map.path.RSRoute;
 import com.framework.network.RSFrame;
 
@@ -16,7 +16,7 @@ public class WalkRequestHandler implements FrameHandler {
 		int y = frame.readShort();
 
 		RSLocation destination = new RSLocation(x, y, player.getLocation().getZ());
-		RSPathFinderBuilder builder = new RSPathFinderBuilder();
+		RSRouteBuilder builder = new RSRouteBuilder();
 		builder.startingAt(player.getLocation());
 		builder.endingAt(destination);
 

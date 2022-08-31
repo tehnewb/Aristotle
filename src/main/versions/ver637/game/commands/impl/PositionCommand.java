@@ -27,7 +27,7 @@ public class PositionCommand implements Command {
 
 	@Override
 	public void onFail(Player player) {
-
+		
 	}
 
 }

@@ -22,6 +22,7 @@ import versions.ver637.map.WorldMap;
 @Accessors(fluent = true, chain = true)
 public class RSRoute {
 
+	@Getter
 	private RSLocation[] checkpoints;
 	private RSLocation nextStep;
 	private int checkpointIndex;
@@ -62,6 +63,7 @@ public class RSRoute {
 		 * closing. That's why this is here
 		 */
 		if (RSCollision.canTraverse(WorldMap.getMap(), nextStep, directionTo)) {
+
 			this.nextStep = this.nextStep.neighbor(directionTo);
 
 			if (nextStep.equals(nextCheckpoint))
@@ -70,9 +72,32 @@ public class RSRoute {
 				this.checkpoints = null;
 		} else {
 			this.checkpoints = null;
-			return null;
+			return new RSRouteStep(RSDirection.None, nextStep);
 		}
 		return new RSRouteStep(directionTo, nextStep);
+	}
+
+	/**
+	 * Returns the current {@code RSRouteStep} without removing it.
+	 * 
+	 * @return the current step
+	 */
+	public RSRouteStep get() {
+		if (isEmpty())
+			return new RSRouteStep(RSDirection.None, nextStep);
+		RSLocation checkpoint = this.checkpoints[this.checkpointIndex];
+		RSLocation nextCheckpoint = this.checkpoints[this.checkpointIndex + 1];
+		RSDirection directionTo = RSDirection.getDirectionGoingTowards(checkpoint, nextCheckpoint);
+		return new RSRouteStep(directionTo, nextStep.neighbor(directionTo));
+	}
+
+	/**
+	 * Returns true if the {@code RSRoute} has reached its destination.
+	 * 
+	 * @return true if reached destination; false otherwise
+	 */
+	public boolean reachedLastCheckpoint() {
+		return this.checkpoints != null && (this.checkpoints.length == 2 || this.checkpointIndex >= this.checkpoints.length - 1);
 	}
 
 	/**
@@ -81,6 +106,10 @@ public class RSRoute {
 	public void clear() {
 		this.checkpoints = null;
 		this.reachRequest = r -> {};
+	}
+
+	public boolean hasNext() {
+		return !isEmpty() && this.checkpointIndex < this.checkpoints.length;
 	}
 
 	/**

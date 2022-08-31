@@ -27,7 +27,7 @@ import versions.ver637.map.WorldMap;
 @Getter
 @Setter
 @Accessors(fluent = true, chain = true)
-public class RSPathFinderBuilder {
+public class RSRouteBuilder {
 
 	private static final int[] directions = new int[16384];
 	private static final int[] distances = new int[16384];
@@ -43,8 +43,8 @@ public class RSPathFinderBuilder {
 	private Consumer<RSRoute> reachRequest = r -> {};
 	private Object target;
 	private int srcSize = 1;
-	private int objectRotation = 0;
-	private int objectShape = 0;
+	private int objectRotation = 1;
+	private int objectShape = 1;
 	private int accessBitMask = 0;
 	private int maximumTurns = 10000;
 	private int destWidth = 1;

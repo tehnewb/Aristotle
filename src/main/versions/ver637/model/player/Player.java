@@ -49,7 +49,11 @@ public class Player extends RSEntity {
 	 * @param pane the pane to set it to
 	 */
 	public void setWindowPane(InterfaceWindow pane) {
+		if (this.pane != null)
+			this.pane.onClose();
+
 		this.pane = pane;
+		this.pane.onOpen();
 		this.session.write(new WindowPaneFrame(pane.getID(), true));
 	}
 
