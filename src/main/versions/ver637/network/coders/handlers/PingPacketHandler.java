@@ -1,14 +1,14 @@
 package versions.ver637.network.coders.handlers;
 
 import com.framework.network.RSFrame;
-import com.framework.network.RSNetworkSession;
 
-import versions.ver637.network.coders.RSFrameHandler;
+import versions.ver637.model.player.Player;
+import versions.ver637.network.coders.FrameHandler;
 
-public class PingPacketHandler implements RSFrameHandler {
+public class PingPacketHandler implements FrameHandler {
 
 	@Override
-	public void handleFrame(RSNetworkSession session, RSFrame frame) {}
+	public void handleFrame(Player player, RSFrame frame) {}
 
 	@Override
 	public int[] opcodesHandled() {

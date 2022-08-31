@@ -1,5 +1,8 @@
 package com.framework.map;
 
+import org.rsmod.pathfinder.ZoneFlags;
+
+import lombok.Getter;
 import lombok.NonNull;
 
 /**
@@ -11,11 +14,9 @@ public class RSMap {
 
 	private static final int MaximumRegions = 60000;
 	private final RSRegion[] regions = new RSRegion[MaximumRegions];
-	private final RSCollision collision = new RSCollision(this);
 
-	public boolean canTraverse(@NonNull RSLocation from, @NonNull RSLocation to) {
-		return collision.canTraverse(from, to);
-	}
+	@Getter
+	private final ZoneFlags zoneFlags = new ZoneFlags();
 
 	/**
 	 * Sets the region to the given {@code region} object.
@@ -53,7 +54,7 @@ public class RSMap {
 	public RSChunk getChunk(int absoluteX, int absoluteY, int absoluteZ) {
 		RSLocation location = new RSLocation(absoluteX, absoluteY, absoluteZ);
 		RSRegion region = regions[location.getRegionID()];
-		RSChunk chunk = region.getChunk(location.getChunkX() % RSRegion.Size, location.getChunkY() % RSRegion.Size, absoluteZ);
+		RSChunk chunk = region.getChunk(location.getChunkX() % RSRegion.ChunkPlaneSize, location.getChunkY() % RSRegion.ChunkPlaneSize, absoluteZ);
 		if (chunk == null) {
 			region.setChunk(chunk = new RSChunk(location.getChunkX(), location.getChunkY(), absoluteZ));
 		}
@@ -69,9 +70,8 @@ public class RSMap {
 	 * @param absoluteZ the absolute z coordinate
 	 * @return the clip
 	 */
-	public int getClip(int absoluteX, int absoluteY, int absoluteZ) {
-		RSChunk chunk = getChunk(absoluteX, absoluteY, absoluteZ);
-		return chunk.getClip(absoluteX % RSChunk.Size, absoluteY % RSChunk.Size);
+	public int getFlags(int absoluteX, int absoluteY, int absoluteZ) {
+		return zoneFlags.get(absoluteX, absoluteY, absoluteZ, 0);
 	}
 
 	/**
@@ -83,9 +83,8 @@ public class RSMap {
 	 * @param absoluteZ the absolute z coordinate
 	 * @param clip      the clip value to add
 	 */
-	public void addClip(int absoluteX, int absoluteY, int absoluteZ, int clip) {
-		RSChunk chunk = getChunk(absoluteX, absoluteY, absoluteZ);
-		chunk.addClip(absoluteX % RSChunk.Size, absoluteY % RSChunk.Size, clip);
+	public void addFlags(int absoluteX, int absoluteY, int absoluteZ, int clip) {
+		zoneFlags.add(absoluteX, absoluteY, absoluteZ, clip);
 	}
 
 	/**
@@ -97,37 +96,8 @@ public class RSMap {
 	 * @param absoluteZ the absolute z coordinate
 	 * @param clip      the clip value to remove
 	 */
-	public void removeClip(int absoluteX, int absoluteY, int absoluteZ, int clip) {
-		RSChunk chunk = getChunk(absoluteX, absoluteY, absoluteZ);
-		chunk.removeClip(absoluteX % RSChunk.Size, absoluteY % RSChunk.Size, clip);
-	}
-
-	/**
-	 * Returns the collision flags set to the chunk based on the given absolute
-	 * coordinates.
-	 * 
-	 * @param absoluteX the absolute x coordinate
-	 * @param absoluteY the absolute y coordinate
-	 * @param absoluteZ the absolute z coordinate
-	 * @return the collision flags
-	 */
-	public int getCollisionFlags(int absoluteX, int absoluteY, int absoluteZ) {
-		RSChunk chunk = getChunk(absoluteX, absoluteY, absoluteZ);
-		return chunk.getFlags(absoluteX % RSChunk.Size, absoluteY % RSChunk.Size);
-	}
-
-	/**
-	 * Sets the given {@code flag} value to the chunk based on the given absolute
-	 * coordinates.
-	 * 
-	 * @param absoluteX the absolute x coordinate
-	 * @param absoluteY the absolute y coordinate
-	 * @param absoluteZ the absolute z coordinate
-	 * @param flag      the flag to set
-	 */
-	public void setCollisionFlags(int absoluteX, int absoluteY, int absoluteZ, int flag) {
-		RSChunk chunk = getChunk(absoluteX, absoluteY, absoluteZ);
-		chunk.setFlag(absoluteX % RSChunk.Size, absoluteY % RSChunk.Size, flag);
+	public void removeFlags(int absoluteX, int absoluteY, int absoluteZ, int clip) {
+		zoneFlags.remove(absoluteX, absoluteY, absoluteZ, clip);
 	}
 
 	/**
@@ -142,9 +112,9 @@ public class RSMap {
 	public void setNPCFlag(int absoluteX, int absoluteY, int absoluteZ, boolean flagged) {
 		RSChunk chunk = getChunk(absoluteX, absoluteY, absoluteZ);
 		if (flagged) {
-			chunk.setNPCFlag(absoluteX % RSChunk.Size, absoluteY % RSChunk.Size);
+			chunk.setNPCFlag(absoluteX % RSChunk.TilePlaneSize, absoluteY % RSChunk.TilePlaneSize);
 		} else {
-			chunk.removeNPCFlag(absoluteX % RSChunk.Size, absoluteY % RSChunk.Size);
+			chunk.removeNPCFlag(absoluteX % RSChunk.TilePlaneSize, absoluteY % RSChunk.TilePlaneSize);
 		}
 	}
 
@@ -159,6 +129,6 @@ public class RSMap {
 	 */
 	public boolean hasNPCFlag(int absoluteX, int absoluteY, int absoluteZ) {
 		RSChunk chunk = getChunk(absoluteX, absoluteY, absoluteZ);
-		return chunk.hasNPCFlag(absoluteX % RSChunk.Size, absoluteY % RSChunk.Size);
+		return chunk.hasNPCFlag(absoluteX % RSChunk.TilePlaneSize, absoluteY % RSChunk.TilePlaneSize);
 	}
 }

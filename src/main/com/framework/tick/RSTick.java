@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import com.framework.RSFramework;
+import com.framework.entity.RSEntity;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -14,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
 @Accessors(fluent = true)
-public abstract class RSTick {
+public abstract class RSTick extends RSEntity {
 
 	@Getter
 	private long delay;
@@ -47,20 +48,25 @@ public abstract class RSTick {
 		this.gap = Instant.now().plusMillis(delay);
 	}
 
+	long start;
+
 	/**
 	 * Handles the updating process for this tick by calculating the gap between
 	 * each tick based on the delay set.
 	 */
 	protected final void update() {
-		if (stopped()) {
+		if (stopped())
 			return; // do not continue any further if this tick is stopped
-		}
+
+		if (gap == null)
+			gap = Instant.now().plusMillis(delay);
 
 		Duration difference = Duration.between(gap, Instant.now());
 		if (difference.isPositive()) {
 			occurrences++;
 			tick();
 			gap = gap.plusMillis(delay);
+			start = System.currentTimeMillis();
 		}
 	}
 

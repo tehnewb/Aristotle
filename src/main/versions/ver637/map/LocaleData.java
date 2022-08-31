@@ -26,9 +26,9 @@ public class LocaleData {
 	private int sizeX = 1;
 	private int sizeY = 1;
 	private int ID;
-	private int walkBitFlag;
+	private int accessFlag;
 	private int secondInt = -1;
-	private int thirdInt;
+	private int thirdInt = -1;
 	private int anInt3913 = -1;
 	private int anInt3921;
 	private int anInt3846;
@@ -46,7 +46,7 @@ public class LocaleData {
 	private int anInt3904;
 	private int anInt3905;
 	private int anInt3832;
-	private int anInt3835;
+	private int anInt3835 = -1;
 	private int anInt3836;
 	private int anInt3838 = -1;
 	private int anInt3842;
@@ -54,7 +54,7 @@ public class LocaleData {
 	private int anInt3844 = -1;
 	private byte aByte3912;
 	private boolean blockRangeFlag;
-	private boolean solid;
+	private boolean solid = true;
 	private boolean aBoolean3839;
 	private boolean aBoolean3845;
 	private boolean secondBool;
@@ -66,7 +66,7 @@ public class LocaleData {
 	private boolean aBoolean3873;
 	private boolean aBoolean3891;
 	private boolean aBoolean3894;
-	private boolean aBoolean3895;
+	private boolean aBoolean3895 = true;
 	private boolean aBoolean3906;
 	private boolean aBoolean3923;
 	private boolean aBoolean3924;

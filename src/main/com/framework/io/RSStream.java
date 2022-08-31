@@ -54,7 +54,7 @@ public class RSStream {
 	 * Constructs an empty {@code RSStream} with an initial capacity of 256 bytes.
 	 */
 	public RSStream() {
-		this(new byte[16]);
+		this(new byte[256]);
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class RSStream {
 	 */
 	private final void ensureCapacity() {
 		if (this.position >= this.buffer.length)
-			this.buffer = Arrays.copyOfRange(this.buffer, 0, position + 16);
+			this.buffer = Arrays.copyOf(this.buffer, this.buffer.length + 16);
 	}
 
 	/**
@@ -146,6 +146,16 @@ public class RSStream {
 	 */
 	public byte readByteA() {
 		return (byte) (readByte() - 128);
+	}
+
+	/**
+	 * Returns the s-type byte read in the buffer at the current reader index and
+	 * increases the reader index by 1.
+	 * 
+	 * @return the byte read
+	 */
+	public byte readByteS() {
+		return (byte) (128 - readByte());
 	}
 
 	/**
@@ -430,7 +440,7 @@ public class RSStream {
 	public int readUnsignedSmart() {
 		int value = getByte(position) & 0xFF;
 		if (value <= Byte.MAX_VALUE) {
-			return readByte();
+			return readUnsignedByte();
 		} else {
 			return readUnsignedShort() - 32768;
 		}
@@ -511,7 +521,7 @@ public class RSStream {
 	 * @return this current instance, used for chaining
 	 */
 	public RSStream writeBytes(RSStream stream) {
-		return writeBytes(stream.buffer());
+		return writeBytes(Arrays.copyOfRange(stream.buffer, 0, stream.position));
 	}
 
 	/**

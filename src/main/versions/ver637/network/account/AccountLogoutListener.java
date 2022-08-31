@@ -1,23 +1,27 @@
 package versions.ver637.network.account;
 
-import com.framework.event.RSController;
-import com.framework.event.RSEventMethod;
+import com.framework.RSFramework;
+import com.framework.network.RSConnectionListener;
 import com.framework.network.RSNetworkSession;
-import com.framework.network.RSSessionDisconnectEvent;
 
 import versions.ver637.model.player.Player;
 
-@RSController
-public class AccountLogoutListener {
+public class AccountLogoutListener implements RSConnectionListener {
 
-	@RSEventMethod
-	public void onDisconnect(RSSessionDisconnectEvent event) {
-		RSNetworkSession session = event.getSession();
+	@Override
+	public void onDisconnect(RSNetworkSession session) {
 		Player player = session.get("Player", Player.class);
 		if (player == null)
 			return;
 
-		Player.remove(player.getIndex());
+		RSFramework.queueResource(new AccountSaveResource(player.getAccount()));
+
+		Player.removeFromOnline(player);
+	}
+
+	@Override
+	public void onConnect(RSNetworkSession session) {
+
 	}
 
 }

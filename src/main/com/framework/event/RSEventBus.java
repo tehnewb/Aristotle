@@ -16,9 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RSEventBus {
 
-	// Empty object so that new instances are not created every search
-	private static final ArrayList<RSEventInvoker> EmptyList = new ArrayList<>();
-
 	// Map holding all invokers corresponding to a specific class
 	private final HashMap<Class<?>, ArrayList<RSEventInvoker>> InvokerMap = new HashMap<>();
 
@@ -64,6 +61,6 @@ public class RSEventBus {
 	 * @return the invokers corresponding to the given clazz
 	 */
 	private ArrayList<RSEventInvoker> getCurrentInvokers(Class<?> clazz) {
-		return InvokerMap.getOrDefault(clazz, EmptyList);
+		return InvokerMap.getOrDefault(clazz, new ArrayList<RSEventInvoker>());
 	}
 }

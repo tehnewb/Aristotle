@@ -78,7 +78,7 @@ public class RSFrame extends RSStream {
 	 * @param header the header type
 	 */
 	public RSFrame(int opcode, byte header) {
-		this(opcode, new byte[16], header);
+		this(opcode, new byte[256], header);
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class RSFrame extends RSStream {
 	 * it defaults to -1.
 	 */
 	public RSFrame() {
-		this(new byte[16]);
+		this(new byte[256]);
 	}
 
 	/**

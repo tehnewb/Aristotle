@@ -1,8 +1,10 @@
 package com.framework.entity;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 
 /**
@@ -21,15 +23,35 @@ public class RSEntityList<E extends RSEntity> implements Iterable<E> {
 	private RSEntity[] data;
 
 	@Getter
+	@Setter
+	private boolean growing;
+
+	@Getter
 	private int size, head = 1, tail = 1;
 
 	/**
-	 * Constructs a new {@code RSEntityList} with a specified {@code capacity}.
+	 * Constructs a new {@code RSEntityList} with a specified {@code capacity}
+	 * determining the capacity of data in this list and the specified
+	 * {@code growing} flag, which determines whether or not this
+	 * {@code RSEntityList} will grow when it gets close to being full.
 	 * 
-	 * @param capacity the capacity of the data array in this {@code RSEntityList}
+	 * @param capacity the capacity
+	 * @param growing  the growing flag
+	 */
+	public RSEntityList(int capacity, boolean growing) {
+		this.data = new RSEntity[capacity];
+		this.growing = growing;
+	}
+
+	/**
+	 * Constructs a new {@code RSEntityList} with a specified {@code capacity}
+	 * determining the capacity of data in this list. This list by default does not
+	 * grow when close to full.
+	 * 
+	 * @param capacity the capacity
 	 */
 	public RSEntityList(int capacity) {
-		this.data = new RSEntity[capacity];
+		this(capacity, false);
 	}
 
 	/**
@@ -40,6 +62,8 @@ public class RSEntityList<E extends RSEntity> implements Iterable<E> {
 	 * @throws Exception is there was an error while increasing the array size
 	 */
 	private int findEmptyIndex() {
+		if (growing)
+			this.data = Arrays.copyOf(this.data, this.data.length + 16);
 		for (int i = 1; i < data.length; i++)
 			if (data[i] == null)
 				return i;
@@ -52,25 +76,26 @@ public class RSEntityList<E extends RSEntity> implements Iterable<E> {
 	 * has not been used and returns {@code true} if the {@code RSEntity} was added;
 	 * otherwise {@code false} is returned;
 	 * 
-	 * @param RSEntity the {@code RSEntity} type to add
+	 * @param entity the {@code RSEntity} type to add
 	 * @return true if the {@code RSEntity} was added; return false otherwise
 	 * 
 	 * @see java.RSEntity.RSEntity#getIndex()
 	 */
-	public boolean add(E RSEntity) {
+	public boolean add(E entity) {
 		int index = findEmptyIndex();
-		if (index != -1) {
+		if (index == -1) {
+			throw new ArrayStoreException("RSEntityList is too full to store: " + entity.getClass().getSimpleName());
+		} else {
 			if (index < head)
 				head = index;
 			if (index > tail)
 				tail = index;
 
-			data[index] = RSEntity;
+			data[index] = entity;
 			data[index].setIndex(index);
 			size++;
 			return true;
 		}
-		return false;
 	}
 
 	/**
@@ -78,11 +103,11 @@ public class RSEntityList<E extends RSEntity> implements Iterable<E> {
 	 * returns {@code true} if the {@code RSEntity} was removed; otherwise
 	 * {@code false} is returned.
 	 * 
-	 * @param RSEntity the RSEntity to remove
+	 * @param entity the RSEntity to remove
 	 * @return true if the {@code RSEntity} was removed; return false otherwise
 	 */
-	public boolean remove(E RSEntity) {
-		int index = RSEntity.getIndex();
+	public boolean remove(E entity) {
+		int index = entity.getIndex();
 		if (index < 0)
 			return false;
 		if (index == head)
@@ -91,7 +116,7 @@ public class RSEntityList<E extends RSEntity> implements Iterable<E> {
 			tail--;
 		data[index] = null;
 		size--;
-		RSEntity.setIndex(-1);
+		entity.setIndex(-1);
 		return true;
 	}
 
@@ -116,13 +141,13 @@ public class RSEntityList<E extends RSEntity> implements Iterable<E> {
 	/**
 	 * Sets the given {@code RSEntity} at the given {@coden index}.
 	 * 
-	 * @param index    the index to set at
-	 * @param RSEntity the entity to set
+	 * @param index  the index to set at
+	 * @param entity the entity to set
 	 * @return the previous entity
 	 */
-	public E set(int index, E RSEntity) {
+	public E set(int index, E entity) {
 		RSEntity previous = this.data[index];
-		this.data[index] = RSEntity;
+		this.data[index] = entity;
 		return (E) previous;
 	}
 
@@ -172,7 +197,7 @@ public class RSEntityList<E extends RSEntity> implements Iterable<E> {
 	public boolean contains(Object o) {
 		if (!RSEntity.class.isAssignableFrom(o.getClass()))
 			return false;
-		RSEntity e = (RSEntity) o;
+		RSEntity e = RSEntity.class.cast(o);
 		if (e.getIndex() < 0 || e.getIndex() >= data.length)
 			return false;
 		return data[e.getIndex()] != null && data[e.getIndex()].equals(o);
@@ -223,6 +248,15 @@ public class RSEntityList<E extends RSEntity> implements Iterable<E> {
 		return data;
 	}
 
+	/**
+	 * Constructs a new array based on the given type of array and limits the
+	 * elements to the length of the given array and fills the elements of them
+	 * given array with the elements currently in this {@code RSEntityList}.
+	 * 
+	 * @param <T> the array type
+	 * @param a   the array to store the elements in
+	 * @return the array filled with the elements
+	 */
 	public <T> T[] toArray(T[] a) {
 		int count = head;
 		for (int i = 0; i < Math.min(size, a.length); i++) {

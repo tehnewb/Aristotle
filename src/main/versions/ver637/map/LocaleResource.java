@@ -24,16 +24,16 @@ public class LocaleResource implements RSResource<LocaleData> {
 
 	@Override
 	public LocaleData load() throws Exception {
-		byte[] archive = CacheResource.getLibrary().data(CacheResource.CONFIG_LOC, objectID >>> 8, objectID & 0xff);
+		if (data[objectID] != null)
+			return data[objectID];
+
+		byte[] archive = CacheResource.getLibrary().data(CacheResource.LOCALES, objectID >>> 8, objectID & 0xff);
 		LocaleData data = new LocaleData();
 		data.setID(objectID);
 
-		if (archive == null)
-			return data;
-
 		RSStream stream = new RSStream(archive);
 		for (;;) {
-			int opcode = stream.readByte() & 0xff;
+			int opcode = stream.readUnsignedByte();
 			if (opcode == 0)
 				break;
 			if (opcode != 1 && opcode != 5) {
@@ -75,7 +75,7 @@ public class LocaleResource implements RSResource<LocaleData> {
 																		else if (opcode != 66) {
 																			if (opcode != 67) {
 																				if (opcode == 69)
-																					data.setWalkBitFlag(stream.readUnsignedByte());
+																					data.setAccessFlag(stream.readUnsignedByte());
 																				else if (opcode != 70) {
 																					if (opcode == 71)
 																						stream.readShort();
@@ -361,8 +361,10 @@ public class LocaleResource implements RSResource<LocaleData> {
 
 	private void skipUseless(RSStream stream) {
 		int length = stream.readUnsignedByte();
-		for (int index = 0; index < length; index++)
-			stream.skip(1 + (stream.readUnsignedByte() * 2));
+		for (int index = 0; index < length; index++) {
+			stream.skip(1);
+			stream.skip(stream.readUnsignedByte() * 2);
+		}
 	}
 
 	public static LocaleData getData(int objectID) {

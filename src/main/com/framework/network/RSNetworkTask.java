@@ -40,7 +40,7 @@ public class RSNetworkTask implements Runnable {
 				}
 			});
 			bootstrap.bind(port).sync();
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			e.printStackTrace();
 		}
 	}

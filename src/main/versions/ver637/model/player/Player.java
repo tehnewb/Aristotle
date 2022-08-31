@@ -2,15 +2,17 @@ package versions.ver637.model.player;
 
 import java.util.stream.Stream;
 
+import com.framework.RSFramework;
 import com.framework.entity.RSEntity;
 import com.framework.entity.RSEntityList;
+import com.framework.map.RSLocation;
 import com.framework.network.RSNetworkSession;
+import com.framework.pane.RSPane;
 
 import lombok.Getter;
 import lombok.NonNull;
 import versions.ver637.network.account.Account;
 import versions.ver637.network.coders.frames.WindowPaneFrame;
-import versions.ver637.window.RSWindow;
 
 public class Player extends RSEntity {
 
@@ -23,11 +25,22 @@ public class Player extends RSEntity {
 	private final Account account;
 
 	@Getter
-	private RSWindow pane;
+	private final PlayerModel model;
+
+	@Getter
+	private RSPane pane;
 
 	public Player(RSNetworkSession session, Account account) {
 		this.session = session;
 		this.account = account;
+		this.model = new PlayerModel(this);
+	}
+
+	public void setLocation(RSLocation newLocation) {
+		RSLocation previous = account.getLocationVariables().getCurrentLocation();
+		account.getLocationVariables().setCurrentLocation(newLocation);
+
+		RSFramework.post(new PlayerLocationChangeEvent(this, previous, newLocation));
 	}
 
 	/**
@@ -35,9 +48,18 @@ public class Player extends RSEntity {
 	 * 
 	 * @param pane the pane to set it to
 	 */
-	public void setWindowPane(RSWindow pane) {
+	public void setWindowPane(RSPane pane) {
 		this.pane = pane;
 		this.session.write(new WindowPaneFrame(pane.getID(), true));
+	}
+
+	/**
+	 * Returns the current location of the {@code Player}.
+	 * 
+	 * @return the current location
+	 */
+	public RSLocation getLocation() {
+		return account.getLocationVariables().getCurrentLocation();
 	}
 
 	/**
@@ -63,7 +85,7 @@ public class Player extends RSEntity {
 	 */
 	public static Player get(String username) {
 		Stream<Player> stream = Stream.of(OnlinePlayers.toArray(new Player[OnlinePlayers.size()]));
-		Stream<Player> filtered = stream.filter(p -> p.getAccount().getUsername().equalsIgnoreCase(username));
+		Stream<Player> filtered = stream.filter(p -> p != null && p.getAccount().getUsername().equalsIgnoreCase(username));
 		return filtered.findFirst().orElse(null);
 	}
 
@@ -72,7 +94,7 @@ public class Player extends RSEntity {
 	 * 
 	 * @param player the player to add
 	 */
-	public static void add(@NonNull Player player) {
+	public static void addToOnline(@NonNull Player player) {
 		OnlinePlayers.add(player);
 	}
 
@@ -81,10 +103,20 @@ public class Player extends RSEntity {
 	 * 
 	 * @param index the index to remove
 	 */
-	public static void remove(int index) {
+	public static void removeFromOnline(@NonNull Player player) {
+		int index = player.getIndex();
 		if (index < 1 || index > 2047)
 			throw new IndexOutOfBoundsException("Player index must be between 1 and 2047 inclusive");
 		OnlinePlayers.remove(index);
+	}
+
+	/**
+	 * Returns the {@code RSEntityList} of online players.
+	 * 
+	 * @return the list of online players
+	 */
+	public static RSEntityList<Player> getOnlinePlayers() {
+		return OnlinePlayers;
 	}
 
 }

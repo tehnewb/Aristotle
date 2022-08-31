@@ -28,9 +28,9 @@ public class RegionResource implements RSResource<RSRegion> {
 
 	/*
 	 * This is to avoid queuing for the same region resource and causing issues if
-	 * for some reason this is requesting on different threads
+	 * for some reason this is requested on different threads
 	 */
-	private static final BitSet queued = new BitSet(60000);
+	private static final BitSet loaded = new BitSet(60000);
 
 	private final int regionID;
 
@@ -44,10 +44,10 @@ public class RegionResource implements RSResource<RSRegion> {
 
 	@Override
 	public RSRegion load() throws Exception {
-		if (queued.get(regionID))
+		if (loaded.get(regionID))
 			return null;
 
-		queued.set(regionID, true);
+		loaded.set(regionID, true);
 
 		XTEAKey key = XTEAResource.getKey(regionID);
 		CacheLibrary library = CacheResource.getLibrary();
@@ -55,21 +55,23 @@ public class RegionResource implements RSResource<RSRegion> {
 
 		int regionX = region.getRegionX();
 		int regionY = region.getRegionY();
+		int relativeX = regionX << 6;
+		int relativeY = regionY << 6;
 
 		byte[] landArr = library.data(CacheResource.MAPS, "m" + regionX + "_" + regionY);
 		byte[] objArr = library.data(CacheResource.MAPS, "l" + regionX + "_" + regionY, key.getKeys());
-		byte[] flags = new byte[RSChunk.Size * RSChunk.Size * RSChunk.MaximumHeight];
 
 		final int FLAG_BRIDGE = 0x2;
 		final int FLAG_CLIP = 0x1;
+		byte[][][] flags = new byte[64][64][4];
 
 		if (landArr != null) {
 			RSStream landStream = new RSStream(landArr);
-			for (int localZ = 0; localZ < RSChunk.MaximumHeight; localZ++) {
-				for (int localX = 0; localX < RSChunk.Size; localX++) {
-					for (int localY = 0; localY < RSChunk.Size; localY++) {
+			for (int localZ = 0; localZ < 4; localZ++) {
+				for (int localX = 0; localX < 64; localX++) {
+					for (int localY = 0; localY < 64; localY++) {
 						while (true) {
-							int v = landStream.readUnsignedByte();
+							int v = landStream.readByte() & 0xff;
 							if (v == 0) {
 								break;
 							} else if (v == 1) {
@@ -78,23 +80,23 @@ public class RegionResource implements RSResource<RSRegion> {
 							} else if (v <= 49) {
 								landStream.readByte();
 							} else if (v <= 81) {
-								int flag = v - 49;
-								flags[localX | (localY << 3) | (localZ << 6)] = (byte) flag;
+								flags[localX][localY][localZ] = (byte) (v - 49);
+							}
+						}
+					}
+				}
+			}
+			for (int localZ = 0; localZ < 4; localZ++) {
+				for (int localX = 0; localX < 64; localX++) {
+					for (int localY = 0; localY < 64; localY++) {
+						if ((flags[localX][localY][localZ] & FLAG_CLIP) == FLAG_CLIP) {
+							int height = localZ;
+							if ((flags[localX][localY][1] & FLAG_BRIDGE) == FLAG_BRIDGE) {
+								height--;
+							}
 
-								if ((flag & FLAG_CLIP) == FLAG_CLIP) {
-									int height = localZ;
-									if ((flag & FLAG_BRIDGE) == FLAG_BRIDGE)
-										height--;
-
-									if (height >= 0 && height <= 3) {
-										int absoluteX = (regionX << 6) + localX;
-										int absoluteY = (regionY << 6) + localY;
-										RSLocation location = new RSLocation(absoluteX, absoluteY, height);
-										RSChunk chunk = new RSChunk(location.getChunkX(), location.getChunkY(), height);
-										chunk.addClip(absoluteX % RSChunk.Size, absoluteY % RSChunk.Size, RSCollision.BLOCKED);
-										region.setChunk(chunk);
-									}
-								}
+							if (height >= 0 && height <= 3) {
+								WorldMap.getMap().addFlags(relativeX + localX, relativeY + localY, height, RSCollision.BLOCKED);
 							}
 						}
 					}
@@ -118,9 +120,10 @@ public class RegionResource implements RSResource<RSRegion> {
 					int objectHash = objStream.readUnsignedByte();
 					int type = objectHash >> 2;
 					int rotation = objectHash & 0x3;
-					if (localX < 0 || localX >= RSChunk.Size || localY < 0 || localY >= RSChunk.Size)
+					if (localX < 0 || localX >= RSChunk.TileCount || localY < 0 || localY >= RSChunk.TileCount)
 						continue;
-					if ((flags[localX | (localY << 3) | (1 << 6)] & FLAG_BRIDGE) == FLAG_BRIDGE)
+
+					if ((flags[localX][localY][1] & FLAG_BRIDGE) == FLAG_BRIDGE)
 						height--;
 
 					if (height >= 0 && height <= 3) {
@@ -128,7 +131,7 @@ public class RegionResource implements RSResource<RSRegion> {
 						final int absoluteY = (regionY << 6) + localY;
 						final int absoluteZ = height;
 						LocaleResource resource = new LocaleResource(objectID, l -> {
-							MapLocale locale = new MapLocale(l.getID(), new RSLocation(absoluteX, absoluteY, absoluteZ), type, rotation);
+							Locale locale = new Locale(l.getID(), new RSLocation(absoluteX, absoluteY, absoluteZ), type, rotation);
 							try {
 								WorldMap.getMap().addLocale(locale);
 							} catch (Exception e) {

@@ -1,14 +1,14 @@
 package versions.ver637.network.coders.handlers;
 
 import com.framework.network.RSFrame;
-import com.framework.network.RSNetworkSession;
 
-import versions.ver637.network.coders.RSFrameHandler;
+import versions.ver637.model.player.Player;
+import versions.ver637.network.coders.FrameHandler;
 
-public class WorldRequestHandler implements RSFrameHandler {
+public class WorldRequestHandler implements FrameHandler {
 
 	@Override
-	public void handleFrame(RSNetworkSession session, RSFrame frame) {
+	public void handleFrame(Player player, RSFrame frame) {
 		RSFrame buffer = RSFrame.varShort(98);
 		buffer.writeByte(1);
 		buffer.writeByte(2);
@@ -28,7 +28,7 @@ public class WorldRequestHandler implements RSFrameHandler {
 		buffer.writeSmart(1);
 		buffer.writeShort(0);
 
-		session.write(buffer);
+		player.getSession().write(buffer);
 	}
 
 	@Override

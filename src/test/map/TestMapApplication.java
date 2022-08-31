@@ -17,13 +17,12 @@ public class TestMapApplication {
 		map.setRegion(lumbridge);
 
 		map.setNPCFlag(3222, 3222, 0, true);
-		map.addClip(3222, 3223, 0, 1000);
-		map.addClip(3222, 3223, 0, 2000);
-		map.setCollisionFlags(3225, 3225, 0, 10);
+		map.addFlags(3222, 3223, 0, 1000);
+		map.addFlags(3222, 3223, 0, 2000);
+		map.addFlags(3225, 3225, 0, 10);
 
-		log.info("NPC Flag set to {} ", map.hasNPCFlag(3222, 3222, 0));
-		log.info("Clipping set to {} ", map.getClip(3222, 3223, 0));
-		log.info("Collision Flags set to {} ", map.getCollisionFlags(3225, 3225, 0));
+		log.info("NPC UpdateFlag set to {} ", map.hasNPCFlag(3222, 3222, 0));
+		log.info("Flags set to {} ", map.getFlags(3222, 3223, 0));
 		for (int dx = -1; dx <= 1; dx++) {
 			for (int dy = -1; dy <= 1; dy++) {
 				log.info("Direction found for dx={} dy={} is {}", dx, dy, RSDirection.of(dx, dy));

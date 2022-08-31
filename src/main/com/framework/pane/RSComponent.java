@@ -1,4 +1,4 @@
-package versions.ver637.window;
+package com.framework.pane;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

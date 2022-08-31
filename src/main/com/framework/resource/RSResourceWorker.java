@@ -18,14 +18,14 @@ public final class RSResourceWorker implements Runnable {
 
 	@Override
 	public void run() {
-		while (!ResourceQueue.isEmpty()) {
-			try {
+		try {
+			while (!ResourceQueue.isEmpty()) {
 				RSResource next = ResourceQueue.poll();
 				Object resource = next.load();
 				next.finish(resource);
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 

@@ -10,11 +10,12 @@ import lombok.NonNull;
  */
 public class RSRegion {
 
-	public static final int Size = 8;
+	public static final int ChunkCount = 64;
+	public static final int ChunkPlaneSize = 8;
 	public static final int Bits = 6;
 	public static final int MaximumHeight = 4;
 
-	private RSChunk[][][] chunks = new RSChunk[Size][Size][MaximumHeight];
+	private RSChunk[][][] chunks = new RSChunk[ChunkPlaneSize][ChunkPlaneSize][MaximumHeight];
 
 	@Getter
 	private final int ID;
@@ -36,7 +37,7 @@ public class RSRegion {
 	public void setChunk(@NonNull RSChunk chunk) {
 		if (chunk.getChunkZ() < 0 || chunk.getChunkZ() >= MaximumHeight)
 			throw new IndexOutOfBoundsException("Chunk Z must be between 0 and 3 inclusive");
-		this.chunks[chunk.getChunkX() % Size][chunk.getChunkY() % Size][chunk.getChunkZ()] = chunk;
+		this.chunks[chunk.getChunkX() % ChunkPlaneSize][chunk.getChunkY() % ChunkPlaneSize][chunk.getChunkZ()] = chunk;
 	}
 
 	/**
@@ -51,7 +52,7 @@ public class RSRegion {
 	public RSChunk getChunk(int chunkX, int chunkY, int chunkZ) {
 		if (chunkZ < 0 || chunkZ >= MaximumHeight)
 			throw new IndexOutOfBoundsException("Chunk Z must be between 0 and 3 inclusive");
-		return this.chunks[chunkX % Size][chunkY % Size][chunkZ];
+		return this.chunks[chunkX % ChunkPlaneSize][chunkY % ChunkPlaneSize][chunkZ];
 	}
 
 	/**

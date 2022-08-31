@@ -1,7 +1,8 @@
 package versions.ver637.map;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import com.framework.map.RSLocation;
 import com.framework.map.RSMap;
@@ -14,30 +15,40 @@ public class WorldMap extends RSMap {
 	@Getter
 	private static final WorldMap Map = new WorldMap();
 
-	private final HashMap<Integer, ArrayList<MapLocale>> locales = new HashMap<>();
+	private final HashMap<Integer, Locale> locales = new HashMap<>();
 
-	public void addLocale(@NonNull MapLocale locale) {
-		ArrayList<MapLocale> list = getLocalesAt(locale.getLocation());
-		list.add(locale);
-		locales.put(locale.getLocation().get30BitsHash(), list);
-
+	/**
+	 * Adds the given {@code locale} to this {@code WorldMap}.
+	 * 
+	 * @param locale the locale to add
+	 */
+	public void addLocale(@NonNull Locale locale) {
+		if (Stream.of(locale.getData().getOptions()).anyMatch(Objects::nonNull)) {
+			locales.put(locale.getLocation().packTo30Bits(), locale);
+		}
 		locale.applyClip();
 	}
 
-	public void removeLocale(MapLocale locale) {
-		ArrayList<MapLocale> list = getLocalesAt(locale.getLocation());
-		list.remove(locale);
+	/**
+	 * Removes the locale at the given {@code locale}.
+	 * 
+	 * @param location the location of the locale
+	 */
+	public void removeLocale(RSLocation location) {
+		Locale locale = locales.remove(location.packTo30Bits());
 
 		locale.removeClip();
 	}
 
-	public MapLocale getLocale(RSLocation location, int objectID) {
-		ArrayList<MapLocale> list = getLocalesAt(location);
-		return list.stream().filter(l -> l.getID() == objectID).findFirst().orElse(null);
-	}
-
-	public ArrayList<MapLocale> getLocalesAt(@NonNull RSLocation location) {
-		return locales.getOrDefault(location.get30BitsHash(), new ArrayList<>());
+	/**
+	 * Returns the location at the given {@code location}. If the locale doesn't
+	 * exist, null is returned;
+	 * 
+	 * @param location the location of the locale
+	 * @return the locale; possibly null
+	 */
+	public Locale getLocale(RSLocation location) {
+		return locales.get(location.packTo30Bits());
 	}
 
 }

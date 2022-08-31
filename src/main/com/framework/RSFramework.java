@@ -24,8 +24,7 @@ import com.framework.network.RSSessionCoder;
 import com.framework.resource.RSResource;
 import com.framework.resource.RSResourceWorker;
 import com.framework.tick.RSTick;
-import com.framework.tick.RSTickWorker;
-import com.google.common.base.Stopwatch;
+import com.framework.tick.RSTickTask;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.reflect.ClassPath;
 import com.google.common.reflect.ClassPath.ClassInfo;
@@ -47,7 +46,7 @@ public final class RSFramework {
 	private static final ExecutorService ResourceService = Executors.newSingleThreadExecutor(d -> new Thread(d, "Resrource-Worker"));
 
 	private static final RSResourceWorker ResourceWorker = new RSResourceWorker();
-	private static final RSTickWorker TickWorker = new RSTickWorker();
+	private static final RSTickTask TickTask = new RSTickTask();
 	private static final RSEventBus EventBus = new RSEventBus();
 
 	private static RSNetworkTask NetworkTask;
@@ -65,10 +64,8 @@ public final class RSFramework {
 	 * @throws Exception if an error occurs during this application's life span
 	 */
 	public static void run(Class<?> mainClass) throws Exception {
-		Stopwatch stopwatch = Stopwatch.createStarted();
-
-		TickScheduler.scheduleWithFixedDelay(TickWorker, 1, 1, TimeUnit.NANOSECONDS);
-		log.info("Started resource worker...");
+		TickScheduler.scheduleWithFixedDelay(TickTask, 0, 1, TimeUnit.NANOSECONDS);
+		log.info("Tick Service started.");
 
 		log.info("Retrieving controller classes...");
 		ClassLoader classLoader = ClassLoader.getSystemClassLoader();
@@ -88,12 +85,6 @@ public final class RSFramework {
 		}
 
 		log.info("Finished loading controllers.");
-
-		stopwatch.stop();
-
-		long usedMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-
-		log.info("Framework Load Time: {}s using {}MB of memory", stopwatch.elapsed(TimeUnit.MILLISECONDS) / 1000D, usedMemory / 1024 / 1024);
 	}
 
 	/**
@@ -192,12 +183,12 @@ public final class RSFramework {
 	}
 
 	/**
-	 * Adds the given {@code rsTick} for updating.
+	 * Adds the given {@code processor} to the {@code RSTickService} for processing.
 	 * 
-	 * @param rsTick the tick to add for updating
+	 * @param processor the processor to add
 	 */
-	public static void addTick(@NonNull RSTick rsTick) {
-		TickWorker.addTick(rsTick);
+	public static void addTick(@NonNull RSTick tick) {
+		RSFramework.TickTask.addTick(tick);
 	}
 
 }

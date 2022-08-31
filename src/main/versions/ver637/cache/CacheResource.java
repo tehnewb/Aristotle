@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CacheResource implements RSResource<CacheResource> {
 
 	public static final int Revision = 637;
+
 	public static final byte ANIMS = 0;
 	public static final byte BASES = 1;
 	public static final byte CONFIG = 2;
@@ -21,7 +22,7 @@ public class CacheResource implements RSResource<CacheResource> {
 	public static final byte CLIENTSCRIPTS = 12;
 	public static final byte FONTMETRICS = 13;
 	public static final byte VORBIS = 14;
-	public static final byte CONFIG_LOC = 16;
+	public static final byte LOCALES = 16;
 	public static final byte CONFIG_ENUM = 17;
 	public static final byte CONFIG_NPC = 18;
 	public static final byte CONFIG_OBJ = 19;

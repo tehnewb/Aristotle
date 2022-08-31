@@ -2,10 +2,10 @@ package com.framework.map;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import versions.ver637.map.WorldMap;
 
 @RequiredArgsConstructor
 public class RSCollision {
-
 	public static final int OPEN = 0;
 	public static final int CLOSED = 0xFFFFFF;
 	public static final int UNINITIALIZED = 0x1000000;
@@ -67,61 +67,59 @@ public class RSCollision {
 	private final RSMap map;
 
 	/**
-	 * Returns true if the given {@codes start} RSLocation can move to the given
-	 * {@code finish} RSLocation. This must be a 1 tile movement.
+	 * Returns true if the given {@codes start} location can move to the given
+	 * {@code finish} location.
 	 * 
-	 * @param start  starting RSLocation
-	 * @param finish ending RSLocation
+	 * @param start  starting location
+	 * @param finish ending location
 	 * @return true if can move; false otherwise
 	 */
-	public boolean canTraverse(RSLocation start, RSLocation finish) {
+	public static boolean canTraverse(WorldMap map, RSLocation start, RSDirection to) {
+		RSLocation finish = start.neighbor(to);
+
 		if (start.equals(finish))
 			return true;
 
 		RSLocation delta = RSLocation.delta(start, finish);
-
-		if (Math.abs(delta.getX()) > 1 || Math.abs(delta.getY()) > 1)
-			return false;
-
 		RSLocation north = start.neighbor(RSDirection.North);
 		RSLocation east = start.neighbor(RSDirection.East);
 		RSLocation south = start.neighbor(RSDirection.South);
 		RSLocation west = start.neighbor(RSDirection.West);
 
-		RSDirection direction = RSDirection.of(delta.getX(), delta.getY());
+		RSDirection approach = RSDirection.of(delta.getX(), delta.getY());
 
-		int clipFrom = map.getClip(start.getX(), start.getY(), start.getZ());
-		int clipTo = map.getClip(finish.getX(), finish.getY(), finish.getZ());
-		int clipNorth = map.getClip(north.getX(), north.getY(), north.getZ());
-		int clipEast = map.getClip(east.getX(), east.getY(), east.getZ());
-		int clipSouth = map.getClip(south.getX(), south.getY(), south.getZ());
-		int clipWest = map.getClip(west.getX(), west.getY(), west.getZ());
+		int clipFrom = map.getFlags(start.getX(), start.getY(), start.getZ());
+		int clipTo = map.getFlags(finish.getX(), finish.getY(), finish.getZ());
+		int clipNorth = map.getFlags(north.getX(), north.getY(), north.getZ());
+		int clipEast = map.getFlags(east.getX(), east.getY(), east.getZ());
+		int clipSouth = map.getFlags(south.getX(), south.getY(), south.getZ());
+		int clipWest = map.getFlags(west.getX(), west.getY(), west.getZ());
 
-		return canMove8Way(clipFrom, clipTo, clipNorth, clipEast, clipSouth, clipWest, direction); // west of starting tile, and the approach we are taking to get to the destination.
+		return canMove8Way(clipFrom, clipTo, clipNorth, clipEast, clipSouth, clipWest, approach); // west of starting tile, and the approach we are taking to get to the destination.
 	}
 
 	/**
 	 * Returns true if the {@code start} or {@code dest} flags contain a block mask
 	 * in them.
 	 * 
-	 * @param fromClipping the starting tile's clipping
-	 * @param toClipping   the destination tile's clipping
-	 * @param direction    the direction from the start tile to the end tile
+	 * @param start        the starting tile's flag
+	 * @param dest         the destination tile's flag
+	 * @param destApproach the direction from the start tile to the end tile
 	 * @return true if the direction can be moved to
 	 */
-	public static boolean canMove4Way(int fromClipping, int toClipping, RSDirection direction) {
-		if (isBlocked(toClipping))
+	public static boolean canMove4Way(int start, int dest, RSDirection destApproach) {
+		if (isBlocked(dest))
 			return false;
 
-		switch (direction) {
+		switch (destApproach) {
 			case North:
-				return !(has(toClipping, SOUTH) || has(fromClipping, NORTH));
+				return !(has(dest, SOUTH) || has(start, NORTH));
 			case East:
-				return !(has(toClipping, WEST) || has(fromClipping, EAST));
+				return !(has(dest, WEST) || has(start, EAST));
 			case South:
-				return !(has(toClipping, NORTH) || has(fromClipping, SOUTH));
+				return !(has(dest, NORTH) || has(start, SOUTH));
 			case West:
-				return !(has(toClipping, EAST) || has(fromClipping, WEST));
+				return !(has(dest, EAST) || has(start, WEST));
 			default:
 				return false;
 		}

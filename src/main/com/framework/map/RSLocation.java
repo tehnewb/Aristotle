@@ -39,6 +39,28 @@ public class RSLocation {
 	}
 
 	/**
+	 * Gets the local x relative to another tile.
+	 * 
+	 * @param other - the other tile.
+	 * @return - the local x.
+	 */
+	public final int getLocalX(RSLocation other) {
+		final int offset = 6;
+		return x - (8 * (other.getChunkX() - offset));
+	}
+
+	/**
+	 * Get the local y relative to another tile.
+	 * 
+	 * @param other - the other tile.
+	 * @return - the local y.
+	 */
+	public final int getLocalY(RSLocation other) {
+		final int offset = 6;
+		return y - (8 * (other.getChunkY() - offset));
+	}
+
+	/**
 	 * Translates this {@code Location} by adding the given {@code x, y, z}
 	 * coordinates and returning a new instance with the translated values.
 	 * 
@@ -88,7 +110,7 @@ public class RSLocation {
 	 * @return the region id
 	 */
 	public int getRegionID() {
-		return getRegionY() | (getRegionX() << RSChunk.Size);
+		return getRegionY() | (getRegionX() << RSChunk.TilePlaneSize);
 	}
 
 	/**
@@ -133,7 +155,7 @@ public class RSLocation {
 	 * @return the local x coordinate
 	 */
 	public final int getLocalChunkX() {
-		return x % RSChunk.Size;
+		return x % RSChunk.TilePlaneSize;
 	}
 
 	/**
@@ -142,7 +164,7 @@ public class RSLocation {
 	 * @return the local y coordinate
 	 */
 	public final int getLocalChunkY() {
-		return y % RSChunk.Size;
+		return y % RSChunk.TilePlaneSize;
 	}
 
 	/**
@@ -150,8 +172,8 @@ public class RSLocation {
 	 * 
 	 * @return the 18 bit hash
 	 */
-	public int get18BitsHash() {
-		return getChunkY() + (getChunkX() << 8) + (z << 16);
+	public int packTo18Bits() {
+		return ((getRegionX() & 0xFF) << 8) | (getRegionY() & 0xFF) | ((getZ() & 0x3) << 16);
 	}
 
 	/**
@@ -159,8 +181,8 @@ public class RSLocation {
 	 * 
 	 * @return the 30 bit hash
 	 */
-	public int get30BitsHash() {
-		return x << 14 | y & 0x3FFF | z << 28;
+	public int packTo30Bits() {
+		return getY() | getZ() << 28 | getX() << 14;
 	}
 
 	/**

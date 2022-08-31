@@ -1,5 +1,7 @@
 package com.framework.network;
 
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 import io.netty.channel.Channel;
 import io.netty.util.AttributeKey;
 import lombok.Getter;
@@ -27,6 +29,13 @@ public class RSNetworkSession {
 	@NonNull
 	private RSSessionCoder coder;
 
+	@Getter
+	@Setter
+	@NonNull
+	private RSConnectionListener connectionListener = RSConnectionListener.DefaultListener;
+
+	private final ConcurrentLinkedQueue<Object> queued = new ConcurrentLinkedQueue<>();
+
 	/**
 	 * Writes the given {@code object} to the channel of this
 	 * {@code RSNetworkSession}.
@@ -34,7 +43,22 @@ public class RSNetworkSession {
 	 * @param object the object to write
 	 */
 	public void write(@NonNull Object object) {
-		channel.writeAndFlush(object);
+		queued.add(object);
+	}
+
+	/**
+	 * Finishes the write procedure of all messages queued to this
+	 * {@code RSNetworkSession} and finally flushes the channel them after.
+	 */
+	public void flushMessages() {
+		if (queued.isEmpty())
+			return;
+
+		while (!queued.isEmpty()) {
+			Object object = queued.poll();
+			channel.write(object);
+		}
+		channel.flush();
 	}
 
 	/**
