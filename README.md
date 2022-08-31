@@ -254,3 +254,52 @@ Jar files are the only supported way for plugins and can be loaded as such...
 </p>
 </details>
 
+<details><summary><h2>Downloading and Importing Aristotle</h2></summary>
+<p>
+
+## Downloading
+
+### Download Aristotle through Github Desktop
+
+If you have <a href="https://desktop.github.com/">GitHub Desktop</a>, you can go to:
+
+1. File
+2. Clone repository...
+3. URL tab
+4. Paste https://github.com/tehnewb/Aristotle.git into the URL text field
+5. Choose the path you want the repository to go into
+6. Click "Clone"
+
+### Download Aristotle through github.com ZIP
+
+1. Click on the green Code button at the top-right hand side of this repository
+2. Click Download ZIP
+
+### Download Aristotle through command line:
+
+1. Open your terminal
+2. Go to your preferred directory using the 'cd' command
+3. Type git clone https://github.com/tehnewb/Aristotle.git
+
+
+## Importing
+
+### Eclipse
+
+1. Click File -> Import...
+2. Gradle -> Existing Gradle Project
+3. Enter the project directory in the Project root directory field
+4. Click Finish
+
+
+### IntelliJ
+
+1. Go to your welcome screen
+2. Click Get from VCS
+3. Make sure the Version Control dropdown has Git selected
+4. Type https://github.com/tehnewb/Aristotle into the URL field
+5. Choose your preferred directory
+6. Click Clone
+
+</p>
+</details>
