@@ -1,9 +1,9 @@
-package com.framework.pane;
+package versions.ver637.pane;
 
 import lombok.Getter;
 
 /**
- * A class used to configure the bitwise settings for an interface. The settings
+ * A class used to configure the bitwise struct for an interface. The struct
  * available include enabling/disabling the primary left click, or right click
  * options, using items/spells/interface components on ground
  * items/npcs/objects/players/yourself/interface components, configuring the
@@ -13,25 +13,25 @@ import lombok.Getter;
  * 
  * @author Mangis
  */
-public class RSComponentSettings {
+public class ComponentSettings {
 
 	@Getter
 	private int value;
 
 	/**
-	 * True if the settings have a left click entityOption
+	 * True if the struct have a left click entityOption
 	 * 
-	 * @return True if the settings have a left click entityOption
+	 * @return True if the struct have a left click entityOption
 	 */
 	public boolean hasPrimaryOption() {
 		return (value & 0x1) != 0;
 	}
 
 	/**
-	 * True if the settings have the right click entityOption for the given id.
+	 * True if the struct have the right click entityOption for the given id.
 	 * 
 	 * @param optionId the entityOption id, value is 0-9
-	 * @return True if the settings have the right click entityOption for the given
+	 * @return True if the struct have the right click entityOption for the given
 	 *         id.
 	 */
 	public boolean hasSecondaryOption(int optionId) {
@@ -41,36 +41,36 @@ public class RSComponentSettings {
 	}
 
 	/**
-	 * True if the settings allow use with items on the ground
+	 * True if the struct allow use with items on the ground
 	 * 
-	 * @return True if the settings allow use with items on the ground
+	 * @return True if the struct allow use with items on the ground
 	 */
 	public boolean canUseOnGroundItems() {
 		return (value & (0x1 << 11)) != 0;
 	}
 
 	/**
-	 * True if the settings allow use with npcs
+	 * True if the struct allow use with npcs
 	 * 
-	 * @return True if the settings allow use with npcs
+	 * @return True if the struct allow use with npcs
 	 */
 	public boolean canUseOnNPCs() {
 		return (value & (0x1 << 12)) != 0;
 	}
 
 	/**
-	 * True if the settings allow use with objects
+	 * True if the struct allow use with objects
 	 * 
-	 * @return True if the settings allow use with objects
+	 * @return True if the struct allow use with objects
 	 */
 	public boolean canUseOnObjects() {
 		return (value & (0x1 << 13)) != 0;
 	}
 
 	/**
-	 * True if the settings allow use with other players (not necessarily yourself)
+	 * True if the struct allow use with other players (not necessarily yourself)
 	 * 
-	 * @return True if the settings allow use with other players (not necessarily
+	 * @return True if the struct allow use with other players (not necessarily
 	 *         yourself)
 	 */
 	public boolean canUseOnOtherPlayers() {
@@ -78,27 +78,27 @@ public class RSComponentSettings {
 	}
 
 	/**
-	 * True if the settings allow use on themselves
+	 * True if the struct allow use on themselves
 	 * 
-	 * @return True if the settings allow use on themselves
+	 * @return True if the struct allow use on themselves
 	 */
 	public boolean canUseOnSelf() {
 		return (value & (0x1 << 15)) != 0;
 	}
 
 	/**
-	 * True if the settings allow interface components to be dragged
+	 * True if the struct allow interface components to be dragged
 	 * 
-	 * @return True if the settings allow interface components to be dragged
+	 * @return True if the struct allow interface components to be dragged
 	 */
 	public boolean canDrag() {
 		return (value & (0x1 << 23)) != 0;
 	}
 
 	/**
-	 * True if the settings allow items to be dragged onto interface components
+	 * True if the struct allow items to be dragged onto interface components
 	 * 
-	 * @return True if the settings allow items to be dragged onto interface
+	 * @return True if the struct allow items to be dragged onto interface
 	 *         components
 	 */
 	public boolean canDragOnto() {
@@ -106,10 +106,10 @@ public class RSComponentSettings {
 	}
 
 	/**
-	 * True if the settings allow use on other interface components, eg, high
+	 * True if the struct allow use on other interface components, eg, high
 	 * alchemy is used on items.
 	 * 
-	 * @return True if the settings allow use on other interface components, eg,
+	 * @return True if the struct allow use on other interface components, eg,
 	 *         high alchemy is used on items.
 	 */
 	public boolean canUseOnInterfaceComponent() {
@@ -147,7 +147,7 @@ public class RSComponentSettings {
 	 * inventory item. If inventory component where items are stored doesn't allow
 	 * the canUseOn , it would not be possible to use High Alchemy on that item.
 	 */
-	public RSComponentSettings setIsUseOnTarget(boolean allow) {
+	public ComponentSettings setIsUseOnTarget(boolean allow) {
 		value &= ~(1 << 22);
 		if (allow)
 			value |= (1 << 22);
@@ -158,7 +158,7 @@ public class RSComponentSettings {
 	 * Set's canDragOnto. if it's true items can be dragged onto interface
 	 * components. An example would be dragging an item in the bank onto a bank tab.
 	 */
-	public RSComponentSettings setCanDragOnto(boolean allow) {
+	public ComponentSettings setCanDragOnto(boolean allow) {
 		value &= ~(1 << 21);
 		if (allow)
 			value |= (1 << 21);
@@ -168,7 +168,7 @@ public class RSComponentSettings {
 	/**
 	 * Set's canUseOnFlag. if it's true, then interface components can be dragged
 	 */
-	public RSComponentSettings setCanDrag(boolean allow) {
+	public ComponentSettings setCanDrag(boolean allow) {
 		value &= ~(1 << 23);
 		if (allow)
 			value |= (1 << 23);
@@ -176,13 +176,13 @@ public class RSComponentSettings {
 	}
 
 	/**
-	 * Set's standard entityOption settings. Great example of standard click
+	 * Set's standard entityOption struct. Great example of standard click
 	 * entityOption is the Continue button in dialog interface. If the entityOption
 	 * is not allowed the packet won't be send to server.
 	 * 
 	 * @param allowed
 	 */
-	public RSComponentSettings setPrimaryOption(boolean allowed) {
+	public ComponentSettings setPrimaryOption(boolean allowed) {
 		value &= ~(0x1);
 		if (allowed)
 			value |= 0x1;
@@ -190,12 +190,12 @@ public class RSComponentSettings {
 	}
 
 	/**
-	 * Set's right click entityOption settings. Great example of right click
+	 * Set's right click entityOption struct. Great example of right click
 	 * entityOption is the Dismiss entityOption in summoning orb. If specified
 	 * entityOption is not allowed , it will not appear in right click menu and the
 	 * packet will not be send to server when clicked.
 	 */
-	public RSComponentSettings setSecondaryOption(int optionID, boolean allowed) {
+	public ComponentSettings setSecondaryOption(int optionID, boolean allowed) {
 		if (optionID < 0 || optionID > 9)
 			throw new IllegalArgumentException("optionID must be 0-9.");
 		value &= ~(0x1 << (optionID + 1)); // disable
@@ -210,7 +210,7 @@ public class RSComponentSettings {
 	 * clicks in inventory will also invoke click event handler scripts on gameframe
 	 * interface.
 	 */
-	public RSComponentSettings setInterfaceDepth(int depth) {
+	public ComponentSettings setInterfaceDepth(int depth) {
 		if (depth < 0 || depth > 7)
 			throw new IllegalArgumentException("height must be 0-7.");
 		value &= ~(0x7 << 18);
@@ -219,11 +219,11 @@ public class RSComponentSettings {
 	}
 
 	/**
-	 * Sets use on settings. By use on , I mean the options such as Cast in
+	 * Sets use on struct. By use on , I mean the options such as Cast in
 	 * spellbook or use in inventory. If nothing is allowed then 'use' entityOption
 	 * will not appear in right click menu.
 	 */
-	public RSComponentSettings setUseOnSettings(boolean canUseOnGroundItems, boolean canUseOnNpcs, boolean canUseOnObjects, boolean canUseOnNonselfPlayers, boolean canUseOnSelfPlayer, boolean canUseOnInterfaceComponent) {
+	public ComponentSettings setUseOnSettings(boolean canUseOnGroundItems, boolean canUseOnNpcs, boolean canUseOnObjects, boolean canUseOnNonselfPlayers, boolean canUseOnSelfPlayer, boolean canUseOnInterfaceComponent) {
 		int useFlag = 0;
 		if (canUseOnGroundItems)
 			useFlag |= 0x1;

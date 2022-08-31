@@ -4,8 +4,7 @@ import com.framework.network.RSFrame;
 
 import versions.ver637.model.player.Player;
 import versions.ver637.network.coders.FrameHandler;
-import versions.ver637.pane.FixedPane;
-import versions.ver637.pane.ResizablePane;
+import versions.ver637.pane.GamePane;
 
 public class PaneSwitchHandler implements FrameHandler {
 
@@ -13,11 +12,7 @@ public class PaneSwitchHandler implements FrameHandler {
 	public void handleFrame(Player player, RSFrame frame) {
 		int mode = frame.readByte();
 
-		if (mode == 1) {
-			player.setWindowPane(new FixedPane());
-		} else {
-			player.setWindowPane(new ResizablePane());
-		}
+		player.setWindowPane(new GamePane(player, mode >= 2));
 	}
 
 	@Override

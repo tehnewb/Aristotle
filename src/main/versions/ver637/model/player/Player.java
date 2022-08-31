@@ -7,12 +7,12 @@ import com.framework.entity.RSEntity;
 import com.framework.entity.RSEntityList;
 import com.framework.map.RSLocation;
 import com.framework.network.RSNetworkSession;
-import com.framework.pane.RSPane;
 
 import lombok.Getter;
 import lombok.NonNull;
 import versions.ver637.network.account.Account;
 import versions.ver637.network.coders.frames.WindowPaneFrame;
+import versions.ver637.pane.InterfaceWindow;
 
 public class Player extends RSEntity {
 
@@ -28,7 +28,7 @@ public class Player extends RSEntity {
 	private final PlayerModel model;
 
 	@Getter
-	private RSPane pane;
+	private InterfaceWindow pane;
 
 	public Player(RSNetworkSession session, Account account) {
 		this.session = session;
@@ -48,7 +48,7 @@ public class Player extends RSEntity {
 	 * 
 	 * @param pane the pane to set it to
 	 */
-	public void setWindowPane(RSPane pane) {
+	public void setWindowPane(InterfaceWindow pane) {
 		this.pane = pane;
 		this.session.write(new WindowPaneFrame(pane.getID(), true));
 	}

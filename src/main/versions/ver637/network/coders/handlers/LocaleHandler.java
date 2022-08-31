@@ -1,14 +1,13 @@
 package versions.ver637.network.coders.handlers;
 
-import com.framework.RSFramework;
 import com.framework.map.RSLocation;
 import com.framework.map.path.RSPathFinderBuilder;
 import com.framework.network.RSFrame;
 import com.google.common.primitives.Ints;
 
 import lombok.extern.slf4j.Slf4j;
-import versions.ver637.map.Locale;
-import versions.ver637.map.PlayerUseLocaleEvent;
+import versions.ver637.map.GameObject;
+import versions.ver637.map.GameObjectReachRequest;
 import versions.ver637.map.WorldMap;
 import versions.ver637.model.player.Player;
 import versions.ver637.network.coders.FrameHandler;
@@ -55,9 +54,9 @@ public class LocaleHandler implements FrameHandler {
 			}
 		}
 		RSLocation location = new RSLocation(x, y, player.getLocation().getZ());
-		Locale locale = WorldMap.getMap().getLocale(location);
+		GameObject locale = WorldMap.getMap().getGameObject(location);
 		if (locale == null) {
-			locale = new Locale(objectID, location, 10, 0);
+			locale = new GameObject(objectID, location, 10, 0);
 		}
 
 		if (locale.getID() != objectID) {
@@ -74,11 +73,7 @@ public class LocaleHandler implements FrameHandler {
 		builder.objectRotation(locale.getRotation());
 		builder.objectShape(locale.getType());
 		builder.accessBitMask(locale.getAccessFlag());
-		builder.reachRequest(route -> {
-			Locale target = (Locale) route.target();
-			String option = target.getData().getOptions()[index];
-			RSFramework.post(new PlayerUseLocaleEvent(player, target, option));
-		});
+		builder.reachRequest(new GameObjectReachRequest(player, locale.getData().getOptions()[index]));
 
 		player.getAccount().getLocationVariables().setRunning(running);
 		player.getAccount().getLocationVariables().setRoute(builder.findPath());

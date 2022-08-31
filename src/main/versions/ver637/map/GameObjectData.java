@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LocaleData {
+public class GameObjectData {
 	private String[] options = new String[5];
 	private int[][] anIntArrayArray3916;
 	private int[] anIntArray3908;

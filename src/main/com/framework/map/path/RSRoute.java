@@ -1,7 +1,6 @@
 package com.framework.map.path;
 
-import java.util.ArrayDeque;
-import java.util.Iterator;
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 import com.framework.map.RSCollision;
@@ -21,9 +20,20 @@ import versions.ver637.map.WorldMap;
  * @author Albert Beaupre
  */
 @Accessors(fluent = true, chain = true)
-public class RSRoute implements Iterable<RSRouteStep> {
+public class RSRoute {
 
-	private ArrayDeque<RSRouteStep> steps = new ArrayDeque<>();
+	private RSLocation[] checkpoints;
+	private RSLocation nextStep;
+	private int checkpointIndex;
+
+	public RSRoute(RSLocation... checkpoints) {
+		if (checkpoints.length > 0) {
+			this.checkpoints = checkpoints;
+			this.nextStep = checkpoints[0];
+		} else {
+			this.checkpoints = null;
+		}
+	}
 
 	@Getter
 	@Setter
@@ -44,14 +54,33 @@ public class RSRoute implements Iterable<RSRouteStep> {
 	 * @return the next step
 	 */
 	public RSRouteStep next() {
-		return steps.poll();
+		RSLocation checkpoint = this.checkpoints[this.checkpointIndex];
+		RSLocation nextCheckpoint = this.checkpoints[this.checkpointIndex + 1];
+		RSDirection directionTo = RSDirection.getDirectionGoingTowards(checkpoint, nextCheckpoint);
+		/**
+		 * The collision can change at any time during the route, such as a door
+		 * closing. That's why this is here
+		 */
+		if (RSCollision.canTraverse(WorldMap.getMap(), nextStep, directionTo)) {
+			this.nextStep = this.nextStep.neighbor(directionTo);
+
+			if (nextStep.equals(nextCheckpoint))
+				this.checkpointIndex++;
+			if (this.checkpointIndex + 1 >= this.checkpoints.length)
+				this.checkpoints = null;
+		} else {
+			this.checkpoints = null;
+			return null;
+		}
+		return new RSRouteStep(directionTo, nextStep);
 	}
 
 	/**
 	 * Clears this {@code RSRoute} of all steps.
 	 */
 	public void clear() {
-		steps.clear();
+		this.checkpoints = null;
+		this.reachRequest = r -> {};
 	}
 
 	/**
@@ -60,46 +89,12 @@ public class RSRoute implements Iterable<RSRouteStep> {
 	 * @return true if empty; otherwise false
 	 */
 	public boolean isEmpty() {
-		return steps.isEmpty();
+		return this.checkpoints == null;
 	}
 
 	@Override
 	public String toString() {
-		return steps.toString();
-	}
-
-	@Override
-	public Iterator<RSRouteStep> iterator() {
-		return steps.iterator();
-	}
-
-	/**
-	 * Builds the {@code RSRoute} based on the given {@code checkpoints}. The
-	 * coordinates between the checkpoints are added to the route.
-	 * 
-	 * @param checkpoints the checkpoints to build from.
-	 * @return the build steps route
-	 */
-	public static RSRoute buildFromCheckpoints(RSLocation... checkpoints) {
-		if (checkpoints.length == 1)
-			return new RSRoute();
-
-		RSRoute route = new RSRoute();
-		RSLocation from = checkpoints[0];
-		for (int i = 1; i < checkpoints.length; i++) {
-			RSLocation to = checkpoints[i];
-			RSLocation current = from;
-			while (!current.equals(to)) {
-				RSDirection direction = RSDirection.getDirectionGoingTowards(from, to);
-				if (!RSCollision.canTraverse(WorldMap.getMap(), current, direction))
-					break;
-
-				current = current.neighbor(direction);
-				route.steps.add(new RSRouteStep(direction, current));
-			}
-			from = to;
-		}
-		return route;
+		return Arrays.toString(checkpoints);
 	}
 
 }

@@ -12,7 +12,6 @@ import com.framework.map.RSRegion;
 import com.framework.resource.RSResource;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import versions.ver637.cache.CacheResource;
 import versions.ver637.cache.XTEAResource;
 
@@ -22,7 +21,6 @@ import versions.ver637.cache.XTEAResource;
  * 
  * @author Albert Beaupre
  */
-@Slf4j
 @RequiredArgsConstructor
 public class RegionResource implements RSResource<RSRegion> {
 
@@ -129,17 +127,7 @@ public class RegionResource implements RSResource<RSRegion> {
 					if (height >= 0 && height <= 3) {
 						final int absoluteX = (regionX << 6) + localX;
 						final int absoluteY = (regionY << 6) + localY;
-						final int absoluteZ = height;
-						LocaleResource resource = new LocaleResource(objectID, l -> {
-							Locale locale = new Locale(l.getID(), new RSLocation(absoluteX, absoluteY, absoluteZ), type, rotation);
-							try {
-								WorldMap.getMap().addLocale(locale);
-							} catch (Exception e) {
-								e.printStackTrace();
-								log.error("COULD NOT ADD LOCALE AT LOCATION: " + locale.getLocation());
-							}
-						});
-						resource.queue();
+						WorldMap.getMap().addGameObject(new GameObject(objectID, new RSLocation(absoluteX, absoluteY, height), type, rotation));
 					}
 				}
 			}

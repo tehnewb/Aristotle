@@ -15,39 +15,40 @@ public class WorldMap extends RSMap {
 	@Getter
 	private static final WorldMap Map = new WorldMap();
 
-	private final HashMap<Integer, Locale> locales = new HashMap<>();
+	private final HashMap<Integer, GameObject> locales = new HashMap<>();
 
 	/**
-	 * Adds the given {@code locale} to this {@code WorldMap}.
+	 * Adds the given {@code object} to this {@code WorldMap}.
 	 * 
-	 * @param locale the locale to add
+	 * @param object the object to add
 	 */
-	public void addLocale(@NonNull Locale locale) {
-		if (Stream.of(locale.getData().getOptions()).anyMatch(Objects::nonNull)) {
-			locales.put(locale.getLocation().packTo30Bits(), locale);
+	public void addGameObject(@NonNull GameObject object) {
+		// Only add if there are options. 99% of the time there is only one object per tile with clickable options
+		if (Stream.of(object.getData().getOptions()).anyMatch(Objects::nonNull)) {
+			locales.put(object.getLocation().packTo30Bits(), object);
 		}
-		locale.applyClip();
+		object.applyClip();
 	}
 
 	/**
-	 * Removes the locale at the given {@code locale}.
+	 * Removes the given {@code object} from this {@code WorldMap}.
 	 * 
-	 * @param location the location of the locale
+	 * @param object the object to remove
 	 */
-	public void removeLocale(RSLocation location) {
-		Locale locale = locales.remove(location.packTo30Bits());
+	public void removeGameObject(@NonNull GameObject object) {
+		locales.remove(object.getLocation().packTo30Bits());
 
-		locale.removeClip();
+		object.removeClip();
 	}
 
 	/**
-	 * Returns the location at the given {@code location}. If the locale doesn't
-	 * exist, null is returned;
+	 * Returns the {@code GameObject} at the given {@code location}. If the object
+	 * doesn't exist, null is returned;
 	 * 
-	 * @param location the location of the locale
-	 * @return the locale; possibly null
+	 * @param location the location of the object
+	 * @return the object; possibly null
 	 */
-	public Locale getLocale(RSLocation location) {
+	public GameObject getGameObject(RSLocation location) {
 		return locales.get(location.packTo30Bits());
 	}
 

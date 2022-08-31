@@ -1,16 +1,16 @@
-package com.framework.pane;
+package versions.ver637.pane;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 @Data
 @RequiredArgsConstructor
-public class RSComponent {
+public class InterfaceComponent {
 
 	private final int ID;
 
-	private RSWindow parent;
-	private RSComponentSettings settings;
+	private InterfaceWindow parent;
+	private ComponentSettings settings;
 	private String text;
 	private String[] options;
 	private boolean hidden;

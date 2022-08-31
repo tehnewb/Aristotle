@@ -1,5 +1,6 @@
 package com.framework.util;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -25,6 +26,25 @@ public class ReflectUtil {
 			e.printStackTrace();
 		}
 		return list;
+	}
+
+	public static String[] describe(Object object) {
+		try {
+			Field[] fields = object.getClass().getDeclaredFields();
+			String[] descriptions = new String[fields.length];
+			for (int i = 0; i < fields.length; i++) {
+				Field field = fields[i];
+				field.setAccessible(true);
+				String fieldName = field.getName();
+				Object fieldValue = field.get(object);
+				if (fieldValue == null)
+					continue;
+				descriptions[i] = fieldName + " = " + fieldValue;
+			}
+			return descriptions;
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 }

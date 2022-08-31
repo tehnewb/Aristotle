@@ -12,6 +12,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
@@ -173,12 +174,25 @@ public final class RSFramework {
 	}
 
 	/**
-	 * Queues the given {@code callable} to process the resource.
+	 * Queues the given {@code resource} to load the resource.
 	 * 
-	 * @param callable the callable to process the resource
+	 * @param callable the resource to process the resource
 	 */
-	public static void queueResource(@SuppressWarnings("rawtypes") @NonNull RSResource callable) {
-		ResourceWorker.queue(callable);
+	public static void queueResource(@SuppressWarnings("rawtypes") @NonNull RSResource resource) {
+		ResourceWorker.queue(resource);
+		ResourceService.execute(ResourceWorker);
+	}
+
+	/**
+	 * Queues the given {@code resource} to load the resource. The given
+	 * {@code callback} will be accepted with the loaded resource passed as the
+	 * object.
+	 * 
+	 * @param callable the resource to process the resource
+	 * @param callback the callback accepted once the resource is finished
+	 */
+	public static <T> void queueResource(@NonNull RSResource<T> resource, Consumer<T> callback) {
+		ResourceWorker.queue(resource, callback);
 		ResourceService.execute(ResourceWorker);
 	}
 

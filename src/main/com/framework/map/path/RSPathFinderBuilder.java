@@ -86,7 +86,7 @@ public class RSPathFinderBuilder {
 			int y = (packed >> 16) & 0xFFFF;
 			checkpoints[i] = new RSLocation(x, y, endingAt.getZ());
 		}
-		return RSRoute.buildFromCheckpoints(checkpoints).target(target).reachRequest(reachRequest).failed(path.getAlternative() || path.getFailed());
+		return new RSRoute(checkpoints).target(target).reachRequest(reachRequest).failed(path.getAlternative() || path.getFailed());
 	}
 
 }

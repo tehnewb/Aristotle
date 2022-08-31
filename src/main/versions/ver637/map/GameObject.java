@@ -6,20 +6,20 @@ import com.framework.map.RSLocation;
 import lombok.Getter;
 
 @Getter
-public class Locale {
+public class GameObject {
 
 	private final int ID;
 	private final RSLocation location;
 	private final int type;
 	private final int rotation;
-	private final LocaleData data;
+	private final GameObjectData data;
 
-	public Locale(int objectID, RSLocation location, int type, int rotation) {
+	public GameObject(int objectID, RSLocation location, int type, int rotation) {
 		this.ID = objectID;
 		this.location = location;
 		this.type = type;
 		this.rotation = rotation;
-		this.data = LocaleResource.getData(objectID);
+		this.data = GameObjectResource.getData(objectID);
 	}
 
 	public void applyClip() {

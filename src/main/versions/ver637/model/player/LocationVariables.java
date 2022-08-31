@@ -31,7 +31,7 @@ public class LocationVariables {
 	@NonNull
 	private RegionView view = RegionView.Small;
 
-	private boolean running;
+	private boolean running = true;
 	private boolean resting;
 
 	/**
@@ -56,13 +56,21 @@ public class LocationVariables {
 		if (!route.isEmpty()) {
 			RSRouteStep firstStep = route.next();
 
-			if (variables.isRunning() && !route.isEmpty()) {
-				RSRouteStep secondStep = route.next();
-				player.setLocation(secondStep.location());
-				player.getModel().registerFlag(new MovementFlag(firstStep, secondStep, variables.isRunning()));
-			} else {
-				player.setLocation(firstStep.location());
-				player.getModel().registerFlag(new MovementFlag(firstStep, null, variables.isRunning()));
+			if (firstStep != null) {
+				if (!firstStep.location().equals(player.getLocation())) {
+
+					if (variables.isRunning() && !route.isEmpty()) {
+						RSRouteStep secondStep = route.next();
+						if (secondStep != null) {
+
+							player.setLocation(secondStep.location());
+							player.getModel().registerFlag(new MovementFlag(firstStep, secondStep, variables.isRunning()));
+						}
+					} else {
+						player.setLocation(firstStep.location());
+						player.getModel().registerFlag(new MovementFlag(firstStep, null, variables.isRunning()));
+					}
+				}
 			}
 		}
 		if (route.isEmpty() && !route.failed()) {
