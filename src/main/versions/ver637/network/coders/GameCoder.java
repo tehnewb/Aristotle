@@ -54,6 +54,9 @@ public class GameCoder implements RSSessionCoder {
 				default -> PacketSizes[opcode];
 			};
 
+			if (length < 0)
+				return;
+
 			if (in.readableBytes() < length)
 				return;
 

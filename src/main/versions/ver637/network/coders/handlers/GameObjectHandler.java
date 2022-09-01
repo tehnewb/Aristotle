@@ -17,8 +17,7 @@ public class GameObjectHandler implements FrameHandler {
 
 	@Override
 	public void handleFrame(Player player, RSFrame frame) {
-		final int[] opcodes = { 76, 55, 81, 60, 25, 48 };
-		int index = Ints.indexOf(opcodes, frame.opcode());
+		int index = Ints.indexOf(opcodesHandled(), frame.opcode());
 		int x = -1, y = -1;
 		int objectID = -1;
 		boolean running = false;
@@ -74,13 +73,13 @@ public class GameObjectHandler implements FrameHandler {
 		builder.objectShape(locale.getType());
 		builder.accessBitMask(locale.getAccessFlag());
 		builder.reachRequest(new GameObjectReachRequest(player, locale.getData().getOptions()[index]));
-		player.getAccount().getLocationVariables().setRunning(running);
-		player.getAccount().getLocationVariables().setRoute(builder.findPath());
+		player.getLocationVariables().setRunning(running || player.getLocationVariables().isRunning());
+		player.getLocationVariables().setRoute(builder.findPath());
 	}
 
 	@Override
 	public int[] opcodesHandled() {
-		return new int[] { 25, 81, 76, 55, 60, 48 };
+		return new int[] { 76, 55, 81, 60, 25, 48 };
 	}
 
 }

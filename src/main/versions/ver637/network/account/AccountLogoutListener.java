@@ -14,9 +14,10 @@ public class AccountLogoutListener implements RSConnectionListener {
 		if (player == null)
 			return;
 
-		RSFramework.queueResource(new AccountSaveResource(player.getAccount()));
-
+		if (player.getPane() != null)
+			player.getPane().onClose();
 		Player.removeFromOnline(player);
+		RSFramework.queueResource(new AccountSaveResource(player.getAccount()));
 	}
 
 	@Override

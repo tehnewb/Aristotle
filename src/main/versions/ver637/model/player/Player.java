@@ -1,5 +1,6 @@
 package versions.ver637.model.player;
 
+import java.text.MessageFormat;
 import java.util.stream.Stream;
 
 import com.framework.RSFramework;
@@ -11,8 +12,10 @@ import com.framework.network.RSNetworkSession;
 import lombok.Getter;
 import lombok.NonNull;
 import versions.ver637.network.account.Account;
+import versions.ver637.network.coders.frames.ChatMessageFrame;
+import versions.ver637.network.coders.frames.ChatMessageFrame.ChatType;
 import versions.ver637.network.coders.frames.WindowPaneFrame;
-import versions.ver637.pane.InterfaceWindow;
+import versions.ver637.pane.GamePane;
 
 public class Player extends RSEntity {
 
@@ -28,12 +31,17 @@ public class Player extends RSEntity {
 	private final PlayerModel model;
 
 	@Getter
-	private InterfaceWindow pane;
+	private GamePane pane;
 
 	public Player(RSNetworkSession session, Account account) {
 		this.session = session;
 		this.account = account;
 		this.model = new PlayerModel(this);
+	}
+
+	public void sendMessage(String string, Object... arguments) {
+		String formatted = MessageFormat.format(string, arguments);
+		session.write(new ChatMessageFrame(account.getUsername(), formatted, ChatType.Normal));
 	}
 
 	public void setLocation(RSLocation newLocation) {
@@ -48,7 +56,7 @@ public class Player extends RSEntity {
 	 * 
 	 * @param pane the pane to set it to
 	 */
-	public void setWindowPane(InterfaceWindow pane) {
+	public void setWindowPane(GamePane pane) {
 		if (this.pane != null)
 			this.pane.onClose();
 
@@ -64,6 +72,52 @@ public class Player extends RSEntity {
 	 */
 	public RSLocation getLocation() {
 		return account.getLocationVariables().getCurrentLocation();
+	}
+
+	/**
+	 * Returns the {@code FriendVariables} in the account of this {@code Player}.
+	 * 
+	 * @return the friend variables
+	 */
+	public FriendVariables getFriendVariables() {
+		return account.getFriendVariables();
+	}
+
+	/**
+	 * Returns the {@code ChatVariables} in the account of this {@code Player}.
+	 * 
+	 * @return the chat variables
+	 */
+	public ChatVariables getChatVariables() {
+		return account.getChatVariables();
+	}
+
+	/**
+	 * Returns the {@code AppearanceVariables} in the account of this
+	 * {@code Player}.
+	 * 
+	 * @return the appearance variables
+	 */
+	public AppearanceVariables getAppearanceVariables() {
+		return account.getAppearanceVariables();
+	}
+
+	/**
+	 * Returns the {@code LocationVariables} in the account of this {@code Player}.
+	 * 
+	 * @return the location variables
+	 */
+	public LocationVariables getLocationVariables() {
+		return account.getLocationVariables();
+	}
+
+	/**
+	 * Returns the {@code TickVariables} in the account of this {@code Player}.
+	 * 
+	 * @return the tick variables
+	 */
+	public TickVariables getTickVariables() {
+		return account.getTickVariables();
 	}
 
 	/**

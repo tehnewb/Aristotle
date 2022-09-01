@@ -4,6 +4,8 @@ import java.io.File;
 import java.net.InetSocketAddress;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 import com.framework.network.RSFrame;
 import com.framework.network.RSNetworkSession;
@@ -13,6 +15,7 @@ import com.google.gson.Gson;
 
 import lombok.RequiredArgsConstructor;
 import versions.ver637.cache.CacheResource;
+import versions.ver637.model.player.FriendVariables;
 import versions.ver637.model.player.Player;
 import versions.ver637.model.player.flags.AppearanceFlag;
 import versions.ver637.network.coders.GameCoder;
@@ -53,26 +56,33 @@ public class AccountLoadResource implements RSResource<AccountLoginCallback> {
 	@Override
 	public void finish(AccountLoginCallback a) {
 		AccountLoginResponse response = a.response();
+		Account account = a.account();
+
 		session.getChannel().writeAndFlush(RSFrame.raw().writeByte(response.getCode()));
 		if (response == AccountLoginResponse.SuccessfulLogin) {
 			Player player = new Player(session, a.account());
 			Player.addToOnline(player);
 
 			InetSocketAddress address = (InetSocketAddress) session.getChannel().remoteAddress();
-			a.account().setLastKnownIP(address.getHostName());
+			account.setLastKnownIP(address.getHostName());
 
 			session.set("Player", player);
 			session.setConnectionListener(new AccountLogoutListener());
 			session.setCoder(new GameCoder(null, null));
 			if (request == AccountLoginRequest.Lobby) {
-				session.write(createLobbyResponse(a.account()));
+				session.write(createLobbyResponse(account));
+
+				FriendVariables.alertOnline(player);
 			} else if (request == AccountLoginRequest.Login) {
 				session.write(createLoginResponse(player));
+				session.write(new RegionFrame(player, player.getLocationVariables().getView(), true, true));
 
-				session.write(new RegionFrame(player, player.getAccount().getLocationVariables().getView(), true, true));
+				player.getAppearanceVariables().username(StringUtil.upperFirst(account.getUsername()));
 				player.getModel().setInWorld(true);
-				player.getModel().registerFlag(new AppearanceFlag(player.getAccount().getAppearanceVariables()));
+				player.getModel().registerFlag(new AppearanceFlag(player.getAppearanceVariables()));
 			}
+
+			account.setLastLoginDate(LocalDate.now().toString());
 		}
 	}
 
@@ -98,7 +108,7 @@ public class AccountLoadResource implements RSResource<AccountLoginCallback> {
 		lobbyResponse.writeShort(account.getMemberDays()); // member days left
 		lobbyResponse.writeShort(account.getRecoveryQuestionState()); // recovery questions
 		lobbyResponse.writeShort(account.getUnreadMessageCount()); // unread messages
-		lobbyResponse.writeShort(7487 - account.getDaysFromLastLogin());
+		lobbyResponse.writeShort((int) ChronoUnit.DAYS.between(LocalDate.parse("2002-02-27"), LocalDate.parse(account.getLastLoginDate())));
 		lobbyResponse.writeInt(StringUtil.IPAddressToNumber(account.getLastKnownIP())); // last ip
 		lobbyResponse.writeByte(account.getEmailRegistrationState()); // email status (0 - no email, 1 - pending, 2 - pending, 3 - registered)
 		lobbyResponse.writeShort(0);

@@ -515,6 +515,17 @@ public class RSStream {
 	}
 
 	/**
+	 * Writes the given {@code bytes} array to the buffer at the current writer
+	 * index and increases the writer index by the length of the array.
+	 * 
+	 * @param bytes the array to write
+	 * @return this current instance, used for chaining
+	 */
+	public RSStream writeBytes(byte[] bytes, int offset, int length) {
+		return writeBytes(Arrays.copyOfRange(bytes, offset, length));
+	}
+
+	/**
 	 * Writes the bytes from the given {@code stream} to this {@code RSStream}.
 	 * 
 	 * @param stream the stream to transfer the bytes from

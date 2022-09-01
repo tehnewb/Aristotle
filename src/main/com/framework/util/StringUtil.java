@@ -102,4 +102,20 @@ public class StringUtil {
 		return ((ip[0] << 24) | (ip[1] << 16) | (ip[2] << 8) | (ip[3]));
 	}
 
+	public static String formatForRuneScape(String text) {
+		char buf[] = text.toLowerCase().toCharArray();
+		boolean endMarker = true;
+		for (int i = 0; i < buf.length; i++) {
+			char c = buf[i];
+			if (endMarker && c >= 'a' && c <= 'z') {
+				buf[i] -= 0x20;
+				endMarker = false;
+			}
+			if (c == '.' || c == '!' || c == '?') {
+				endMarker = true;
+			}
+		}
+		return new String(buf, 0, buf.length);
+	}
+
 }

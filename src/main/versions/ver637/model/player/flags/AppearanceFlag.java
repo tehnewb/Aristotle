@@ -52,7 +52,7 @@ public class AppearanceFlag implements UpdateFlag {
 		appearanceData.writeByte(variables.skinColor());
 
 		appearanceData.writeShort(variables.renderAnimation());
-		appearanceData.writeRSString("Player" + (int) (Math.random() * 100));
+		appearanceData.writeRSString(variables.username());
 		appearanceData.writeByte(138);
 		appearanceData.writeByte(138);
 		appearanceData.writeShort(0);

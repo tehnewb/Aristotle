@@ -31,8 +31,10 @@ public class LocationVariables {
 	@NonNull
 	private RegionView view = RegionView.Small;
 
-	private boolean running = true;
-	private boolean resting;
+	private transient boolean resting;
+	private transient boolean moving;
+	private int runEnergy = 10000;
+	private boolean running;
 
 	/**
 	 * Returns the location at which the player has entered a new region.
@@ -48,7 +50,7 @@ public class LocationVariables {
 	/**
 	 * Processes the route movement for the given {@code player}.
 	 * 
-	 * @param player
+	 * @param player the player processing the route for
 	 */
 	public static void processRoute(Player player) {
 		LocationVariables variables = player.getAccount().getLocationVariables();
@@ -69,6 +71,7 @@ public class LocationVariables {
 				player.getModel().registerFlag(new MovementFlag(firstStep, secondStep, variables.isRunning()));
 			}
 		}
+		variables.setMoving(route.hasNext());
 	}
 
 }

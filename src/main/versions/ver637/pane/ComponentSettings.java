@@ -1,6 +1,8 @@
 package versions.ver637.pane;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * A class used to configure the bitwise struct for an interface. The struct
@@ -13,6 +15,8 @@ import lombok.Getter;
  * 
  * @author Mangis
  */
+@AllArgsConstructor
+@NoArgsConstructor
 public class ComponentSettings {
 
 	@Getter
@@ -106,11 +110,11 @@ public class ComponentSettings {
 	}
 
 	/**
-	 * True if the struct allow use on other interface components, eg, high
-	 * alchemy is used on items.
+	 * True if the struct allow use on other interface components, eg, high alchemy
+	 * is used on items.
 	 * 
-	 * @return True if the struct allow use on other interface components, eg,
-	 *         high alchemy is used on items.
+	 * @return True if the struct allow use on other interface components, eg, high
+	 *         alchemy is used on items.
 	 */
 	public boolean canUseOnInterfaceComponent() {
 		return (value & (0x1 << 16)) != 0;
@@ -219,9 +223,9 @@ public class ComponentSettings {
 	}
 
 	/**
-	 * Sets use on struct. By use on , I mean the options such as Cast in
-	 * spellbook or use in inventory. If nothing is allowed then 'use' entityOption
-	 * will not appear in right click menu.
+	 * Sets use on struct. By use on , I mean the options such as Cast in spellbook
+	 * or use in inventory. If nothing is allowed then 'use' entityOption will not
+	 * appear in right click menu.
 	 */
 	public ComponentSettings setUseOnSettings(boolean canUseOnGroundItems, boolean canUseOnNpcs, boolean canUseOnObjects, boolean canUseOnNonselfPlayers, boolean canUseOnSelfPlayer, boolean canUseOnInterfaceComponent) {
 		int useFlag = 0;
@@ -240,6 +244,28 @@ public class ComponentSettings {
 		value &= ~(0x7F << 11); // disable
 		value |= useFlag << 11;
 		return this;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("ComponentSettings[");
+		builder.append("value=" + this.value + ", ");
+		builder.append("hasPrimary=" + this.hasPrimaryOption() + ", ");
+		for (int i = 0; i < 9; i++)
+			builder.append("hasSecondary[" + i + "]=" + this.hasSecondaryOption(i) + ", ");
+		builder.append("canDrag=" + this.canDrag() + ", ");
+		builder.append("canDragOnto=" + this.canDragOnto() + ", ");
+		builder.append("canUseOnGroundItems=" + this.canUseOnGroundItems() + ", ");
+		builder.append("canUseOnInterfaceComponent=" + this.canUseOnInterfaceComponent() + ", ");
+		builder.append("canUseOnNPCs=" + this.canUseOnNPCs() + ", ");
+		builder.append("canUseOnObjects=" + this.canUseOnObjects() + ", ");
+		builder.append("canUseOnOtherPlayers=" + this.canUseOnOtherPlayers() + ", ");
+		builder.append("canUseOnSelf=" + this.canUseOnSelf() + ", ");
+		builder.append("interfaceDepth=" + this.getInterfaceDepth() + ", ");
+		builder.append("isUseOnTarget=" + this.isUseOnTarget());
+		builder.append("]");
+		return builder.toString();
 	}
 
 }

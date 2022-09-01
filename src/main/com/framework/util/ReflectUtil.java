@@ -28,7 +28,7 @@ public class ReflectUtil {
 		return list;
 	}
 
-	public static String[] describe(Object object) {
+	public static String[] describeFields(Object object) {
 		try {
 			Field[] fields = object.getClass().getDeclaredFields();
 			String[] descriptions = new String[fields.length];

@@ -27,6 +27,8 @@ public class PlayerModel extends UpdateModel {
 	@Override
 	public void prepare() {
 		LocationVariables.processRoute(player);
+		TickVariables.processTicks(player);
+		ChatVariables.processChat(player);
 	}
 
 	@Override

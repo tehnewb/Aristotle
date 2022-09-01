@@ -30,7 +30,7 @@ public class TeleportCommand implements Command {
 			y = Integer.parseInt(arguments[1].trim());
 			z = arguments.length > 2 ? Integer.parseInt(arguments[2].trim()) : player.getLocation().getZ();
 		}
-		player.getAccount().getLocationVariables().getRoute().clear();
+		player.getLocationVariables().getRoute().clear();
 		player.setLocation(new RSLocation(x, y, z));
 		player.getModel().registerFlag(new TeleportFlag());
 	}

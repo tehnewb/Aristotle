@@ -54,7 +54,7 @@ public abstract class RSTick extends RSEntity {
 	 * Handles the updating process for this tick by calculating the gap between
 	 * each tick based on the delay set.
 	 */
-	protected final void update() {
+	public final void update() {
 		if (stopped())
 			return; // do not continue any further if this tick is stopped
 

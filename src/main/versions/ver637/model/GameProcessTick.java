@@ -7,6 +7,10 @@ import versions.ver637.model.player.Player;
 
 public class GameProcessTick extends RSGameTick {
 
+	public GameProcessTick() {
+		super("Game Process Tick");
+	}
+
 	@Override
 	protected void tick() {
 		RSEntityList<Player> players = Player.getOnlinePlayers();

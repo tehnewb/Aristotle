@@ -83,12 +83,12 @@ public class RSRoute {
 	 * @return the current step
 	 */
 	public RSRouteStep get() {
-		if (isEmpty())
-			return new RSRouteStep(RSDirection.None, nextStep);
 		RSLocation checkpoint = this.checkpoints[this.checkpointIndex];
 		RSLocation nextCheckpoint = this.checkpoints[this.checkpointIndex + 1];
 		RSDirection directionTo = RSDirection.getDirectionGoingTowards(checkpoint, nextCheckpoint);
-		return new RSRouteStep(directionTo, nextStep.neighbor(directionTo));
+		if (isEmpty() || !RSCollision.canTraverse(WorldMap.getMap(), nextStep, directionTo))
+			return new RSRouteStep(directionTo, nextStep.neighbor(directionTo));
+		return new RSRouteStep(RSDirection.None, nextStep);
 	}
 
 	/**
