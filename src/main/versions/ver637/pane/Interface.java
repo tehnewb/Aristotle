@@ -1,6 +1,7 @@
 package versions.ver637.pane;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -144,6 +145,20 @@ public abstract class Interface {
 	 */
 	public Interface getChildForID(int ID) {
 		return children.values().stream().filter(i -> i.getID() == ID).findFirst().orElse(null);
+	}
+
+	/**
+	 * Closes all non modal interfaces.
+	 */
+	public void closeNonModal() {
+		for (Entry<Integer, Interface> entry : this.children.entrySet()) {
+			int position = entry.getKey();
+			Interface window = entry.getValue();
+			if (window.isModal())
+				continue;
+
+			removeChild(position);
+		}
 	}
 
 }

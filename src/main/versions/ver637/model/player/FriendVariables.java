@@ -7,9 +7,12 @@ import com.framework.util.StringUtil;
 
 import lombok.Getter;
 import lombok.Setter;
+import versions.ver637.network.account.Account;
 import versions.ver637.network.account.SimpleAccountResource;
+import versions.ver637.network.coders.frames.AddIgnoreFrame;
 import versions.ver637.network.coders.frames.ReceivePrivateMessageFrame;
 import versions.ver637.network.coders.frames.SendPrivateMessageFrame;
+import versions.ver637.network.coders.frames.UnlockIgnoreFrame;
 import versions.ver637.network.coders.frames.UpdateFriendFrame;
 import versions.ver637.network.coders.frames.UpdateFriendFrame.FriendState;
 
@@ -18,6 +21,7 @@ import versions.ver637.network.coders.frames.UpdateFriendFrame.FriendState;
 public class FriendVariables {
 
 	private ArrayList<String> friends = new ArrayList<>();
+	private ArrayList<String> ignores = new ArrayList<>();
 
 	public static void initializeFriendsList(Player player) {
 		FriendVariables variables = player.getFriendVariables();
@@ -29,10 +33,8 @@ public class FriendVariables {
 
 			if (friend == null) {
 				RSFramework.queueResource(new SimpleAccountResource(name), account -> {
-					if (account == null) {
-						//TODO account does not exist for some reason
+					if (account == null)
 						return;
-					}
 					player.getSession().write(new UpdateFriendFrame(account, FriendState.Offline));
 				});
 				continue;
@@ -44,29 +46,27 @@ public class FriendVariables {
 	}
 
 	public static void alertOnline(Player player) {
-		FriendVariables variables = player.getFriendVariables();
-
-		for (String name : variables.getFriends()) {
-			Player friend = Player.get(name);
-			if (friend == null)
+		for (Player other : Player.getOnlinePlayers()) {
+			if (other == null)
 				continue;
+			ArrayList<String> friends = other.getFriendVariables().getFriends();
 
-			if (isMutualFriend(player, friend)) {
+			if (friends.stream().anyMatch(player.getAccount().getUsername()::equalsIgnoreCase)) {
 				FriendState state = player.getModel().isInWorld() ? FriendState.World : FriendState.Lobby;
-				friend.getSession().write(new UpdateFriendFrame(player.getAccount(), state));
+				other.getSession().write(new UpdateFriendFrame(player.getAccount(), state));
 			}
 		}
 
 	}
 
 	public static void alertOffline(Player player) {
-		FriendVariables variables = player.getFriendVariables();
-		for (String name : variables.getFriends()) {
-			Player friend = Player.get(name);
-			if (friend == null)
+		for (Player other : Player.getOnlinePlayers()) {
+			if (other == null)
 				continue;
-			if (isMutualFriend(player, friend)) {
-				friend.getSession().write(new UpdateFriendFrame(player.getAccount(), FriendState.Offline));
+			ArrayList<String> friends = other.getFriendVariables().getFriends();
+
+			if (friends.stream().anyMatch(player.getAccount().getUsername()::equalsIgnoreCase)) {
+				other.getSession().write(new UpdateFriendFrame(player.getAccount(), FriendState.Offline));
 			}
 		}
 	}
@@ -82,7 +82,7 @@ public class FriendVariables {
 		if (other == null) {
 			RSFramework.queueResource(new SimpleAccountResource(username), account -> {
 				if (account == null) {
-					player.sendMessage("That username does not exist.");
+					player.sendMessage("{0} does not exist.", StringUtil.upperFirst(username));
 					return;
 				}
 
@@ -110,8 +110,53 @@ public class FriendVariables {
 			return;
 		}
 
-		other.getSession().write(new ReceivePrivateMessageFrame(sender, message));
 		sender.getSession().write(new SendPrivateMessageFrame(sender, message));
+
+		if (isIgnoring(other, sender))
+			return;
+
+		System.out.println("WTF");
+
+		other.getSession().write(new ReceivePrivateMessageFrame(sender, message));
+	}
+
+	public static void initializeIgnoreList(Player player) {
+		FriendVariables variables = player.getFriendVariables();
+		ArrayList<Account> accounts = new ArrayList<>();
+		ArrayList<String> ignores = variables.getIgnores();
+		for (String name : ignores) {
+			RSFramework.queueResource(new SimpleAccountResource(name), account -> {
+				if (account == null)
+					return;
+				accounts.add(account);
+
+				if (account.getUsername().equalsIgnoreCase(ignores.get(ignores.size() - 1)))
+					player.getSession().write(new UnlockIgnoreFrame(accounts.toArray(Account[]::new)));
+			});
+		}
+	}
+
+	public static void addIgnore(Player player, String username) {
+		FriendVariables variables = player.getFriendVariables();
+
+		if (variables.getIgnores().contains(username))
+			return;
+
+		variables.getIgnores().add(username);
+
+		RSFramework.queueResource(new SimpleAccountResource(username), account -> {
+			if (account == null) {
+				player.sendMessage("{0} does not exist.", StringUtil.upperFirst(username));
+				return;
+			}
+			player.getSession().write(new AddIgnoreFrame(account));
+		});
+	}
+
+	public static void removeIgnore(Player player, String username) {
+		FriendVariables variables = player.getFriendVariables();
+
+		variables.getIgnores().remove(username);
 	}
 
 	public static boolean isMutualFriend(Player player, Player other) {
@@ -121,6 +166,11 @@ public class FriendVariables {
 		boolean hasOther = variables.getFriends().stream().anyMatch(other.getAccount().getUsername()::equalsIgnoreCase);
 		boolean hasPlayer = variablesOther.getFriends().stream().anyMatch(player.getAccount().getUsername()::equalsIgnoreCase);
 		return hasOther && hasPlayer;
+	}
+
+	public static boolean isIgnoring(Player player, Player other) {
+		FriendVariables variables = player.getFriendVariables();
+		return variables.getIgnores().stream().anyMatch(other.getAccount().getUsername()::equalsIgnoreCase);
 	}
 
 }

@@ -12,7 +12,6 @@ public class FriendHandler implements FrameHandler {
 
 	public static final int AddFriendOpcode = 2;
 	public static final int RemoveFriendOpcode = 77;
-	public static final int AddIgnoreOpcode = 74;
 	public static final int SendPrivateMessageOpcode = 41;
 
 	@Override
@@ -31,7 +30,8 @@ public class FriendHandler implements FrameHandler {
 			case SendPrivateMessageOpcode -> {
 				String name = StringUtil.upperFirst(frame.readRSString());
 				int characterCount = frame.readUnsignedByte();
-				String message = Huffman.decompress(frame.readBytes(characterCount), characterCount);
+				byte[] buffer = frame.readBytes(frame.readableBytes());
+				String message = Huffman.decompress(buffer, characterCount);
 				String formatted = StringUtil.formatForRuneScape(message);
 				FriendVariables.sendPrivateMessage(player, name, formatted);
 			}
@@ -40,7 +40,7 @@ public class FriendHandler implements FrameHandler {
 
 	@Override
 	public int[] opcodesHandled() {
-		return new int[] { AddFriendOpcode, RemoveFriendOpcode, AddIgnoreOpcode, SendPrivateMessageOpcode };
+		return new int[] { AddFriendOpcode, RemoveFriendOpcode, SendPrivateMessageOpcode };
 	}
 
 }

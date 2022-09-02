@@ -6,8 +6,10 @@ import versions.ver637.pane.Interface;
 
 public class ChatPaneSubInterface extends Interface {
 
+	public static final int ChatPaneSubID = 137;
+
 	public ChatPaneSubInterface() {
-		super(137, true);
+		super(ChatPaneSubID, true);
 	}
 
 	@Override

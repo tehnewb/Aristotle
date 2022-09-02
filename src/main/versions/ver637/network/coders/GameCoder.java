@@ -55,10 +55,10 @@ public class GameCoder implements RSSessionCoder {
 			};
 
 			if (length < 0)
-				return;
+				length = in.readableBytes();
 
 			if (in.readableBytes() < length)
-				return;
+				length = in.readableBytes();
 
 			byte[] payload = in.readBytes(length);
 			RSFrame frame = new RSFrame(opcode, payload, RSFrame.StandardType);

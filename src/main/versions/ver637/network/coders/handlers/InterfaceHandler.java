@@ -24,7 +24,7 @@ public class InterfaceHandler implements FrameHandler {
 		if (window == null)
 			return;
 
-		window.click(new ComponentClick(componentID, itemID, slot, option));
+		window.click(new ComponentClick(window, componentID, itemID, slot, option));
 	}
 
 	@Override

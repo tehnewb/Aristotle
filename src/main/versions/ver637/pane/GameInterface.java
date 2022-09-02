@@ -5,7 +5,7 @@ package versions.ver637.pane;
  * 
  * @author Albert Beaupre
  */
-public abstract class GamePaneInterface extends Interface {
+public abstract class GameInterface extends Interface {
 
 	/**
 	 * Constructs a new {@code GamePaneInterface} with the given
@@ -13,7 +13,7 @@ public abstract class GamePaneInterface extends Interface {
 	 * 
 	 * @param interfaceID the id of the interface
 	 */
-	public GamePaneInterface(int interfaceID, boolean modal) {
+	public GameInterface(int interfaceID, boolean modal) {
 		super(interfaceID, modal);
 	}
 

@@ -1,32 +1,18 @@
 package versions.ver637.pane.chat;
 
-import versions.ver637.pane.ComponentClick;
-import versions.ver637.pane.GamePaneInterface;
+import versions.ver637.pane.GameInterfaceAdapter;
 
-public class ChatOptionsInterface extends GamePaneInterface {
+public class ChatOptionsInterface extends GameInterfaceAdapter {
+
+	public static final int ChatOptionsID = 751;
 
 	public ChatOptionsInterface() {
-		super(751, true);
+		super(ChatOptionsID, true);
 	}
 
 	@Override
 	public void onOpen() {
 		this.setVarp(281, 1000); // tutorial unlocked
-	}
-
-	@Override
-	public void click(ComponentClick data) {
-
-	}
-
-	@Override
-	public void onClose() {
-
-	}
-
-	@Override
-	public boolean clickThrough() {
-		return false;
 	}
 
 	@Override

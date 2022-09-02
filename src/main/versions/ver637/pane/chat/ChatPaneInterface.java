@@ -1,28 +1,18 @@
 package versions.ver637.pane.chat;
 
-import versions.ver637.pane.ComponentClick;
-import versions.ver637.pane.GamePaneInterface;
+import versions.ver637.pane.GameInterfaceAdapter;
 
-public class ChatPaneInterface extends GamePaneInterface {
+public class ChatPaneInterface extends GameInterfaceAdapter {
+
+	public static final int ChatPaneID = 752;
 
 	public ChatPaneInterface() {
-		super(752, true);
+		super(ChatPaneID, true);
 	}
 
 	@Override
 	public void onOpen() {
 		this.addChild(new ChatPaneSubInterface());
-
-	}
-
-	@Override
-	public void click(ComponentClick data) {
-
-	}
-
-	@Override
-	public void onClose() {
-
 	}
 
 	@Override

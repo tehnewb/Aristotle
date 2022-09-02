@@ -1,27 +1,13 @@
 package versions.ver637.pane.chat;
 
-import versions.ver637.pane.ComponentClick;
-import versions.ver637.pane.GamePaneInterface;
+import versions.ver637.pane.GameInterfaceAdapter;
 
-public class PrivateMessageInterface extends GamePaneInterface {
+public class PrivateMessageInterface extends GameInterfaceAdapter {
+
+	public static final int PrivateMessageID = 754;
 
 	public PrivateMessageInterface() {
-		super(754, true);
-	}
-
-	@Override
-	public void click(ComponentClick data) {
-
-	}
-
-	@Override
-	public void onOpen() {
-
-	}
-
-	@Override
-	public void onClose() {
-
+		super(PrivateMessageID, true);
 	}
 
 	@Override

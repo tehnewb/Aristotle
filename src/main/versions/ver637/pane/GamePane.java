@@ -11,6 +11,7 @@ import versions.ver637.pane.chat.ChatPaneInterface;
 import versions.ver637.pane.chat.PrivateMessageInterface;
 import versions.ver637.pane.orbs.RunOrbInterface;
 import versions.ver637.pane.tabs.FriendListTab;
+import versions.ver637.pane.tabs.IgnoreListTab;
 
 public class GamePane extends Interface {
 
@@ -144,6 +145,7 @@ public class GamePane extends Interface {
 
 	@Override
 	public void onOpen() {
+		this.open(new IgnoreListTab());
 		this.open(new FriendListTab());
 		this.open(new RunOrbInterface());
 		this.open(new ChatPaneInterface());

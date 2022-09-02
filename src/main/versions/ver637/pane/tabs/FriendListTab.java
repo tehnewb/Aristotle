@@ -1,10 +1,9 @@
 package versions.ver637.pane.tabs;
 
 import versions.ver637.model.player.FriendVariables;
-import versions.ver637.pane.ComponentClick;
-import versions.ver637.pane.GamePaneInterface;
+import versions.ver637.pane.GameInterfaceAdapter;
 
-public class FriendListTab extends GamePaneInterface {
+public class FriendListTab extends GameInterfaceAdapter {
 
 	public static final int FriendListID = 550;
 
@@ -19,18 +18,8 @@ public class FriendListTab extends GamePaneInterface {
 	}
 
 	@Override
-	public void click(ComponentClick data) {
-
-	}
-
-	@Override
 	public void onClose() {
 		FriendVariables.alertOffline(player);
-	}
-
-	@Override
-	public boolean clickThrough() {
-		return false;
 	}
 
 	@Override

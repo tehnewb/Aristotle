@@ -1,6 +1,7 @@
 package versions.ver637.network.coders.frames;
 
 import com.framework.network.RSFrame;
+import com.framework.util.StringUtil;
 
 import versions.ver637.network.account.Account;
 
@@ -16,12 +17,17 @@ public class UpdateFriendFrame extends RSFrame {
 
 	public UpdateFriendFrame(Account friend, FriendState state) {
 		super(UpdateFriendOpcode, VarShortType);
-		String previous = friend.getAppearanceVariables().previousUserName();
+		String previousName = friend.getAppearanceVariables().previousUserName();
 		String displayName = friend.getAppearanceVariables().username();
 
+		if (displayName == null)
+			displayName = friend.getUsername();
+
+		displayName = StringUtil.upperFirst(displayName);
+
 		writeByte(0);
-		writeRSString(displayName == null ? friend.getUsername() : displayName);
-		writeRSString(previous == null ? "" : previous);
+		writeRSString(displayName);
+		writeRSString(previousName == null ? "" : StringUtil.upperFirst(previousName));
 		writeShort(state.ordinal());
 		writeByte(0); // clan rank
 		if (state.equals(FriendState.Lobby) || state.equals(FriendState.World)) {

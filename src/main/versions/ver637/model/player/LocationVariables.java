@@ -55,10 +55,17 @@ public class LocationVariables {
 	public static void processRoute(Player player) {
 		LocationVariables variables = player.getAccount().getLocationVariables();
 		RSRoute route = variables.getRoute();
+
+		if (!player.getModel().isInWorld())
+			return;
+
 		if (route.reachedLastCheckpoint() || (route.isEmpty() && !route.failed())) {
 			route.reachRequest().accept(route);
 
 			variables.setRoute(EmptyRoute);
+
+			if (player.getPane() != null)
+				player.getPane().closeNonModal();
 		}
 		if (route.hasNext()) {
 			RSRouteStep firstStep = route.next();
@@ -70,6 +77,9 @@ public class LocationVariables {
 				player.setLocation(secondStep == null ? firstStep.location() : secondStep.location());
 				player.getModel().registerFlag(new MovementFlag(firstStep, secondStep, variables.isRunning()));
 			}
+
+			if (player.getPane() != null)
+				player.getPane().closeNonModal();
 		}
 		variables.setMoving(route.hasNext());
 	}

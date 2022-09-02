@@ -45,4 +45,9 @@ public class RSNetworkHandler extends ChannelInboundHandlerAdapter {
 			ctx.writeAndFlush(message);
 		}
 	}
+
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+		cause.printStackTrace();
+	}
 }
