@@ -11,6 +11,8 @@ import com.framework.network.RSNetworkSession;
 
 import lombok.Getter;
 import lombok.NonNull;
+import versions.ver637.model.player.clan.ClanVariables;
+import versions.ver637.model.player.music.MusicVariables;
 import versions.ver637.network.account.Account;
 import versions.ver637.network.coders.frames.ChatMessageFrame;
 import versions.ver637.network.coders.frames.ChatMessageFrame.ChatType;
@@ -72,6 +74,33 @@ public class Player extends RSEntity {
 	 */
 	public RSLocation getLocation() {
 		return account.getLocationVariables().getCurrentLocation();
+	}
+
+	/**
+	 * Returns the {@code MusicVariables} in the account of this {@code Player}.
+	 * 
+	 * @return the music variables
+	 */
+	public MusicVariables getMusicVariables() {
+		return account.getMusicVariables();
+	}
+
+	/**
+	 * Returns the {@code MiscVariables} in the account of this {@code Player}.
+	 * 
+	 * @return the misc variables
+	 */
+	public MiscVariables getMiscVariables() {
+		return account.getMiscVariables();
+	}
+
+	/**
+	 * Returns the {@code ClanVariables} in the account of this {@code Player}.
+	 * 
+	 * @return the clan variables
+	 */
+	public ClanVariables getClanVariables() {
+		return account.getClanVariables();
 	}
 
 	/**

@@ -4,7 +4,9 @@ import com.framework.RSFramework;
 import com.framework.network.RSConnectionListener;
 import com.framework.network.RSNetworkSession;
 
+import versions.ver637.model.player.FriendVariables;
 import versions.ver637.model.player.Player;
+import versions.ver637.model.player.clan.ClanVariables;
 
 public class AccountLogoutListener implements RSConnectionListener {
 
@@ -14,9 +16,15 @@ public class AccountLogoutListener implements RSConnectionListener {
 		if (player == null)
 			return;
 
+		player.getModel().setInWorld(false);
+		Player.removeFromOnline(player);
+		
 		if (player.getPane() != null)
 			player.getPane().onClose();
-		Player.removeFromOnline(player);
+		
+		FriendVariables.alertOffline(player);
+		ClanVariables.alertClan(player);
+		
 		RSFramework.queueResource(new AccountSaveResource(player.getAccount()));
 	}
 

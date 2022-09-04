@@ -23,8 +23,13 @@ public class FriendListTab extends GameInterfaceAdapter {
 	}
 
 	@Override
+	public boolean clickThrough() {
+		return true;
+	}
+
+	@Override
 	public int position(boolean resizable) {
-		return resizable ? 96 : 202;
+		return resizable ? 96 : 211;
 	}
 
 }

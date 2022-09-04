@@ -8,9 +8,9 @@ public class InterfaceFrame extends RSFrame {
 
 	public InterfaceFrame(int parentID, int interfaceID, int position, boolean clickThrough) {
 		super(InterfaceOpcode, StandardType);
-		
-		writeInt2(parentID * 65536 + position);
-		writeLEShortA(position >> 16 | interfaceID);
+
+		writeInt2(parentID << 16 | position);
+		writeLEShortA(interfaceID);
 		writeByteC(clickThrough ? 1 : 0);
 	}
 }

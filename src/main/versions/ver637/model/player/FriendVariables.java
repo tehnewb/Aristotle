@@ -7,6 +7,7 @@ import com.framework.util.StringUtil;
 
 import lombok.Getter;
 import lombok.Setter;
+import versions.ver637.model.player.ChatVariables.Chat;
 import versions.ver637.network.account.Account;
 import versions.ver637.network.account.SimpleAccountResource;
 import versions.ver637.network.coders.frames.AddIgnoreFrame;
@@ -35,13 +36,13 @@ public class FriendVariables {
 				RSFramework.queueResource(new SimpleAccountResource(name), account -> {
 					if (account == null)
 						return;
-					player.getSession().write(new UpdateFriendFrame(account, FriendState.Offline));
+					player.getSession().write(new UpdateFriendFrame(player, account, FriendState.Offline));
 				});
 				continue;
 			}
 
 			FriendState state = friend.getModel().isInWorld() ? FriendState.World : FriendState.Lobby;
-			player.getSession().write(new UpdateFriendFrame(friend.getAccount(), state));
+			player.getSession().write(new UpdateFriendFrame(player, friend.getAccount(), state));
 		}
 	}
 
@@ -53,7 +54,7 @@ public class FriendVariables {
 
 			if (friends.stream().anyMatch(player.getAccount().getUsername()::equalsIgnoreCase)) {
 				FriendState state = player.getModel().isInWorld() ? FriendState.World : FriendState.Lobby;
-				other.getSession().write(new UpdateFriendFrame(player.getAccount(), state));
+				other.getSession().write(new UpdateFriendFrame(player, player.getAccount(), state));
 			}
 		}
 
@@ -66,7 +67,7 @@ public class FriendVariables {
 			ArrayList<String> friends = other.getFriendVariables().getFriends();
 
 			if (friends.stream().anyMatch(player.getAccount().getUsername()::equalsIgnoreCase)) {
-				other.getSession().write(new UpdateFriendFrame(player.getAccount(), FriendState.Offline));
+				other.getSession().write(new UpdateFriendFrame(player, player.getAccount(), FriendState.Offline));
 			}
 		}
 	}
@@ -87,12 +88,12 @@ public class FriendVariables {
 				}
 
 				variables.getFriends().add(username);
-				player.getSession().write(new UpdateFriendFrame(account, FriendState.Offline));
+				player.getSession().write(new UpdateFriendFrame(player, account, FriendState.Offline));
 			});
 			return;
 		}
 		FriendState state = other.getModel().isInWorld() ? FriendState.World : FriendState.Lobby;
-		player.getSession().write(new UpdateFriendFrame(other.getAccount(), state));
+		player.getSession().write(new UpdateFriendFrame(player, other.getAccount(), state));
 
 		variables.getFriends().add(username);
 	}
@@ -103,21 +104,19 @@ public class FriendVariables {
 		variables.getFriends().remove(username);
 	}
 
-	public static void sendPrivateMessage(Player sender, String receiver, String message) {
+	public static void sendPrivateMessage(Player sender, String receiver, Chat chat) {
 		Player other = Player.get(receiver);
 		if (other == null) {
 			sender.sendMessage("{0} is not online.", StringUtil.upperFirst(receiver));
 			return;
 		}
 
-		sender.getSession().write(new SendPrivateMessageFrame(sender, message));
+		sender.getSession().write(new SendPrivateMessageFrame(sender, sender.getChatVariables().isProfanityFilter() ? chat.filtered() : chat.text()));
 
 		if (isIgnoring(other, sender))
 			return;
 
-		System.out.println("WTF");
-
-		other.getSession().write(new ReceivePrivateMessageFrame(sender, message));
+		other.getSession().write(new ReceivePrivateMessageFrame(sender, other.getChatVariables().isProfanityFilter() ? chat.filtered() : chat.text()));
 	}
 
 	public static void initializeIgnoreList(Player player) {

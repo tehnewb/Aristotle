@@ -5,6 +5,7 @@ import com.framework.map.path.RSRouteBuilder;
 import com.framework.map.path.RSRoute;
 import com.framework.network.RSFrame;
 
+import versions.ver637.model.player.LocationVariables;
 import versions.ver637.model.player.Player;
 import versions.ver637.network.coders.FrameHandler;
 
@@ -21,6 +22,7 @@ public class WalkRequestHandler implements FrameHandler {
 		builder.endingAt(destination);
 
 		RSRoute route = builder.findPath();
+		LocationVariables.resetRoute(player);
 		player.getAccount().getLocationVariables().setRoute(route);
 	}
 

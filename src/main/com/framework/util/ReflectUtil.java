@@ -2,6 +2,7 @@ package com.framework.util;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import com.google.common.collect.ImmutableSet;
@@ -37,8 +38,12 @@ public class ReflectUtil {
 				field.setAccessible(true);
 				String fieldName = field.getName();
 				Object fieldValue = field.get(object);
-				if (fieldValue == null)
-					continue;
+
+				if (fieldValue != null) {
+					if (fieldValue.getClass().isArray()) {
+						fieldValue = Arrays.toString(Object[].class.cast(fieldValue));
+					}
+				}
 				descriptions[i] = fieldName + " = " + fieldValue;
 			}
 			return descriptions;

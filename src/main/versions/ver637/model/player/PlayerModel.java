@@ -52,7 +52,7 @@ public class PlayerModel extends UpdateModel {
 			if (!local.get(index))
 				continue;
 
-			if (other == null || !other.getLocation().inRange(player.getLocation(), 16)) {
+			if (other == null || !other.getLocation().inRange(player.getLocation(), 16) || !other.getModel().isInWorld()) {
 				frame.writeBits(1, 1);
 				frame.writeBits(11, index);
 				frame.writeBits(1, 0);

@@ -676,7 +676,7 @@ public class RSStream {
 	 * @return this current instance, used for chaining
 	 */
 	public RSStream writeLong(long value) {
-		return writeByte(value).writeByte(value >> 8).writeByte(value >> 16).writeByte(value >> 24).writeByte(value >> 32).writeByte(value >> 40).writeByte(value >> 48).writeByte(value >> 56);
+		return writeByte(value >> 56).writeByte(value >> 48).writeByte(value >> 40).writeByte(value >> 32).writeByte(value >> 24).writeByte(value >> 16).writeByte(value >> 8).writeByte(value);
 	}
 
 	/**

@@ -102,6 +102,31 @@ public class StringUtil {
 		return ((ip[0] << 24) | (ip[1] << 16) | (ip[2] << 8) | (ip[3]));
 	}
 
+	/**
+	 * Converts the given {@code string} to a long type value.
+	 * 
+	 * @param string the string to convert
+	 * @return the converted value
+	 */
+	public static long toLong(String string) {
+		long lng = 0L;
+		for (int i = 0; i < string.length() && i < 12; i++) {
+			char character = string.charAt(i);
+			lng *= 37L;
+			if (character >= 'A' && character <= 'Z') {
+				lng += (1 + character) - 65;
+			} else if (character >= 'a' && character <= 'z') {
+				lng += (1 + character) - 97;
+			} else if (character >= '0' && character <= '9') {
+				lng += (27 + character) - 48;
+			}
+		}
+		while (lng % 37L == 0L && lng != 0L) {
+			lng /= 37L;
+		}
+		return lng;
+	}
+
 	public static String formatForRuneScape(String text) {
 		char buf[] = text.toLowerCase().toCharArray();
 		boolean endMarker = true;

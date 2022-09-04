@@ -3,6 +3,7 @@ package versions.ver637.game.commands.impl;
 import com.framework.map.RSLocation;
 
 import versions.ver637.game.commands.Command;
+import versions.ver637.model.player.LocationVariables;
 import versions.ver637.model.player.Player;
 import versions.ver637.model.player.flags.TeleportFlag;
 
@@ -30,7 +31,7 @@ public class TeleportCommand implements Command {
 			y = Integer.parseInt(arguments[1].trim());
 			z = arguments.length > 2 ? Integer.parseInt(arguments[2].trim()) : player.getLocation().getZ();
 		}
-		player.getLocationVariables().getRoute().clear();
+		LocationVariables.resetRoute(player);
 		player.setLocation(new RSLocation(x, y, z));
 		player.getModel().registerFlag(new TeleportFlag());
 	}

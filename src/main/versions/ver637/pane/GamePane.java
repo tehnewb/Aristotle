@@ -10,13 +10,18 @@ import versions.ver637.pane.chat.ChatOptionsInterface;
 import versions.ver637.pane.chat.ChatPaneInterface;
 import versions.ver637.pane.chat.PrivateMessageInterface;
 import versions.ver637.pane.orbs.RunOrbInterface;
+import versions.ver637.pane.tabs.ClanChatTab;
 import versions.ver637.pane.tabs.FriendListTab;
+import versions.ver637.pane.tabs.GraphicSettingsTab;
 import versions.ver637.pane.tabs.IgnoreListTab;
+import versions.ver637.pane.tabs.InventoryTab;
+import versions.ver637.pane.tabs.LogoutTab;
+import versions.ver637.pane.tabs.MusicTab;
 
 public class GamePane extends Interface {
 
-	private final int[] varps = new int[2000];
-	private final int[] varcs = new int[1000];
+	private final int[] varps = new int[3000];
+	private final int[] varcs = new int[2000];
 	private final int[] varbits = new int[10000];
 	private final String[] cs2Strings = new String[1000];
 
@@ -145,12 +150,30 @@ public class GamePane extends Interface {
 
 	@Override
 	public void onOpen() {
+		/**
+		 * Tabs
+		 */
+		this.open(new LogoutTab());
 		this.open(new IgnoreListTab());
 		this.open(new FriendListTab());
+		this.open(new ClanChatTab());
+		this.open(new InventoryTab());
+		this.open(new GraphicSettingsTab());
+		this.open(new MusicTab());
+
+		/**
+		 * Orbs
+		 */
 		this.open(new RunOrbInterface());
+
+		/**
+		 * Chat
+		 */
 		this.open(new ChatPaneInterface());
 		this.open(new ChatOptionsInterface());
 		this.open(new PrivateMessageInterface());
+
+		player.sendMessage("Welcome to Aristotle");
 	}
 
 	@Override
@@ -167,7 +190,7 @@ public class GamePane extends Interface {
 
 	@Override
 	public boolean clickThrough() {
-		return false;
+		return true;
 	}
 
 	@Override

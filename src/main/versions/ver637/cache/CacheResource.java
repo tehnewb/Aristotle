@@ -23,7 +23,7 @@ public class CacheResource implements RSResource<CacheResource> {
 	public static final byte FONTMETRICS = 13;
 	public static final byte VORBIS = 14;
 	public static final byte LOCALES = 16;
-	public static final byte CONFIG_ENUM = 17;
+	public static final byte ENUMS = 17;
 	public static final byte CONFIG_NPC = 18;
 	public static final byte CONFIG_OBJ = 19;
 	public static final byte CONFIG_SEQ = 20;

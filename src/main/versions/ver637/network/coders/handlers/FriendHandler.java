@@ -4,6 +4,7 @@ import com.framework.io.Huffman;
 import com.framework.network.RSFrame;
 import com.framework.util.StringUtil;
 
+import versions.ver637.model.player.ChatVariables.Chat;
 import versions.ver637.model.player.FriendVariables;
 import versions.ver637.model.player.Player;
 import versions.ver637.network.coders.FrameHandler;
@@ -33,7 +34,7 @@ public class FriendHandler implements FrameHandler {
 				byte[] buffer = frame.readBytes(frame.readableBytes());
 				String message = Huffman.decompress(buffer, characterCount);
 				String formatted = StringUtil.formatForRuneScape(message);
-				FriendVariables.sendPrivateMessage(player, name, formatted);
+				FriendVariables.sendPrivateMessage(player, name, new Chat(formatted, 0));
 			}
 		}
 	}

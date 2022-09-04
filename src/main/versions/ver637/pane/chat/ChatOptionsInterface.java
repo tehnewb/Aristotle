@@ -16,6 +16,11 @@ public class ChatOptionsInterface extends GameInterfaceAdapter {
 	}
 
 	@Override
+	public boolean clickThrough() {
+		return true;
+	}
+
+	@Override
 	public int position(boolean resizable) {
 		return resizable ? 16 : 67;
 	}

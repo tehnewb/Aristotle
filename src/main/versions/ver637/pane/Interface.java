@@ -1,6 +1,8 @@
 package versions.ver637.pane;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map.Entry;
 
 import lombok.Getter;
@@ -94,6 +96,10 @@ public abstract class Interface {
 	 * @param window the window to add
 	 */
 	public void addChild(@NonNull Interface window) {
+		if (!window.isModal()) {
+			player.getLocationVariables().setRoutePaused(true);
+		}
+
 		window.parent = this;
 		window.player = player;
 		window.onOpen();
@@ -117,8 +123,12 @@ public abstract class Interface {
 	 */
 	public void removeChild(int position) {
 		Interface window = children.remove(position);
-		if (window != null)
+		if (window != null) {
 			window.onClose();
+			if (!window.isModal()) {
+				player.getLocationVariables().setRoutePaused(false);
+			}
+		}
 
 		player.getSession().write(new CloseInterfaceFrame(this.getID(), position));
 	}
@@ -137,8 +147,8 @@ public abstract class Interface {
 	}
 
 	/**
-	 * Returns the child for the given {@code ID}. If there is no child the that ID,
-	 * then null is returned.
+	 * Returns the child for the given {@code ID}. If there is no child with that
+	 * ID, then null is returned.
 	 * 
 	 * @param ID the id of the child
 	 * @return the child found; possibly null
@@ -148,17 +158,38 @@ public abstract class Interface {
 	}
 
 	/**
+	 * Returns the child with the corresponding {@code position}. If there is no
+	 * child with that position, null is returned.
+	 * 
+	 * @param position the position of the child
+	 * @return the child; possibly null
+	 */
+	public Interface getChildForPosition(int position) {
+		return children.get(position);
+	}
+
+	/**
 	 * Closes all non modal interfaces.
 	 */
 	public void closeNonModal() {
-		for (Entry<Integer, Interface> entry : this.children.entrySet()) {
+		Iterator<Entry<Integer, Interface>> iterator = this.children.entrySet().iterator();
+		ArrayList<Integer> toRemove = new ArrayList<>();
+		while (iterator.hasNext()) {
+			Entry<Integer, Interface> entry = iterator.next();
 			int position = entry.getKey();
 			Interface window = entry.getValue();
 			if (window.isModal())
 				continue;
 
-			removeChild(position);
+			toRemove.add(position);
 		}
+
+		toRemove.forEach(this::removeChild);
+	}
+
+	@Override
+	public String toString() {
+		return "Interface[parent=%s, ID=%s, position=%s]".formatted(this.parent, this.ID, this.position(parent));
 	}
 
 }

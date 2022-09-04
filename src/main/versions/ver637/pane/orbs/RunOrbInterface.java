@@ -47,6 +47,11 @@ public class RunOrbInterface extends GameInterfaceAdapter {
 		return resizable ? 176 : 185;
 	}
 
+	@Override
+	public boolean clickThrough() {
+		return true;
+	}
+
 	private class RunOrbTick extends RSGameTick {
 
 		public static final String TickName = "RunOrbTick";

@@ -17,12 +17,15 @@ import lombok.RequiredArgsConstructor;
 import versions.ver637.cache.CacheResource;
 import versions.ver637.model.player.FriendVariables;
 import versions.ver637.model.player.Player;
+import versions.ver637.model.player.clan.ClanVariables;
 import versions.ver637.model.player.flags.AppearanceFlag;
 import versions.ver637.network.coders.GameCoder;
 import versions.ver637.network.coders.frames.RegionFrame;
 
 @RequiredArgsConstructor
 public class AccountLoadResource implements RSResource<AccountLoginCallback> {
+
+	private static final String AccountFolder = "./resources/" + CacheResource.Revision + "/accounts/";
 
 	private final RSNetworkSession session;
 	private final AccountLoginRequest request;
@@ -35,7 +38,7 @@ public class AccountLoadResource implements RSResource<AccountLoginCallback> {
 			return new AccountLoginCallback(null, AccountLoginResponse.StillLoggedIn);
 
 		Gson gson = new Gson();
-		String path = "./resources/" + CacheResource.Revision + "/accounts/" + username + ".json";
+		String path = AccountFolder + username + ".json";
 		File file = new File(path);
 		if (file.exists()) {
 			String jsonString = Files.readString(Paths.get(path));
@@ -73,10 +76,12 @@ public class AccountLoadResource implements RSResource<AccountLoginCallback> {
 				session.write(createLobbyResponse(account));
 
 				FriendVariables.alertOnline(player);
+				ClanVariables.alertClan(player);
 			} else if (request == AccountLoginRequest.Login) {
 				session.write(createLoginResponse(player));
 				session.write(new RegionFrame(player, player.getLocationVariables().getView(), true, true));
 
+				player.getLocationVariables().setRegionLocation(player.getLocation());
 				player.getAppearanceVariables().username(StringUtil.upperFirst(account.getUsername()));
 				player.getModel().setInWorld(true);
 				player.getModel().registerFlag(new AppearanceFlag(player.getAppearanceVariables()));

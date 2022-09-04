@@ -17,6 +17,11 @@ public class IgnoreListTab extends GameInterfaceAdapter {
 	}
 
 	@Override
+	public boolean clickThrough() {
+		return true;
+	}
+
+	@Override
 	public int position(boolean resizable) {
 		return resizable ? 97 : 212;
 	}

@@ -66,7 +66,7 @@ public class GameCoder implements RSSessionCoder {
 			if (handler != null) {
 				handler.handleFrame(session.get("Player", Player.class), frame);
 			} else {
-				log.debug("Unhandled Packet[opcode={}, length={}]", opcode, length);
+				log.info("Unhandled Packet[opcode={}, length={}]", opcode, length);
 			}
 		}
 	}

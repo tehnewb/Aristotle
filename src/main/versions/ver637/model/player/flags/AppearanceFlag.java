@@ -25,7 +25,7 @@ public class AppearanceFlag implements UpdateFlag {
 	@Override
 	public void write(RSFrame frame) {
 		RSStream appearanceData = new RSStream();
-		int flags = variables.gender();
+		int flags = (variables.gender() & 0x1) | 0x4;
 
 		appearanceData.writeByte(flags);
 		appearanceData.writeByte(variables.titleID());
@@ -54,7 +54,7 @@ public class AppearanceFlag implements UpdateFlag {
 		appearanceData.writeShort(variables.renderAnimation());
 		appearanceData.writeRSString(variables.username());
 		appearanceData.writeByte(138);
-		appearanceData.writeByte(138);
+		appearanceData.writeByte(0); // skill level, eg -> skill: 1526
 		appearanceData.writeShort(0);
 		appearanceData.writeByte(0);
 

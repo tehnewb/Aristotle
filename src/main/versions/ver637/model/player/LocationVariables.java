@@ -29,10 +29,11 @@ public class LocationVariables {
 	private RSLocation currentLocation = DefaultLocation.copy();
 
 	@NonNull
-	private RegionView view = RegionView.Small;
+	private RegionView view = RegionView.Huge;
 
 	private transient boolean resting;
 	private transient boolean moving;
+	private transient boolean routePaused;
 	private int runEnergy = 10000;
 	private boolean running;
 
@@ -59,29 +60,40 @@ public class LocationVariables {
 		if (!player.getModel().isInWorld())
 			return;
 
-		if (route.reachedLastCheckpoint() || (route.isEmpty() && !route.failed())) {
-			route.reachRequest().accept(route);
+		if (!variables.isRoutePaused()) {
+			if (route.reachedLastCheckpoint() || (route.isEmpty() && !route.failed()) && !route.equals(EmptyRoute)) {
+				route.reachRequest().accept(route);
 
-			variables.setRoute(EmptyRoute);
+				variables.setRoute(EmptyRoute);
 
-			if (player.getPane() != null)
-				player.getPane().closeNonModal();
-		}
-		if (route.hasNext()) {
-			RSRouteStep firstStep = route.next();
-			RSRouteStep secondStep = null;
-			if (firstStep.isValid()) {
-				if (variables.isRunning() && route.hasNext())
-					secondStep = route.next();
-
-				player.setLocation(secondStep == null ? firstStep.location() : secondStep.location());
-				player.getModel().registerFlag(new MovementFlag(firstStep, secondStep, variables.isRunning()));
+				if (player.getPane() != null)
+					player.getPane().closeNonModal();
 			}
+			if (route.hasNext()) {
+				RSRouteStep firstStep = route.next();
+				RSRouteStep secondStep = null;
+				if (firstStep.isValid()) {
+					if (variables.isRunning() && route.hasNext())
+						secondStep = route.next();
 
-			if (player.getPane() != null)
-				player.getPane().closeNonModal();
+					player.setLocation(secondStep == null ? firstStep.location() : secondStep.location());
+					player.getModel().registerFlag(new MovementFlag(firstStep, secondStep, variables.isRunning()));
+				}
+
+				if (player.getPane() != null)
+					player.getPane().closeNonModal();
+			}
+			variables.setMoving(route.hasNext());
+		} else {
+			variables.setMoving(false);
 		}
-		variables.setMoving(route.hasNext());
+	}
+
+	public static void resetRoute(Player player) {
+		LocationVariables variables = player.getAccount().getLocationVariables();
+		variables.setRoute(EmptyRoute);
+		variables.setMoving(false);
+		variables.setRoutePaused(false);
 	}
 
 }

@@ -7,7 +7,10 @@ import versions.ver637.model.player.AppearanceVariables;
 import versions.ver637.model.player.ChatVariables;
 import versions.ver637.model.player.FriendVariables;
 import versions.ver637.model.player.LocationVariables;
+import versions.ver637.model.player.MiscVariables;
 import versions.ver637.model.player.TickVariables;
+import versions.ver637.model.player.clan.ClanVariables;
+import versions.ver637.model.player.music.MusicVariables;
 
 @Data
 public class Account {
@@ -36,6 +39,21 @@ public class Account {
 	 * Holds all variables regarding friends
 	 */
 	private FriendVariables friendVariables = new FriendVariables();
+
+	/**
+	 * Holds all variables regarding clan
+	 */
+	private ClanVariables clanVariables = new ClanVariables();
+
+	/**
+	 * Holds all misc variables
+	 */
+	private MiscVariables miscVariables = new MiscVariables();
+
+	/**
+	 * Holds all music variables
+	 */
+	private MusicVariables musicVariables = new MusicVariables();
 
 	private String username;
 	private String password;
