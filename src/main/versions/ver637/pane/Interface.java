@@ -10,7 +10,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import versions.ver637.model.player.Player;
 import versions.ver637.network.coders.frames.CloseInterfaceFrame;
-import versions.ver637.network.coders.frames.InterfaceFrame;
+import versions.ver637.network.coders.frames.OpenInterfaceFrame;
 
 /**
  * 
@@ -105,7 +105,7 @@ public abstract class Interface {
 		window.onOpen();
 		children.put((int) window.position(this), window);
 
-		player.getSession().write(new InterfaceFrame(this.getID(), window.getID(), window.position(this), window.clickThrough()));
+		player.getSession().write(new OpenInterfaceFrame(this.getID(), window.getID(), window.position(this), window.clickThrough()));
 	}
 
 	/**
@@ -166,6 +166,17 @@ public abstract class Interface {
 	 */
 	public Interface getChildForPosition(int position) {
 		return children.get(position);
+	}
+
+	/**
+	 * Returns the child with the same given {@code clazz}.
+	 * 
+	 * @param <T>   the type of class
+	 * @param clazz the class of the interface
+	 * @return the interface with the same class; otherwise null
+	 */
+	public <T extends Interface> T getChild(Class<T> clazz) {
+		return clazz.cast(children.values().stream().filter(i -> clazz.isAssignableFrom(i.getClass())).findFirst().orElse(null));
 	}
 
 	/**

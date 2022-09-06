@@ -35,7 +35,9 @@ public class PlayerLocationController {
 
 				player.sendMessage("<col=ff0000>You have unlocked a new music track: {0}.", music.name());
 			}
-			MusicVariables.playMusic(player, music.index());
+			if (!player.getMusicVariables().isPersonallyPlaying()) {
+				MusicVariables.playMusic(player, music.index());
+			}
 		}
 	}
 

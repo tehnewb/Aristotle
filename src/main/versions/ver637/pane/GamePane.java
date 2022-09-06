@@ -2,14 +2,19 @@ package versions.ver637.pane;
 
 import lombok.Getter;
 import versions.ver637.model.player.Player;
+import versions.ver637.network.coders.frames.CS2Frame;
 import versions.ver637.network.coders.frames.CS2StringFrame;
 import versions.ver637.network.coders.frames.VarbitFrame;
 import versions.ver637.network.coders.frames.VarcFrame;
 import versions.ver637.network.coders.frames.VarpFrame;
 import versions.ver637.pane.chat.ChatOptionsInterface;
 import versions.ver637.pane.chat.ChatPaneInterface;
+import versions.ver637.pane.chat.IntegerRequest;
+import versions.ver637.pane.chat.LongStringRequest;
 import versions.ver637.pane.chat.PrivateMessageInterface;
+import versions.ver637.pane.chat.StringRequest;
 import versions.ver637.pane.orbs.RunOrbInterface;
+import versions.ver637.pane.tabs.AchievementTab;
 import versions.ver637.pane.tabs.ClanChatTab;
 import versions.ver637.pane.tabs.FriendListTab;
 import versions.ver637.pane.tabs.GraphicSettingsTab;
@@ -17,6 +22,8 @@ import versions.ver637.pane.tabs.IgnoreListTab;
 import versions.ver637.pane.tabs.InventoryTab;
 import versions.ver637.pane.tabs.LogoutTab;
 import versions.ver637.pane.tabs.MusicTab;
+import versions.ver637.pane.tabs.NotesTab;
+import versions.ver637.pane.tabs.SkillTab;
 
 public class GamePane extends Interface {
 
@@ -148,11 +155,70 @@ public class GamePane extends Interface {
 		player.getSession().write(new VarbitFrame(index, value));
 	}
 
+	/**
+	 * Sends the client script for the corresponding {@code scriptID} with the given
+	 * {@code arguments}.
+	 * 
+	 * @param scriptID  the id of the script
+	 * @param arguments the arguments for the script
+	 */
+	public void sendScript(int scriptID, Object... arguments) {
+		player.getSession().write(new CS2Frame(scriptID, arguments));
+	}
+
+	/**
+	 * Requests for integer input from the player
+	 * 
+	 * @param request the request
+	 */
+	public void requestInteger(IntegerRequest request) {
+		this.getChildForID(752).addChild(request);
+	}
+
+	/**
+	 * Requests for a long string input from the player
+	 * 
+	 * @param request the request
+	 */
+	public void requestLongString(LongStringRequest request) {
+		this.getChildForID(752).addChild(request);
+	}
+
+	/**
+	 * Requests for string input from the player
+	 * 
+	 * @param request the request
+	 */
+	public void requestString(StringRequest request) {
+		this.getChildForID(752).addChild(request);
+	}
+
+	public LongStringRequest getLongStringRequest() {
+		return this.getChildForID(752).getChild(LongStringRequest.class);
+	}
+
+	public StringRequest getStringRequest() {
+		return this.getChildForID(752).getChild(StringRequest.class);
+	}
+
+	public IntegerRequest getIntegerRequest() {
+		return this.getChildForID(752).getChild(IntegerRequest.class);
+	}
+
+	/**
+	 * Closes the previous request
+	 */
+	public void closeRequest() {
+		this.getChildForID(752).removeChild(0);
+	}
+
 	@Override
 	public void onOpen() {
 		/**
 		 * Tabs
 		 */
+		this.open(new AchievementTab());
+		this.open(new SkillTab());
 		this.open(new LogoutTab());
 		this.open(new IgnoreListTab());
 		this.open(new FriendListTab());
@@ -160,6 +226,7 @@ public class GamePane extends Interface {
 		this.open(new InventoryTab());
 		this.open(new GraphicSettingsTab());
 		this.open(new MusicTab());
+		this.open(new NotesTab());
 
 		/**
 		 * Orbs
@@ -172,8 +239,6 @@ public class GamePane extends Interface {
 		this.open(new ChatPaneInterface());
 		this.open(new ChatOptionsInterface());
 		this.open(new PrivateMessageInterface());
-
-		player.sendMessage("Welcome to Aristotle");
 	}
 
 	@Override

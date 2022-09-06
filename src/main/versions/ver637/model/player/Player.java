@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import versions.ver637.model.player.clan.ClanVariables;
 import versions.ver637.model.player.music.MusicVariables;
+import versions.ver637.model.player.skills.SkillVariables;
 import versions.ver637.network.account.Account;
 import versions.ver637.network.coders.frames.ChatMessageFrame;
 import versions.ver637.network.coders.frames.ChatMessageFrame.ChatType;
@@ -74,6 +75,24 @@ public class Player extends RSEntity {
 	 */
 	public RSLocation getLocation() {
 		return account.getLocationVariables().getCurrentLocation();
+	}
+
+	/**
+	 * Returns the {@code SkillVariables} in the account of this {@code Player}.
+	 * 
+	 * @return the skill variables
+	 */
+	public SkillVariables getSkillVariables() {
+		return account.getSkillVariables();
+	}
+
+	/**
+	 * Returns the {@code NotesVariables} in the account of this {@code Player}.
+	 * 
+	 * @return the note variables
+	 */
+	public NotesVariables getNotesVariables() {
+		return account.getNotesVariables();
 	}
 
 	/**

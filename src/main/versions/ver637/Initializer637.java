@@ -7,6 +7,7 @@ import versions.ver637.cache.EnumResource;
 import versions.ver637.cache.XTEAResource;
 import versions.ver637.map.GameObjectResource;
 import versions.ver637.model.GameProcessTick;
+import versions.ver637.model.item.ItemResource;
 import versions.ver637.model.player.clan.ClanLoadResource;
 import versions.ver637.model.player.music.MusicResource;
 import versions.ver637.network.coders.HandshakeCoder;
@@ -35,6 +36,7 @@ public final class Initializer637 {
 		RSFramework.queueResource(new ClanLoadResource());
 		RSFramework.queueResource(new PluginResource());
 		RSFramework.queueResource(new MusicResource());
+		RSFramework.queueResource(new ItemResource());
 		RSFramework.addTick(new GameProcessTick());
 	}
 }

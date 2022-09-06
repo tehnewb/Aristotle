@@ -74,6 +74,12 @@ public abstract class GameInterface extends Interface {
 		parent.setCS2String(index, string);
 	}
 
+	public void sendScript(int scriptID, Object... arguments) {
+		GamePane parent = GamePane.class.cast(this.getParent());
+
+		parent.sendScript(scriptID, arguments);
+	}
+
 	@Override
 	public final int position(Interface parent) {
 		return position(GamePane.class.cast(parent).isResizable());

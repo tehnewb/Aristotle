@@ -4,8 +4,7 @@ import com.framework.util.ReflectUtil;
 
 import versions.ver637.game.commands.Command;
 import versions.ver637.model.player.Player;
-import versions.ver637.network.coders.frames.InterfaceFrame;
-import versions.ver637.pane.GamePane;
+import versions.ver637.pane.GameInterfaceAdapter;
 import versions.ver637.pane.InterfaceComponentData;
 import versions.ver637.pane.InterfaceData;
 import versions.ver637.pane.InterfaceResource;
@@ -39,8 +38,7 @@ public class InterfaceCommand implements Command {
 				}
 			}
 		} else {
-			GamePane pane = player.getPane();
-			player.getSession().write(new InterfaceFrame(pane.getID(), interfaceID, pane.isResizable() ? 9 : 18, false));
+			player.getPane().open(new GameInterfaceAdapter(interfaceID, false));
 		}
 	}
 

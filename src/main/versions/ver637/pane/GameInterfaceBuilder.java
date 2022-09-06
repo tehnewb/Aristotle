@@ -9,16 +9,14 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true, chain = true)
 public class GameInterfaceBuilder extends GameInterface {
 
-	private int interfaceID;
 	private int positionFixed;
 	private int positionResizable;
 	private boolean clickThrough;
-	private boolean modal;
 	private Consumer<GameInterface> onClose;
 	private Consumer<GameInterface> onOpen;
 	private Consumer<ComponentClick> onClick;
 
-	private GameInterfaceBuilder(int interfaceID, boolean modal) {
+	public GameInterfaceBuilder(int interfaceID, boolean modal) {
 		super(interfaceID, modal);
 	}
 
@@ -45,10 +43,6 @@ public class GameInterfaceBuilder extends GameInterface {
 	@Override
 	public boolean clickThrough() {
 		return clickThrough;
-	}
-
-	public GameInterface build() {
-		return new GameInterfaceBuilder(interfaceID, modal);
 	}
 
 }

@@ -2,8 +2,6 @@ package versions.ver637.game.commands.impl;
 
 import com.framework.map.RSLocation;
 
-import inprogress.scripts.PlayerBindings;
-import inprogress.scripts.RSScriptService;
 import versions.ver637.game.commands.Command;
 import versions.ver637.map.WorldMap;
 import versions.ver637.model.player.Player;
@@ -25,10 +23,6 @@ public class PositionCommand implements Command {
 		RSLocation l = player.getLocation();
 		int flag = WorldMap.getMap().getFlags(l.getX(), l.getY(), l.getZ());
 		System.out.printf("%s, chunkX=%s, chunkY=%s, regionX=%s, regionY=%s, regionID=%s, flag=%s\n", l, l.getChunkX(), l.getChunkY(), l.getRegionX(), l.getRegionY(), l.getRegionID(), flag);
-
-		RSScriptService evaluator = new RSScriptService();
-		evaluator.loadBinding(new PlayerBindings());
-		evaluator.eval(player, "message_me");
 	}
 
 	@Override

@@ -25,7 +25,7 @@ public class CacheResource implements RSResource<CacheResource> {
 	public static final byte LOCALES = 16;
 	public static final byte ENUMS = 17;
 	public static final byte CONFIG_NPC = 18;
-	public static final byte CONFIG_OBJ = 19;
+	public static final byte ITEMS = 19;
 	public static final byte CONFIG_SEQ = 20;
 	public static final byte CONFIG_SPOT = 21;
 	public static final byte CONFIG_STRUCT = 22;

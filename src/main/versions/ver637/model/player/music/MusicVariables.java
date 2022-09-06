@@ -14,6 +14,10 @@ public class MusicVariables {
 	@Getter
 	private transient int currentTrackPlaying;
 
+	@Getter
+	@Setter
+	private transient boolean personallyPlaying;
+
 	private boolean[] unlocked = new boolean[1000];
 
 	public MusicVariables() {

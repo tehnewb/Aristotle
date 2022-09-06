@@ -9,6 +9,6 @@ public class ComponentHiddenFrame extends RSFrame {
 	public ComponentHiddenFrame(int interfaceID, int componentID, boolean hidden) {
 		super(ComponentHiddenOpcode, StandardType);
 		writeInt2((interfaceID << 16) | componentID);
-		writeByteC(hidden ? 0 : 1);
+		writeByteC(hidden ? 1 : 0);
 	}
 }

@@ -32,6 +32,9 @@ public class MusicTab extends GameInterface {
 	public void click(ComponentClick data) {
 		if (data.componentID() == 1) {
 			int musicIndex = data.slot() / 2;
+
+			player.getMusicVariables().setPersonallyPlaying(true);
+
 			MusicVariables.playMusic(player, musicIndex);
 		}
 	}

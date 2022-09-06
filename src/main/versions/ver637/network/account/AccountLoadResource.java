@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+import com.framework.RSFramework;
 import com.framework.network.RSFrame;
 import com.framework.network.RSNetworkSession;
 import com.framework.resource.RSResource;
@@ -15,10 +16,8 @@ import com.google.gson.Gson;
 
 import lombok.RequiredArgsConstructor;
 import versions.ver637.cache.CacheResource;
-import versions.ver637.model.player.FriendVariables;
+import versions.ver637.model.player.LoginEvent;
 import versions.ver637.model.player.Player;
-import versions.ver637.model.player.clan.ClanVariables;
-import versions.ver637.model.player.flags.AppearanceFlag;
 import versions.ver637.network.coders.GameCoder;
 import versions.ver637.network.coders.frames.RegionFrame;
 
@@ -74,17 +73,11 @@ public class AccountLoadResource implements RSResource<AccountLoginCallback> {
 			session.setCoder(new GameCoder(null, null));
 			if (request == AccountLoginRequest.Lobby) {
 				session.write(createLobbyResponse(account));
-
-				FriendVariables.alertOnline(player);
-				ClanVariables.alertClan(player);
+				RSFramework.post(new LoginEvent(player, true));
 			} else if (request == AccountLoginRequest.Login) {
 				session.write(createLoginResponse(player));
 				session.write(new RegionFrame(player, player.getLocationVariables().getView(), true, true));
-
-				player.getLocationVariables().setRegionLocation(player.getLocation());
-				player.getAppearanceVariables().username(StringUtil.upperFirst(account.getUsername()));
-				player.getModel().setInWorld(true);
-				player.getModel().registerFlag(new AppearanceFlag(player.getAppearanceVariables()));
+				RSFramework.post(new LoginEvent(player, false));
 			}
 
 			account.setLastLoginDate(LocalDate.now().toString());
