@@ -62,7 +62,7 @@ public abstract class RSTick extends RSEntity {
 			gap = Instant.now().plusMillis(delay);
 
 		Duration difference = Duration.between(gap, Instant.now());
-		if (difference.isPositive()) {
+		if (!difference.isNegative()) {
 			occurrences++;
 			tick();
 			gap = gap.plusMillis(delay);
