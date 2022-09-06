@@ -3,7 +3,7 @@ plugins {
 	id 'eclipse'
 }
 
-sourceCompatibility = 17
+sourceCompatibility = 18
  
 repositories {
     mavenCentral()
