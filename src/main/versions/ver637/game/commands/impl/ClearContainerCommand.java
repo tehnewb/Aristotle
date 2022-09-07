@@ -2,27 +2,26 @@ package versions.ver637.game.commands.impl;
 
 import versions.ver637.game.commands.Command;
 import versions.ver637.model.player.Player;
-import versions.ver637.pane.GamePane;
 
-public class VarbitCommand implements Command {
+public class ClearContainerCommand implements Command {
 
 	@Override
 	public String[] names() {
-		return new String[] { "varbit", "cbf" };
+		return new String[] { "clearinv", "clearequip" };
 	}
 
 	@Override
 	public String description() {
-		return "Sends the given varbit/configbyfile to the client";
+		return null;
 	}
 
 	@Override
 	public void onExecute(Player player, String name, String... arguments) {
-		int varbitID = Integer.parseInt(arguments[0]);
-		int value = Integer.parseInt(arguments[1]);
-
-		GamePane pane = player.getPane();
-		pane.setVarbit(varbitID, value);
+		if (name.equalsIgnoreCase("clearinv")) {
+			player.getInventory().clear();
+		} else if (name.equalsIgnoreCase("clearequip")) {
+			player.getEquipmentVariables().getEquipment().clear();
+		}
 	}
 
 	@Override

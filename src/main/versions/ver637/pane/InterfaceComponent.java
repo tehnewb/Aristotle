@@ -26,8 +26,9 @@ public class InterfaceComponent {
 
 	public void setSettings(ComponentSettings settings, int offset, int length) {
 		this.settings = settings;
-		if (player != null)
+		if (player != null) {
 			player.getSession().write(new ComponentSettingsFrame(settings.getValue(), parent.getID(), ID, offset, length));
+		}
 	}
 
 	public void setHidden(boolean hidden) {

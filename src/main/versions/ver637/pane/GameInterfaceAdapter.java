@@ -12,19 +12,16 @@ public class GameInterfaceAdapter extends GameInterface {
 	}
 
 	@Override
-	public void click(ComponentClick data) {
-
-	}
+	public void click(ComponentClick data) {}
 
 	@Override
-	public void onOpen() {
-
-	}
+	public void swap(ComponentSwap data) {}
 
 	@Override
-	public void onClose() {
+	public void onOpen() {}
 
-	}
+	@Override
+	public void onClose() {}
 
 	@Override
 	public boolean clickThrough() {

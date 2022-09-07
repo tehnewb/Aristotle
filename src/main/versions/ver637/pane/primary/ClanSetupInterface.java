@@ -3,9 +3,9 @@ package versions.ver637.pane.primary;
 import versions.ver637.model.player.clan.Clan;
 import versions.ver637.model.player.clan.ClanVariables;
 import versions.ver637.pane.ComponentClick;
-import versions.ver637.pane.GameInterface;
+import versions.ver637.pane.GameInterfaceAdapter;
 
-public class ClanSetupInterface extends GameInterface {
+public class ClanSetupInterface extends GameInterfaceAdapter {
 
 	public static final int ClanSetupID = 590;
 	public static final int ClanNameComponent = 22;
@@ -38,8 +38,7 @@ public class ClanSetupInterface extends GameInterface {
 			return;
 		}
 		Clan clan = ClanVariables.getPersonalClan(player);
-		
-		
+
 		if (clan == null) {
 			player.sendMessage("You must set a clan prefix first");
 			return;

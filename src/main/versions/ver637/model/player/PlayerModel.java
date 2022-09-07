@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import versions.ver637.model.UpdateFlag;
 import versions.ver637.model.UpdateModel;
-import versions.ver637.model.player.flags.AppearanceFlag;
 import versions.ver637.model.player.flags.MovementFlag;
 
 @RequiredArgsConstructor
@@ -29,6 +28,8 @@ public class PlayerModel extends UpdateModel {
 		LocationVariables.processRoute(player);
 		TickVariables.processTicks(player);
 		ChatVariables.processChat(player);
+
+		player.getQueue().process();
 	}
 
 	@Override
@@ -82,7 +83,7 @@ public class PlayerModel extends UpdateModel {
 			if (!other.getModel().isInWorld())
 				continue;
 
-			other.getModel().registerFlag(new AppearanceFlag(other.getAccount().getAppearanceVariables()));
+			AppearanceVariables.updateAppearance(other);
 
 			local.set(index);
 

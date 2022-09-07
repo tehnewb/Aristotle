@@ -5,7 +5,6 @@ import com.framework.event.RSEventMethod;
 import com.framework.util.StringUtil;
 
 import versions.ver637.model.player.clan.ClanVariables;
-import versions.ver637.model.player.flags.AppearanceFlag;
 
 @RSController
 public class PlayerLoginController {
@@ -20,7 +19,7 @@ public class PlayerLoginController {
 			player.getLocationVariables().setRegionLocation(player.getLocation());
 			player.getAppearanceVariables().username(StringUtil.upperFirst(player.getAccount().getUsername()));
 			player.getModel().setInWorld(true);
-			player.getModel().registerFlag(new AppearanceFlag(player.getAppearanceVariables()));
+			AppearanceVariables.updateAppearance(player);
 
 			player.sendMessage("Welcome to Aristotle");
 		}

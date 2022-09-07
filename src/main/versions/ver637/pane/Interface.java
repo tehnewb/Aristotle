@@ -64,6 +64,8 @@ public abstract class Interface {
 
 	public abstract void click(ComponentClick data);
 
+	public abstract void swap(ComponentSwap data);
+
 	/**
 	 * Executes when the window opens
 	 */
@@ -140,7 +142,7 @@ public abstract class Interface {
 	 * @return the component
 	 */
 	public InterfaceComponent getComponent(int ID) {
-		InterfaceComponent component = components.get(ID);
+		InterfaceComponent component = components.getOrDefault(ID, new InterfaceComponent(ID));
 		if (component != null && component.getPlayer() == null)
 			component.setPlayer(player);
 		return component;
@@ -177,6 +179,24 @@ public abstract class Interface {
 	 */
 	public <T extends Interface> T getChild(Class<T> clazz) {
 		return clazz.cast(children.values().stream().filter(i -> clazz.isAssignableFrom(i.getClass())).findFirst().orElse(null));
+	}
+
+	/**
+	 * Returns true if this {@code Interface} contains any non modal children.
+	 * 
+	 * @return true if containing non modal; false otherwise
+	 */
+	public boolean hasNonModal() {
+		for (Entry<Integer, Interface> entry : children.entrySet()) {
+			Interface window = entry.getValue();
+
+			if (!window.isModal())
+				return true;
+
+			if (window.hasNonModal())
+				return true;
+		}
+		return false;
 	}
 
 	/**

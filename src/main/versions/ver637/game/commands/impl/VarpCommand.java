@@ -17,7 +17,7 @@ public class VarpCommand implements Command {
 	}
 
 	@Override
-	public void onExecute(Player player, String... arguments) {
+	public void onExecute(Player player, String name, String... arguments) {
 		int varpID = Integer.parseInt(arguments[0]);
 		int value = Integer.parseInt(arguments[1]);
 

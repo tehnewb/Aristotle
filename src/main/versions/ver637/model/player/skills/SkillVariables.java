@@ -135,6 +135,10 @@ public class SkillVariables {
 		skill.setExperience(getExperienceForLevel(level));
 	}
 
+	public int getLevelWithModifier(SkillType type) {
+		return skills[type.getID()].getLevel() + skills[type.getID()].getModifier();
+	}
+
 	public int getLevel(SkillType type) {
 		return skills[type.getID()].getLevel();
 	}

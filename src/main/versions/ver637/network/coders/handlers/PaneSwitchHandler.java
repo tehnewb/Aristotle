@@ -12,7 +12,10 @@ public class PaneSwitchHandler implements FrameHandler {
 	public void handleFrame(Player player, RSFrame frame) {
 		int mode = frame.readByte();
 
-		player.setWindowPane(new GamePane(player, mode >= 2));
+		boolean resizable = mode >= 2;
+		if (player.getPane() != null && player.getPane().isResizable() == resizable)
+			return;
+		player.setWindowPane(new GamePane(player, resizable));
 	}
 
 	@Override

@@ -21,7 +21,7 @@ public class ConsoleRequestHandler implements FrameHandler {
 
 		Command command = Command.getCommand(name);
 		try {
-			command.onExecute(player, args);
+			command.onExecute(player, name, args);
 		} catch (Throwable t) {
 			t.printStackTrace();
 			command.onFail(player);

@@ -73,12 +73,62 @@ public interface Command {
 		}
 
 		@Override
-		public void onExecute(Player player, String... arguments) {}
+		public void onExecute(Player player, String name, String... arguments) {}
 
 		@Override
 		public void onFail(Player player) {}
 
 	};
+
+	/**
+	 * Returns the boolean value for the given {@code string}. If there is an error
+	 * while parsing the boolean, the given {@code defaultValue} is returned
+	 * instead.
+	 * 
+	 * @param string       the string to parse as integer
+	 * @param defaultValue the value returned if an error occurs
+	 * @return the parsed boolean; default value otherwise
+	 */
+	public default boolean getBoolean(String string, boolean defaultValue) {
+		try {
+			return Boolean.parseBoolean(string);
+		} catch (Exception e) {
+			return defaultValue;
+		}
+	}
+
+	/**
+	 * Returns the double value for the given {@code string}. If there is an error
+	 * while parsing the double, the given {@code defaultValue} is returned instead.
+	 * 
+	 * @param string       the string to parse as integer
+	 * @param defaultValue the value returned if an error occurs
+	 * @return the parsed double; default value otherwise
+	 */
+	public default double getDouble(String string, double defaultValue) {
+		try {
+			return Double.parseDouble(string);
+		} catch (Exception e) {
+			return defaultValue;
+		}
+	}
+
+	/**
+	 * Returns the integer value for the given {@code string}. If there is an error
+	 * while parsing the integer, the given {@code defaultValue} is returned
+	 * instead.
+	 * 
+	 * @param string       the string to parse as integer
+	 * @param defaultValue the value returned if an error occurs
+	 * @return the parsed integer; default value otherwise
+	 */
+	public default int getInt(String string, int defaultValue) {
+		try {
+			return Integer.parseInt(string);
+		} catch (Exception e) {
+			return defaultValue;
+		}
+	}
 
 	/**
 	 * The array of names for this {@code Command}. This is usually executed by the
@@ -99,7 +149,7 @@ public interface Command {
 	/**
 	 * This method executes the actions of the command.
 	 */
-	void onExecute(Player player, String... arguments);
+	void onExecute(Player player, String name, String... arguments);
 
 	/**
 	 * This method is called if there is a failure executing the command.

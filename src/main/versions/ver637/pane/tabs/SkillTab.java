@@ -3,11 +3,11 @@ package versions.ver637.pane.tabs;
 import versions.ver637.model.player.skills.SkillType;
 import versions.ver637.model.player.skills.SkillVariables;
 import versions.ver637.pane.ComponentClick;
-import versions.ver637.pane.GameInterface;
+import versions.ver637.pane.GameInterfaceAdapter;
 import versions.ver637.pane.chat.IntegerRequest;
 import versions.ver637.pane.primary.SkillGuideInterface;
 
-public class SkillTab extends GameInterface {
+public class SkillTab extends GameInterfaceAdapter {
 
 	public static final int SkillID = 320;
 	public static final int ExperienceCounterVarp = 1801;

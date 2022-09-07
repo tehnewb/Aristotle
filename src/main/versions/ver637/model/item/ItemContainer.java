@@ -3,6 +3,10 @@ package versions.ver637.model.item;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
+
 /**
  * An {@code ItemContainer} acts as a limited capacity container that holds
  * items for inserting, adding, removing, shifting, and sorting.
@@ -11,9 +15,19 @@ import java.util.Comparator;
  */
 public class ItemContainer {
 
+	@Getter
 	private Item[] items;
+
+	@Getter
 	private final boolean stackOnly;
+
+	@Getter
 	private short size;
+
+	@Getter
+	@Setter
+	@NonNull
+	private transient ItemContainerChangeHandler changeHandler = c -> {};
 
 	public ItemContainer(int capacity, boolean stackOnly) {
 		this.items = new Item[capacity];
@@ -67,7 +81,7 @@ public class ItemContainer {
 	 * @param item the item to set
 	 */
 	public void set(int slot, Item item) {
-		if (item.getAmount() < 0)
+		if (item != null && item.getAmount() <= 0)
 			item = null;
 
 		Item current = get(slot);
@@ -76,6 +90,21 @@ public class ItemContainer {
 		if (current != null && item == null)
 			size--;
 		this.items[slot] = item;
+
+		this.changeHandler.onChange(this);
+	}
+
+	/**
+	 * Swaps the items from the given {@code fromIndex} to the given
+	 * {@code toIndex}.
+	 * 
+	 * @param fromIndex the index swapping from
+	 * @param toIndex   the index swapping to
+	 */
+	public void swap(int fromIndex, int toIndex) {
+		Item current = this.get(toIndex);
+		this.set(toIndex, get(fromIndex));
+		this.set(fromIndex, current);
 	}
 
 	/**
@@ -100,6 +129,8 @@ public class ItemContainer {
 			newItems[newIndex++] = items[i];
 		}
 		this.items = newItems;
+
+		this.changeHandler.onChange(this);
 	}
 
 	/**
@@ -109,6 +140,16 @@ public class ItemContainer {
 	 */
 	public void sort(Comparator<Item> comparator) {
 		Arrays.sort(items, comparator);
+	}
+
+	/**
+	 * Clears this {@code ItemContainer} of all items
+	 */
+	public void clear() {
+		for (int i = 0; i < this.items.length; i++)
+			this.items[i] = null;
+
+		this.changeHandler.onChange(this);
 	}
 
 	/**
@@ -189,15 +230,6 @@ public class ItemContainer {
 	 */
 	public int getCapacity() {
 		return this.items.length;
-	}
-
-	/**
-	 * Returns the size of this {@code ItemContainer}.
-	 * 
-	 * @return the size
-	 */
-	public int getSize() {
-		return size;
 	}
 
 	/**

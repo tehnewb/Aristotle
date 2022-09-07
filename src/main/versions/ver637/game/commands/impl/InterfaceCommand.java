@@ -22,7 +22,7 @@ public class InterfaceCommand implements Command {
 	}
 
 	@Override
-	public void onExecute(Player player, String... arguments) {
+	public void onExecute(Player player, String name, String... arguments) {
 		int interfaceID = Integer.parseInt(arguments[0]);
 
 		if (arguments.length > 1 && arguments[1].equalsIgnoreCase("dump")) {

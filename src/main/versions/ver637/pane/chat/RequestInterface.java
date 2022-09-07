@@ -2,6 +2,7 @@ package versions.ver637.pane.chat;
 
 import versions.ver637.network.coders.frames.CloseDialogFrame;
 import versions.ver637.pane.ComponentClick;
+import versions.ver637.pane.ComponentSwap;
 import versions.ver637.pane.Interface;
 
 public class RequestInterface extends Interface {
@@ -48,6 +49,11 @@ public class RequestInterface extends Interface {
 	@Override
 	public int position(Interface parent) {
 		return 0;
+	}
+
+	@Override
+	public void swap(ComponentSwap data) {
+
 	}
 
 }

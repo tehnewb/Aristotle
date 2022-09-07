@@ -11,7 +11,9 @@ import com.framework.network.RSNetworkSession;
 
 import lombok.Getter;
 import lombok.NonNull;
+import versions.ver637.model.item.ItemContainer;
 import versions.ver637.model.player.clan.ClanVariables;
+import versions.ver637.model.player.equipment.EquipmentVariables;
 import versions.ver637.model.player.music.MusicVariables;
 import versions.ver637.model.player.skills.SkillVariables;
 import versions.ver637.network.account.Account;
@@ -36,10 +38,14 @@ public class Player extends RSEntity {
 	@Getter
 	private GamePane pane;
 
+	@Getter
+	private final PlayerScriptQueue queue;
+
 	public Player(RSNetworkSession session, Account account) {
 		this.session = session;
 		this.account = account;
 		this.model = new PlayerModel(this);
+		this.queue = new PlayerScriptQueue(this);
 	}
 
 	public void sendMessage(String string, Object... arguments) {
@@ -75,6 +81,24 @@ public class Player extends RSEntity {
 	 */
 	public RSLocation getLocation() {
 		return account.getLocationVariables().getCurrentLocation();
+	}
+
+	/**
+	 * Returns the {@code ItemContainer} inventory for this player.
+	 * 
+	 * @return the inventory
+	 */
+	public ItemContainer getInventory() {
+		return account.getInventory();
+	}
+
+	/**
+	 * Returns the {@code EquipmentVariables} in the account of this {@code Player}.
+	 * 
+	 * @return the equipment variables
+	 */
+	public EquipmentVariables getEquipmentVariables() {
+		return account.getEquipmentVariables();
 	}
 
 	/**

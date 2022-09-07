@@ -128,7 +128,7 @@ public class ComponentSettings {
 	 *         button is clicked. The higher the height, the further back the
 	 *         parent.
 	 */
-	public int getInterfaceDepth() {
+	public int getDragDepth() {
 		int bits = (value & (0x7 << 18));
 		return bits >> 18;
 	}
@@ -214,7 +214,7 @@ public class ComponentSettings {
 	 * clicks in inventory will also invoke click event handler scripts on gameframe
 	 * interface.
 	 */
-	public ComponentSettings setInterfaceDepth(int depth) {
+	public ComponentSettings setDragDepth(int depth) {
 		if (depth < 0 || depth > 7)
 			throw new IllegalArgumentException("height must be 0-7.");
 		value &= ~(0x7 << 18);
@@ -262,7 +262,7 @@ public class ComponentSettings {
 		builder.append("canUseOnObjects=" + this.canUseOnObjects() + ", ");
 		builder.append("canUseOnOtherPlayers=" + this.canUseOnOtherPlayers() + ", ");
 		builder.append("canUseOnSelf=" + this.canUseOnSelf() + ", ");
-		builder.append("interfaceDepth=" + this.getInterfaceDepth() + ", ");
+		builder.append("interfaceDepth=" + this.getDragDepth() + ", ");
 		builder.append("isUseOnTarget=" + this.isUseOnTarget());
 		builder.append("]");
 		return builder.toString();

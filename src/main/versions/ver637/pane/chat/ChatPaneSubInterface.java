@@ -2,6 +2,7 @@ package versions.ver637.pane.chat;
 
 import versions.ver637.pane.ComponentClick;
 import versions.ver637.pane.ComponentSettings;
+import versions.ver637.pane.ComponentSwap;
 import versions.ver637.pane.Interface;
 
 public class ChatPaneSubInterface extends Interface {
@@ -38,6 +39,11 @@ public class ChatPaneSubInterface extends Interface {
 	@Override
 	public int position(Interface parent) {
 		return 9;
+	}
+
+	@Override
+	public void swap(ComponentSwap data) {
+
 	}
 
 }

@@ -17,7 +17,7 @@ public class CS2Command implements Command {
 	}
 
 	@Override
-	public void onExecute(Player player, String... arguments) {
+	public void onExecute(Player player, String name, String... arguments) {
 		int scriptID = Integer.parseInt(arguments[0]);
 
 		Object[] values = new Object[arguments.length - 1];

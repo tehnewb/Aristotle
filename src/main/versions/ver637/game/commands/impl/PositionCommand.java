@@ -19,7 +19,7 @@ public class PositionCommand implements Command {
 	}
 
 	@Override
-	public void onExecute(Player player, String... arguments) {
+	public void onExecute(Player player, String name, String... arguments) {
 		RSLocation l = player.getLocation();
 		int flag = WorldMap.getMap().getFlags(l.getX(), l.getY(), l.getZ());
 		System.out.printf("%s, chunkX=%s, chunkY=%s, regionX=%s, regionY=%s, regionID=%s, flag=%s\n", l, l.getChunkX(), l.getChunkY(), l.getRegionX(), l.getRegionY(), l.getRegionID(), flag);

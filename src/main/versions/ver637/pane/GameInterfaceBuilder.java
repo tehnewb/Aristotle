@@ -15,6 +15,7 @@ public class GameInterfaceBuilder extends GameInterface {
 	private Consumer<GameInterface> onClose;
 	private Consumer<GameInterface> onOpen;
 	private Consumer<ComponentClick> onClick;
+	private Consumer<ComponentSwap> onSwap;
 
 	public GameInterfaceBuilder(int interfaceID, boolean modal) {
 		super(interfaceID, modal);
@@ -28,6 +29,11 @@ public class GameInterfaceBuilder extends GameInterface {
 	@Override
 	public void click(ComponentClick data) {
 		onClick.accept(data);
+	}
+
+	@Override
+	public void swap(ComponentSwap data) {
+		onSwap.accept(data);
 	}
 
 	@Override

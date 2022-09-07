@@ -2,11 +2,11 @@ package versions.ver637.pane.tabs;
 
 import versions.ver637.model.player.Player;
 import versions.ver637.pane.ComponentClick;
-import versions.ver637.pane.GameInterface;
+import versions.ver637.pane.GameInterfaceAdapter;
 import versions.ver637.pane.primary.GraphicSelectionInterface;
 import versions.ver637.pane.primary.SoundSelectionInterface;
 
-public class GraphicSettingsTab extends GameInterface {
+public class GraphicSettingsTab extends GameInterfaceAdapter {
 
 	public static final int GraphicSettingsID = 261;
 	public static final int CombinationVarp = 1438;

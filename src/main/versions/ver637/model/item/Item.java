@@ -11,29 +11,29 @@ public class Item {
 	private final int ID;
 	private int amount;
 
-	private transient ItemData data;
-
 	public Item(int ID, int amount) {
 		this.ID = ID;
 		this.amount = amount;
-
-		this.data = ItemResource.getItemData(ID);
 	}
 
 	public Item(int ID) {
 		this(ID, 1);
 	}
 
+	public ItemData getData() {
+		return ItemResource.getItemData(ID);
+	}
+
 	public boolean isStackable() {
-		return data.isStackable();
+		return getData().isStackable();
 	}
 
 	public String getName() {
-		return data.getName();
+		return getData().getName();
 	}
 
 	public int getValue() {
-		return data.getValue();
+		return getData().getValue();
 	}
 
 }

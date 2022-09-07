@@ -20,7 +20,7 @@ public class TeleportCommand implements Command {
 	}
 
 	@Override
-	public void onExecute(Player player, String... arguments) {
+	public void onExecute(Player player, String name, String... arguments) {
 		int x, y, z = player.getLocation().getZ();
 		if (arguments[0].contains(",")) {
 			String[] shiftArgs = arguments[0].trim().split(",");

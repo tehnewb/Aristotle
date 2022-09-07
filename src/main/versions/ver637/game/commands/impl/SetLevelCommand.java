@@ -19,7 +19,7 @@ public class SetLevelCommand implements Command {
 	}
 
 	@Override
-	public void onExecute(Player player, String... arguments) {
+	public void onExecute(Player player, String name, String... arguments) {
 		int skillID = Integer.parseInt(arguments[0]);
 		int level = Integer.parseInt(arguments[1]);
 
@@ -31,7 +31,7 @@ public class SetLevelCommand implements Command {
 
 	@Override
 	public void onFail(Player player) {
-		player.sendMessage("Use command like this: setlevel [skillID] [skillLevel]");
+		player.sendMessage("Use setlevel command like this ::setlevel [skillID] [skillLevel]");
 	}
 
 }

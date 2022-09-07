@@ -25,25 +25,22 @@ public class AppearanceFlag implements UpdateFlag {
 	@Override
 	public void write(RSFrame frame) {
 		RSStream appearanceData = new RSStream();
-		int flags = (variables.gender() & 0x1) | 0x4;
+		int dataHash = (variables.gender() & 0x1) | 0x4;
 
-		appearanceData.writeByte(flags);
+		appearanceData.writeByte(dataHash);
 		appearanceData.writeByte(variables.titleID());
 		appearanceData.writeByte(variables.skullIcon());
 		appearanceData.writeByte(variables.prayerIcon());
 		appearanceData.writeByte(0);
-		for (int i = 0; i < 4; i++) {
-			appearanceData.writeByte(0);
-		}
 
-		appearanceData.writeShort(0x100 + variables.torso());
-		appearanceData.writeByte((byte) 0);
-		appearanceData.writeShort(0x100 + variables.arms());
-		appearanceData.writeShort(0x100 + variables.legs());
-		appearanceData.writeShort(0x100 + variables.head());
-		appearanceData.writeShort(0x100 + variables.hands());
-		appearanceData.writeShort(0x100 + variables.feet());
-		appearanceData.writeShort(0x100 + variables.beard());
+		int[] flags = variables.flags();
+		for (int i = 0; i < flags.length; i++) {
+			if (flags[i] == 0) {
+				appearanceData.writeByte(0);
+			} else {
+				appearanceData.writeShort(flags[i]);
+			}
+		}
 
 		appearanceData.writeByte(variables.hairColor());
 		appearanceData.writeByte(variables.torsoColor());

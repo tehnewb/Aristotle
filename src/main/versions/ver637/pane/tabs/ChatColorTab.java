@@ -1,9 +1,9 @@
 package versions.ver637.pane.tabs;
 
 import versions.ver637.pane.ComponentClick;
-import versions.ver637.pane.GameInterface;
+import versions.ver637.pane.GameInterfaceAdapter;
 
-public class ChatColorTab extends GameInterface {
+public class ChatColorTab extends GameInterfaceAdapter {
 
 	public static final int ChatColorTab = 982;
 

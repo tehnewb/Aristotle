@@ -3,10 +3,10 @@ package versions.ver637.pane.tabs;
 import versions.ver637.model.player.NotesVariables;
 import versions.ver637.pane.ComponentClick;
 import versions.ver637.pane.ComponentSettings;
-import versions.ver637.pane.GameInterface;
+import versions.ver637.pane.GameInterfaceAdapter;
 import versions.ver637.pane.chat.LongStringRequest;
 
-public class NotesTab extends GameInterface {
+public class NotesTab extends GameInterfaceAdapter {
 
 	public static final int NotesID = 34;
 	public static final int HighlightNoteVarp = 1439;
@@ -15,7 +15,6 @@ public class NotesTab extends GameInterface {
 
 	public static final int AddNoteComponent = 3;
 	public static final int DeleteNoteComponent = 8;
-	public static final int DeleteNoteComponent2 = 11;
 	public static final int NoteListComponent = 9;
 
 	public static final int WhiteColorComponent = 35;
@@ -70,7 +69,7 @@ public class NotesTab extends GameInterface {
 					}
 				});
 			}
-			case DeleteNoteComponent, DeleteNoteComponent2 -> {
+			case DeleteNoteComponent -> {
 				if (variables.getHighlightedIndex() == -1) {
 					player.sendMessage("You must select a note to delete.");
 					return;
@@ -114,7 +113,7 @@ public class NotesTab extends GameInterface {
 
 						this.getComponent(16).setHidden(false);
 					}
-					case 3 -> { // delete
+					case 7 -> { // delete
 						deleteNote(data.slot());
 					}
 				}

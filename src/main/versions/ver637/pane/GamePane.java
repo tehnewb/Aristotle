@@ -1,5 +1,7 @@
 package versions.ver637.pane;
 
+import java.util.ArrayList;
+
 import lombok.Getter;
 import versions.ver637.model.player.Player;
 import versions.ver637.network.coders.frames.CS2Frame;
@@ -16,6 +18,7 @@ import versions.ver637.pane.chat.StringRequest;
 import versions.ver637.pane.orbs.RunOrbInterface;
 import versions.ver637.pane.tabs.AchievementTab;
 import versions.ver637.pane.tabs.ClanChatTab;
+import versions.ver637.pane.tabs.EquipmentTab;
 import versions.ver637.pane.tabs.FriendListTab;
 import versions.ver637.pane.tabs.GraphicSettingsTab;
 import versions.ver637.pane.tabs.IgnoreListTab;
@@ -213,6 +216,12 @@ public class GamePane extends Interface {
 	}
 
 	@Override
+	public void closeNonModal() {
+		super.closeNonModal();
+		closeRequest();
+	}
+
+	@Override
 	public void onOpen() {
 		/**
 		 * Tabs
@@ -224,6 +233,7 @@ public class GamePane extends Interface {
 		this.open(new FriendListTab());
 		this.open(new ClanChatTab());
 		this.open(new InventoryTab());
+		this.open(new EquipmentTab());
 		this.open(new GraphicSettingsTab());
 		this.open(new MusicTab());
 		this.open(new NotesTab());
@@ -242,14 +252,17 @@ public class GamePane extends Interface {
 	}
 
 	@Override
-	public void click(ComponentClick data) {
+	public void click(ComponentClick data) {}
 
-	}
+	@Override
+	public void swap(ComponentSwap data) {}
 
 	@Override
 	public void onClose() {
-		for (Interface window : this.children.values()) {
-			window.onClose();
+		ArrayList<Interface> copy = new ArrayList<>();
+		copy.addAll(this.children.values());
+		for (Interface window : copy) {
+			this.close(window);
 		}
 	}
 

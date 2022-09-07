@@ -5,9 +5,9 @@ import versions.ver637.cache.EnumResource.EnumData;
 import versions.ver637.model.player.music.MusicVariables;
 import versions.ver637.pane.ComponentClick;
 import versions.ver637.pane.ComponentSettings;
-import versions.ver637.pane.GameInterface;
+import versions.ver637.pane.GameInterfaceAdapter;
 
-public class MusicTab extends GameInterface {
+public class MusicTab extends GameInterfaceAdapter {
 
 	public static final int MusicID = 187;
 
@@ -20,7 +20,7 @@ public class MusicTab extends GameInterface {
 		MusicVariables.initializeUnlocks(player);
 
 		ComponentSettings settings = new ComponentSettings();
-		settings.setInterfaceDepth(0);
+		settings.setDragDepth(0);
 		settings.setSecondaryOption(0, true);
 
 		EnumData data = EnumResource.getEnumData(1351);
