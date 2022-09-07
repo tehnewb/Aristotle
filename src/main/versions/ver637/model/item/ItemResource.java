@@ -174,7 +174,7 @@ public class ItemResource implements RSResource<Integer> {
 				data.examine = extraDataStream.readRSString();
 
 			if (flags.get(5)) {
-				data.bonuses = new int[18];
+				data.bonuses = new short[18];
 				for (int bonusIndex = 0; bonusIndex < 18; bonusIndex++)
 					data.bonuses[bonusIndex] = extraDataStream.readShort();
 			}
@@ -225,7 +225,7 @@ public class ItemResource implements RSResource<Integer> {
 		private String[] inventoryOptions = { null, null, null, null, "drop" };
 		private String[] equipmentOptions;
 		private Map<Integer, Object> attributes;
-		private int[] bonuses;
+		private short[] bonuses;
 		private SkillRequirement[] requirements;
 
 		public int getRenderID() {

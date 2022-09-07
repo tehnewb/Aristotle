@@ -18,6 +18,7 @@ import versions.ver637.pane.chat.StringRequest;
 import versions.ver637.pane.orbs.RunOrbInterface;
 import versions.ver637.pane.tabs.AchievementTab;
 import versions.ver637.pane.tabs.ClanChatTab;
+import versions.ver637.pane.tabs.EmoteTab;
 import versions.ver637.pane.tabs.EquipmentTab;
 import versions.ver637.pane.tabs.FriendListTab;
 import versions.ver637.pane.tabs.GraphicSettingsTab;
@@ -26,6 +27,7 @@ import versions.ver637.pane.tabs.InventoryTab;
 import versions.ver637.pane.tabs.LogoutTab;
 import versions.ver637.pane.tabs.MusicTab;
 import versions.ver637.pane.tabs.NotesTab;
+import versions.ver637.pane.tabs.QuestTab;
 import versions.ver637.pane.tabs.SkillTab;
 
 public class GamePane extends Interface {
@@ -67,6 +69,11 @@ public class GamePane extends Interface {
 	 */
 	public void close(Interface window) {
 		this.removeChild(window.position(this));
+	}
+
+	public <T extends Interface> void close(Class<T> clazz) {
+		Interface window = this.getChild(clazz);
+		this.close(window);
 	}
 
 	/**
@@ -227,6 +234,7 @@ public class GamePane extends Interface {
 		 * Tabs
 		 */
 		this.open(new AchievementTab());
+		this.open(new QuestTab());
 		this.open(new SkillTab());
 		this.open(new LogoutTab());
 		this.open(new IgnoreListTab());
@@ -235,6 +243,7 @@ public class GamePane extends Interface {
 		this.open(new InventoryTab());
 		this.open(new EquipmentTab());
 		this.open(new GraphicSettingsTab());
+		this.open(new EmoteTab());
 		this.open(new MusicTab());
 		this.open(new NotesTab());
 

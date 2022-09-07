@@ -8,7 +8,7 @@ import versions.ver637.pane.ComponentClick;
 import versions.ver637.pane.GamePane;
 import versions.ver637.pane.Interface;
 
-public class InterfaceHandler implements FrameHandler {
+public class InterfaceComponentHandler implements FrameHandler {
 
 	@Override
 	public void handleFrame(Player player, RSFrame frame) {

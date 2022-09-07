@@ -3,7 +3,7 @@ package versions.ver637.pane.tabs;
 import versions.ver637.model.item.Item;
 import versions.ver637.model.item.ItemContainer;
 import versions.ver637.model.item.ItemContainerChangeHandler;
-import versions.ver637.model.player.equipment.EquipItemScript;
+import versions.ver637.model.player.EquipmentVariables;
 import versions.ver637.network.coders.frames.ContainerFrame;
 import versions.ver637.pane.ComponentClick;
 import versions.ver637.pane.ComponentSettings;
@@ -40,6 +40,10 @@ public class InventoryTab extends GameInterface implements ItemContainerChangeHa
 	public void click(ComponentClick data) {
 		if (data.componentID() == 0) {
 			Item item = player.getInventory().get(data.slot());
+
+			if (item == null)
+				return;
+
 			if (data.option() == 9) {
 				player.sendMessage("{0}", item.getData().getExamine());
 				return;
@@ -47,7 +51,7 @@ public class InventoryTab extends GameInterface implements ItemContainerChangeHa
 
 			String option = item.getData().getInventoryOptions()[data.option()];
 			if (option != null && (option.equalsIgnoreCase("wear") || option.equalsIgnoreCase("wield"))) {
-				player.getQueue().queue(new EquipItemScript(data.itemID(), data.slot()));
+				EquipmentVariables.equip(player, item.getID(), data.slot());
 			}
 		}
 
@@ -56,6 +60,8 @@ public class InventoryTab extends GameInterface implements ItemContainerChangeHa
 	@Override
 	public void swap(ComponentSwap data) {
 		player.getInventory().swap(data.fromSlot(), data.toSlot() - 28);
+
+		player.getQueue().interrupt();
 	}
 
 	@Override
@@ -80,6 +86,6 @@ public class InventoryTab extends GameInterface implements ItemContainerChangeHa
 
 	private void refreshInventory() {
 		player.getSession().write(new ContainerFrame(InventoryContainerID, false, player.getInventory()));
-		//EquipmentVariables.calculateWeight(player);
+		EquipmentVariables.calculateWeight(player);
 	}
 }

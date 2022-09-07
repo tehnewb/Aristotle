@@ -40,6 +40,9 @@ public class ItemContainer {
 	 * @param item the item to add.
 	 */
 	public void addItem(Item item) {
+		if (isFull())
+			return;
+
 		if (item.isStackable() || stackOnly) {
 			int index = this.indexOf(item.getID());
 			if (index == -1) {
@@ -146,6 +149,7 @@ public class ItemContainer {
 	 * Clears this {@code ItemContainer} of all items
 	 */
 	public void clear() {
+		this.size = 0;
 		for (int i = 0; i < this.items.length; i++)
 			this.items[i] = null;
 

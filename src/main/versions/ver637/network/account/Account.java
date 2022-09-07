@@ -6,13 +6,13 @@ import lombok.Data;
 import versions.ver637.model.item.ItemContainer;
 import versions.ver637.model.player.AppearanceVariables;
 import versions.ver637.model.player.ChatVariables;
+import versions.ver637.model.player.EquipmentVariables;
 import versions.ver637.model.player.FriendVariables;
 import versions.ver637.model.player.LocationVariables;
 import versions.ver637.model.player.MiscVariables;
 import versions.ver637.model.player.NotesVariables;
 import versions.ver637.model.player.TickVariables;
 import versions.ver637.model.player.clan.ClanVariables;
-import versions.ver637.model.player.equipment.EquipmentVariables;
 import versions.ver637.model.player.music.MusicVariables;
 import versions.ver637.model.player.skills.SkillVariables;
 

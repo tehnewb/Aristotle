@@ -13,6 +13,7 @@ public abstract class RSScriptQueue<O> {
 
 	@Getter
 	protected final O owner;
+	private boolean interrupted;
 
 	/**
 	 * Processes all {@code RSScript}s within this {@code RSScriptProcessor}.
@@ -26,6 +27,12 @@ public abstract class RSScriptQueue<O> {
 
 			queue.removeIf(r -> r.type() == RSQueueType.Weak);
 		}
+		
+		if (interrupted) {
+			queue.removeIf(r -> r.type() == RSQueueType.Weak);
+			interrupted = false;
+		}
+		
 		while (!queue.isEmpty()) {
 			boolean removed = queue.removeIf(script -> {
 				if (script.type() == RSQueueType.Strong || script.type() == RSQueueType.Soft)
@@ -50,6 +57,10 @@ public abstract class RSScriptQueue<O> {
 	 */
 	public void queue(@NonNull RSScript<O> script) {
 		queue.add(script);
+	}
+
+	public void interrupt() {
+		this.interrupted = true;
 	}
 
 	/**

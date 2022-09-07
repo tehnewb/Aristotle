@@ -13,7 +13,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import versions.ver637.model.item.ItemContainer;
 import versions.ver637.model.player.clan.ClanVariables;
-import versions.ver637.model.player.equipment.EquipmentVariables;
 import versions.ver637.model.player.music.MusicVariables;
 import versions.ver637.model.player.skills.SkillVariables;
 import versions.ver637.network.account.Account;

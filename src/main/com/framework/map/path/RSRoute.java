@@ -63,7 +63,6 @@ public class RSRoute {
 		 * closing. That's why this is here
 		 */
 		if (RSCollision.canTraverse(WorldMap.getMap(), nextStep, directionTo)) {
-
 			this.nextStep = this.nextStep.neighbor(directionTo);
 
 			if (nextStep.equals(nextCheckpoint))

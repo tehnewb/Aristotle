@@ -3,11 +3,11 @@ package versions.ver637.pane.tabs;
 import versions.ver637.model.item.Item;
 import versions.ver637.model.item.ItemContainer;
 import versions.ver637.model.item.ItemContainerChangeHandler;
-import versions.ver637.model.player.equipment.EquipmentVariables;
-import versions.ver637.model.player.equipment.UnequipItemScript;
+import versions.ver637.model.player.EquipmentVariables;
 import versions.ver637.network.coders.frames.ContainerFrame;
 import versions.ver637.pane.ComponentClick;
 import versions.ver637.pane.GameInterfaceAdapter;
+import versions.ver637.pane.primary.EquipmentViewInterface;
 
 public class EquipmentTab extends GameInterfaceAdapter implements ItemContainerChangeHandler {
 
@@ -28,6 +28,10 @@ public class EquipmentTab extends GameInterfaceAdapter implements ItemContainerC
 
 	@Override
 	public void click(ComponentClick data) {
+		if (data.componentID() == 39) {
+			player.getPane().open(new EquipmentViewInterface());
+			return;
+		}
 		if (data.componentID() >= 8 && data.componentID() <= 38) {
 			int equipmentSlot = switch (data.componentID()) {
 				case 8 -> EquipmentVariables.HeadSlot;
@@ -45,6 +49,8 @@ public class EquipmentTab extends GameInterfaceAdapter implements ItemContainerC
 			};
 
 			Item item = player.getEquipmentVariables().getEquipment().get(equipmentSlot);
+			if (item == null)
+				return;
 			if (data.option() == 9) {
 				player.sendMessage("{0}", item.getData().getExamine());
 				return;
@@ -55,7 +61,7 @@ public class EquipmentTab extends GameInterfaceAdapter implements ItemContainerC
 				return;
 
 			if (option.equalsIgnoreCase("remove")) {
-				player.getQueue().queue(new UnequipItemScript(equipmentSlot));
+				EquipmentVariables.unEquip(player, equipmentSlot);
 			}
 		}
 	}
@@ -81,8 +87,9 @@ public class EquipmentTab extends GameInterfaceAdapter implements ItemContainerC
 	}
 
 	private void refreshEquipment() {
+		EquipmentVariables.calculateBonuses(player);
 		EquipmentVariables.calculateWeight(player);
-		player.getSession().write(new ContainerFrame(94, false, player.getEquipmentVariables().getEquipment()));
+		player.getSession().write(new ContainerFrame(EquipmentContainerID, false, player.getEquipmentVariables().getEquipment()));
 	}
 
 }
