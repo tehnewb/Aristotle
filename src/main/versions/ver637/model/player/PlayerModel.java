@@ -25,11 +25,12 @@ public class PlayerModel extends UpdateModel {
 
 	@Override
 	public void prepare() {
+		player.getScripts().process();
+		player.getTimers().process();
+
 		LocationVariables.processRoute(player);
 		TickVariables.processTicks(player);
 		ChatVariables.processChat(player);
-
-		player.getQueue().process();
 	}
 
 	@Override

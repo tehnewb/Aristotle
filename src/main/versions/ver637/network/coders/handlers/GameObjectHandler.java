@@ -1,5 +1,6 @@
 package versions.ver637.network.coders.handlers;
 
+import com.framework.RSFramework;
 import com.framework.map.RSLocation;
 import com.framework.map.path.RSRouteBuilder;
 import com.framework.network.RSFrame;
@@ -8,6 +9,7 @@ import com.google.common.primitives.Ints;
 import lombok.extern.slf4j.Slf4j;
 import versions.ver637.map.GameObject;
 import versions.ver637.map.GameObjectReachRequest;
+import versions.ver637.map.PlayerClickObjectEvent;
 import versions.ver637.map.WorldMap;
 import versions.ver637.model.player.Player;
 import versions.ver637.network.coders.FrameHandler;
@@ -53,26 +55,28 @@ public class GameObjectHandler implements FrameHandler {
 			}
 		}
 		RSLocation location = new RSLocation(x, y, player.getLocation().getZ());
-		GameObject locale = WorldMap.getMap().getGameObject(location);
-		if (locale == null) {
-			locale = new GameObject(objectID, location, 10, 0);
+		GameObject object = WorldMap.getMap().getGameObject(location);
+		if (object == null) {
+			object = new GameObject(objectID, location, 10, 0);
 		}
 
-		if (locale.getID() != objectID) {
+		if (object.getID() != objectID) {
 			log.error("Locale {} at {} does not match frame", objectID, location);
 			return;
 		}
+		
+		RSFramework.post(new PlayerClickObjectEvent(player, object, object.getData().getOptions()[index]));
 
 		RSRouteBuilder builder = new RSRouteBuilder();
 		builder.startingAt(player.getLocation());
 		builder.endingAt(location);
-		builder.target(locale);
-		builder.destWidth(locale.getSizeX());
-		builder.destHeight(locale.getSizeY());
-		builder.objectRotation(locale.getRotation());
-		builder.objectShape(locale.getType());
-		builder.accessBitMask(locale.getAccessFlag());
-		builder.reachRequest(new GameObjectReachRequest(player, locale.getData().getOptions()[index]));
+		builder.target(object);
+		builder.destWidth(object.getSizeX());
+		builder.destHeight(object.getSizeY());
+		builder.objectRotation(object.getRotation());
+		builder.objectShape(object.getType());
+		builder.accessBitMask(object.getAccessFlag());
+		builder.reachRequest(new GameObjectReachRequest(player, object.getData().getOptions()[index]));
 		player.getLocationVariables().setRunning(running || player.getLocationVariables().isRunning());
 		player.getLocationVariables().setRoute(builder.findPath());
 	}

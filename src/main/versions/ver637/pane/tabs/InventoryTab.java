@@ -3,7 +3,9 @@ package versions.ver637.pane.tabs;
 import versions.ver637.model.item.Item;
 import versions.ver637.model.item.ItemContainer;
 import versions.ver637.model.item.ItemContainerChangeHandler;
-import versions.ver637.model.player.EquipmentVariables;
+import versions.ver637.model.player.equipment.EquipItemScript;
+import versions.ver637.model.player.equipment.EquipmentVariables;
+import versions.ver637.model.player.inventory.SwapItemScript;
 import versions.ver637.network.coders.frames.ContainerFrame;
 import versions.ver637.pane.ComponentClick;
 import versions.ver637.pane.ComponentSettings;
@@ -50,8 +52,8 @@ public class InventoryTab extends GameInterface implements ItemContainerChangeHa
 			}
 
 			String option = item.getData().getInventoryOptions()[data.option()];
-			if (option != null && (option.equalsIgnoreCase("wear") || option.equalsIgnoreCase("wield"))) {
-				EquipmentVariables.equip(player, item.getID(), data.slot());
+			if (option != null && (option.equalsIgnoreCase("wear") || option.equalsIgnoreCase("wield") || option.equalsIgnoreCase("equip"))) {
+				player.getScripts().queue(new EquipItemScript(data.itemID(), data.slot()));
 			}
 		}
 
@@ -59,9 +61,7 @@ public class InventoryTab extends GameInterface implements ItemContainerChangeHa
 
 	@Override
 	public void swap(ComponentSwap data) {
-		player.getInventory().swap(data.fromSlot(), data.toSlot() - 28);
-
-		player.getQueue().interrupt();
+		player.getScripts().queue(new SwapItemScript(data.fromSlot(), data.toSlot() - 28));
 	}
 
 	@Override

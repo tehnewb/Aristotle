@@ -25,15 +25,15 @@ public class AppearanceFlag implements UpdateFlag {
 	@Override
 	public void write(RSFrame frame) {
 		RSStream appearanceData = new RSStream();
-		int dataHash = (variables.gender() & 0x1) | 0x4;
+		int dataHash = (variables.getGender() & 0x1) | 0x4;
 
 		appearanceData.writeByte(dataHash);
-		appearanceData.writeByte(variables.titleID());
-		appearanceData.writeByte(variables.skullIcon());
-		appearanceData.writeByte(variables.prayerIcon());
+		appearanceData.writeByte(variables.getTitleID());
+		appearanceData.writeByte(variables.getSkullIcon());
+		appearanceData.writeByte(variables.getPrayerIcon());
 		appearanceData.writeByte(0);
 
-		int[] flags = variables.flags();
+		int[] flags = variables.getFlags();
 		for (int i = 0; i < flags.length; i++) {
 			if (flags[i] == 0) {
 				appearanceData.writeByte(0);
@@ -42,14 +42,14 @@ public class AppearanceFlag implements UpdateFlag {
 			}
 		}
 
-		appearanceData.writeByte(variables.hairColor());
-		appearanceData.writeByte(variables.torsoColor());
-		appearanceData.writeByte(variables.legColor());
-		appearanceData.writeByte(variables.feetColor());
-		appearanceData.writeByte(variables.skinColor());
+		appearanceData.writeByte(variables.getHairColor());
+		appearanceData.writeByte(variables.getTorsoColor());
+		appearanceData.writeByte(variables.getLegColor());
+		appearanceData.writeByte(variables.getFeetColor());
+		appearanceData.writeByte(variables.getSkinColor());
 
-		appearanceData.writeShort(variables.renderAnimation());
-		appearanceData.writeRSString(variables.username());
+		appearanceData.writeShort(variables.getRenderAnimation());
+		appearanceData.writeRSString(variables.getUsername());
 		appearanceData.writeByte(138);
 		appearanceData.writeByte(0); // skill level, eg -> skill: 1526
 		appearanceData.writeShort(0);

@@ -21,8 +21,8 @@ public class UpdateFriendFrame extends RSFrame {
 
 	public UpdateFriendFrame(Player player, Account friend, FriendState state) {
 		super(UpdateFriendOpcode, VarShortType);
-		String previousName = friend.getAppearanceVariables().previousUserName();
-		String displayName = friend.getAppearanceVariables().username();
+		String previousName = friend.getAppearanceVariables().getPreviousUserName();
+		String displayName = friend.getAppearanceVariables().getUsername();
 
 		if (displayName == null)
 			displayName = friend.getUsername();
@@ -32,7 +32,7 @@ public class UpdateFriendFrame extends RSFrame {
 		Clan personalClan = ClanVariables.getPersonalClan(player);
 		int friendRank = 0;
 		if (personalClan != null) {
-			ClanMember member = personalClan.getMember(friend.getAppearanceVariables().username());
+			ClanMember member = personalClan.getMember(friend.getAppearanceVariables().getUsername());
 			if (member != null)
 				friendRank = member.rank();
 		}

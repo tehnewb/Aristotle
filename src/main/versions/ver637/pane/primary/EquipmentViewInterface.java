@@ -1,10 +1,11 @@
 package versions.ver637.pane.primary;
 
-import versions.ver637.model.player.EquipmentVariables;
+import versions.ver637.model.player.equipment.EquipmentVariables;
+import versions.ver637.model.player.equipment.UnequipItemScript;
 import versions.ver637.pane.ComponentClick;
 import versions.ver637.pane.ComponentSettings;
-import versions.ver637.pane.ComponentSwap;
 import versions.ver637.pane.GameInterfaceAdapter;
+import versions.ver637.pane.side.EquipmentSideInterface;
 
 public class EquipmentViewInterface extends GameInterfaceAdapter {
 
@@ -24,16 +25,13 @@ public class EquipmentViewInterface extends GameInterfaceAdapter {
 		this.getComponent(7).setSettings(settings, 0, 16);
 
 		displayBonuses();
-
 		player.getPane().open(new EquipmentSideInterface());
 	}
 
 	@Override
 	public void click(ComponentClick data) {
 		if (data.componentID() == 7) {
-			EquipmentVariables.unEquip(player, data.slot());
-
-			displayBonuses();
+			player.getScripts().queue(new UnequipItemScript(data.slot()));
 		}
 	}
 
@@ -42,45 +40,7 @@ public class EquipmentViewInterface extends GameInterfaceAdapter {
 		player.getPane().close(EquipmentSideInterface.class);
 	}
 
-	private class EquipmentSideInterface extends GameInterfaceAdapter {
-
-		public EquipmentSideInterface() {
-			super(670, false);
-		}
-
-		@Override
-		public void onOpen() {
-			ComponentSettings settings = new ComponentSettings();
-			for (int i = 0; i < 10; i++)
-				settings.setSecondaryOption(i, true);
-			settings.setUseOnSettings(true, true, true, true, false, true);
-			settings.setDragDepth(1);
-			settings.setCanDragOnto(true);
-			settings.setIsUseOnTarget(true);
-			this.getComponent(0).setSettings(settings, 0, 27);
-		}
-
-		@Override
-		public void click(ComponentClick data) {
-			if (data.componentID() == 0) {
-				EquipmentVariables.equip(player, data.itemID(), data.slot());
-				displayBonuses();
-			}
-		}
-
-		@Override
-		public void swap(ComponentSwap data) {
-			player.getInventory().swap(data.fromSlot(), data.toSlot());
-		}
-
-		@Override
-		public int position(boolean resizable) {
-			return resizable ? 84 : 197;
-		}
-
-	}
-
-	private void displayBonuses() {
+	public void displayBonuses() {
 		short[] bonuses = player.getEquipmentVariables().getBonuses();
 
 		// Attack bonus
@@ -107,7 +67,7 @@ public class EquipmentViewInterface extends GameInterfaceAdapter {
 		getComponent(45).setText("Ranged Strength: " + (int) bonuses[EquipmentVariables.RangeStrengthBonus]);
 		getComponent(46).setText("Prayer: " + (int) bonuses[EquipmentVariables.PrayerBonus]);
 		getComponent(47).setText("Magic Damage: " + bonuses[EquipmentVariables.MagicBonus] + "%");
-		setVarc(779, player.getAppearanceVariables().renderAnimation());
+		setVarc(779, player.getAppearanceVariables().getRenderAnimation());
 	}
 
 }

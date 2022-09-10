@@ -2,14 +2,13 @@ package versions.ver637.model.player;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 import versions.ver637.model.item.Item;
 import versions.ver637.model.item.ItemContainer;
+import versions.ver637.model.player.equipment.EquipmentVariables;
 import versions.ver637.model.player.flags.AppearanceFlag;
 
 @Getter
 @Setter
-@Accessors(fluent = true, chain = true)
 public class AppearanceVariables {
 
 	public static final byte MaleGender = 0;
@@ -37,9 +36,9 @@ public class AppearanceVariables {
 	private short feetColor = 4;
 	private short skinColor;
 	private short renderAnimation = 1426;
-	private short skullIcon = -1;
-	private short prayerIcon = -1;
-	private short titleID;
+	private byte skullIcon = -1;
+	private byte prayerIcon = -1;
+	private byte titleID;
 	private String username;
 	private String previousUserName;
 	private transient int[] flags = new int[12];
@@ -109,11 +108,11 @@ public class AppearanceVariables {
 			variables.clearFlag(2);
 		}
 		if (weapon != null) {
-			variables.renderAnimation((short) weapon.getData().getRenderID());
+			variables.setRenderAnimation((short) weapon.getData().getRenderID());
 
 			variables.flagEquipment(3, weapon);
 		} else {
-			variables.renderAnimation((short) 1426);
+			variables.setRenderAnimation((short) 1426);
 			variables.clearFlag(3);
 		}
 		if (chest != null) {

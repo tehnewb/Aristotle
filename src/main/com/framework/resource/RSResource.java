@@ -1,5 +1,7 @@
 package com.framework.resource;
 
+import java.util.function.Consumer;
+
 import com.framework.RSFramework;
 
 /**
@@ -35,5 +37,15 @@ public interface RSResource<R> {
 	 */
 	default void queue() {
 		RSFramework.queueResource(this);
+	}
+
+	/**
+	 * Queues this {@code RSResourceCallable} to the worker in the
+	 * {@code RSFramework}.
+	 * 
+	 * @param callback the callback executed once the resource has been processed
+	 */
+	default void queue(Consumer<R> callback) {
+		RSFramework.queueResource(this, callback);
 	}
 }

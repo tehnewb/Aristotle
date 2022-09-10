@@ -18,7 +18,7 @@ public class EmoteTab extends GameInterfaceAdapter {
 
 	@Override
 	public void click(ComponentClick data) {
-
+		System.out.println(data);
 	}
 
 	@Override

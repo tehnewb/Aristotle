@@ -15,8 +15,8 @@ public class UnlockIgnoreFrame extends RSFrame {
 
 		for (int i = 0; i < ignores.length; i++) {
 			Account account = ignores[i];
-			String displayName = account.getAppearanceVariables().username();
-			String previousName = account.getAppearanceVariables().previousUserName();
+			String displayName = account.getAppearanceVariables().getUsername();
+			String previousName = account.getAppearanceVariables().getPreviousUserName();
 
 			if (displayName == null)
 				displayName = account.getUsername();

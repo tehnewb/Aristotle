@@ -22,7 +22,7 @@ public class ClanMessageFrame extends RSFrame {
 		bytes[0] = (byte) message.length();
 		int length = 1 + Huffman.compress(message, bytes, 1);
 		writeByte(0);
-		writeRSString(from.getAppearanceVariables().username());
+		writeRSString(from.getAppearanceVariables().getUsername());
 		writeLong(StringUtil.toLong(clan.getName()));
 		writeShort((int) (messageID >> 32));
 		writeMedium((int) (messageID - ((messageID >> 32) << 32)));

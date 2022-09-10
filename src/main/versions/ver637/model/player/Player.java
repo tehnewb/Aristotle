@@ -8,12 +8,18 @@ import com.framework.entity.RSEntity;
 import com.framework.entity.RSEntityList;
 import com.framework.map.RSLocation;
 import com.framework.network.RSNetworkSession;
+import com.framework.util.StringUtil;
 
 import lombok.Getter;
 import lombok.NonNull;
+import versions.ver637.map.WorldMap;
 import versions.ver637.model.item.ItemContainer;
 import versions.ver637.model.player.clan.ClanVariables;
+import versions.ver637.model.player.equipment.EquipmentVariables;
+import versions.ver637.model.player.mechanics.PlayerScriptQueue;
+import versions.ver637.model.player.mechanics.PlayerTimerQueue;
 import versions.ver637.model.player.music.MusicVariables;
+import versions.ver637.model.player.prayer.PrayerVariables;
 import versions.ver637.model.player.skills.SkillVariables;
 import versions.ver637.network.account.Account;
 import versions.ver637.network.coders.frames.ChatMessageFrame;
@@ -38,23 +44,33 @@ public class Player extends RSEntity {
 	private GamePane pane;
 
 	@Getter
-	private final PlayerScriptQueue queue;
+	private final PlayerScriptQueue scripts;
+
+	@Getter
+	private final PlayerTimerQueue timers;
 
 	public Player(RSNetworkSession session, Account account) {
 		this.session = session;
 		this.account = account;
 		this.model = new PlayerModel(this);
-		this.queue = new PlayerScriptQueue(this);
+		this.scripts = new PlayerScriptQueue(this);
+		this.timers = new PlayerTimerQueue(this);
 	}
 
 	public void sendMessage(String string, Object... arguments) {
 		String formatted = MessageFormat.format(string, arguments);
-		session.write(new ChatMessageFrame(account.getUsername(), formatted, ChatType.Normal));
+		String[] wrapped = StringUtil.wrap(80, true, formatted);
+		for (String s : wrapped) {
+			session.write(new ChatMessageFrame(account.getUsername(), s, ChatType.Normal));
+		}
 	}
 
 	public void setLocation(RSLocation newLocation) {
 		RSLocation previous = account.getLocationVariables().getCurrentLocation();
 		account.getLocationVariables().setCurrentLocation(newLocation);
+
+		WorldMap.getMap().setPlayerFlag(previous.getX(), previous.getY(), previous.getZ(), false);
+		WorldMap.getMap().setPlayerFlag(newLocation.getX(), newLocation.getY(), newLocation.getZ(), false);
 
 		RSFramework.post(new PlayerLocationChangeEvent(this, previous, newLocation));
 	}
@@ -89,6 +105,15 @@ public class Player extends RSEntity {
 	 */
 	public ItemContainer getInventory() {
 		return account.getInventory();
+	}
+
+	/**
+	 * Returns the {@code PrayerVariables} in the account of this {@code Player}.
+	 * 
+	 * @return the prayer variables
+	 */
+	public PrayerVariables getPrayerVariables() {
+		return account.getPrayerVariables();
 	}
 
 	/**

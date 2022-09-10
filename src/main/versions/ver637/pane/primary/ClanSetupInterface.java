@@ -1,9 +1,12 @@
 package versions.ver637.pane.primary;
 
+import com.framework.util.StringUtil;
+
 import versions.ver637.model.player.clan.Clan;
 import versions.ver637.model.player.clan.ClanVariables;
 import versions.ver637.pane.ComponentClick;
 import versions.ver637.pane.GameInterfaceAdapter;
+import versions.ver637.pane.chat.StringRequest;
 
 public class ClanSetupInterface extends GameInterfaceAdapter {
 
@@ -32,12 +35,33 @@ public class ClanSetupInterface extends GameInterfaceAdapter {
 
 	@Override
 	public void click(ComponentClick data) {
-		System.out.println(data);
 		if (data.componentID() == 3) {
 			player.getPane().close(this);
 			return;
 		}
 		Clan clan = ClanVariables.getPersonalClan(player);
+
+		if (data.componentID() == ClanNameComponent) {
+			player.getPane().requestString(new StringRequest("Enter prefix:") {
+				@Override
+				public void handleRequest(String value) {
+					value = StringUtil.upperFirst(value);
+					Clan clan = ClanVariables.getPersonalClan(player);
+					if (clan == null) {
+						clan = new Clan(player.getAccount().getUsername(), value);
+						Clan.createClan(clan);
+					} else {
+						if (player.getClanVariables().getClanName().equalsIgnoreCase(clan.getName())) {
+							player.getClanVariables().setClanName(value);
+						}
+						clan.setName(value);
+					}
+					clan.refresh();
+					ClanSetupInterface.this.getComponent(ClanNameComponent).setText(value);
+				}
+			});
+			return;
+		}
 
 		if (clan == null) {
 			player.sendMessage("You must set a clan prefix first");

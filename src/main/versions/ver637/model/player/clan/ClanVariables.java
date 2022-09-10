@@ -64,7 +64,7 @@ public class ClanVariables {
 	}
 
 	public static Clan getPersonalClan(Player player) {
-		return Clan.getClanByOwner(player.getAppearanceVariables().username());
+		return Clan.getClanByOwner(player.getAppearanceVariables().getUsername());
 	}
 
 	public static Clan getClan(Player player) {

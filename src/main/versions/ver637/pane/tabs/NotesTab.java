@@ -113,7 +113,7 @@ public class NotesTab extends GameInterfaceAdapter {
 
 						this.getComponent(16).setHidden(false);
 					}
-					case 7 -> { // delete
+					case 3 -> { // delete
 						deleteNote(data.slot());
 					}
 				}
@@ -142,7 +142,7 @@ public class NotesTab extends GameInterfaceAdapter {
 
 	@Override
 	public int position(boolean resizable) {
-		return resizable ? 102 : 218;
+		return resizable ? 102 : 217;
 	}
 
 	public void addNote(String newString) {

@@ -64,7 +64,9 @@ public class Clan {
 	public void setName(@NonNull String newName) {
 		if (!newName.equals(name)) {
 			removeClan(name);
-			createClan(newName, this);
+
+			this.name = newName;
+			addClan(this);
 		}
 
 		this.name = newName;
@@ -76,7 +78,8 @@ public class Clan {
 	}
 
 	public void delete() {
-		RSFramework.queueResource(new ClanSaveResource(this));
+
+		RSFramework.queueResource(new ClanDeleteResource(this.name));
 	}
 
 	public static Clan getClan(@NonNull String name) {
@@ -91,14 +94,10 @@ public class Clan {
 		return null;
 	}
 
-	public static void createClan(@NonNull String name, Clan clan) {
-		if (clans.containsKey(name))
+	public static void createClan(Clan clan) {
+		if (clans.containsKey(clan.name))
 			return;
-		clan.getMembers().add(new ClanMember(clan.owner, 7, 0));
-
-		clans.put(name, clan);
-
-		clan.save();
+		addClan(clan);
 	}
 
 	public static void removeClan(@NonNull String name) {
@@ -114,6 +113,8 @@ public class Clan {
 		if (clans.containsKey(clan.name))
 			return;
 		clans.put(clan.getName(), clan);
+
+		clan.save();
 	}
 
 }

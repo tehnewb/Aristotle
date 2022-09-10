@@ -37,6 +37,14 @@ public class Skill {
 		modifier += (int) (level * percentage);
 	}
 
+	public int getActualLevel() {
+		return SkillVariables.getLevelForExperience(experience);
+	}
+
+	public int getModifiedLevel() {
+		return level + modifier;
+	}
+
 	public void setLevel(int level) {
 		this.level = (byte) level;
 	}

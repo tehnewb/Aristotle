@@ -14,7 +14,7 @@ public class SendPrivateMessageFrame extends RSFrame {
 
 		byte[] bytes = new byte[256];
 		int length = Huffman.compress(text, bytes, 0);
-		writeRSString(receiver.getAppearanceVariables().username());
+		writeRSString(receiver.getAppearanceVariables().getUsername());
 		writeByte(text.length());
 		writeBytes(bytes, 0, length);
 	}

@@ -3,7 +3,8 @@ package versions.ver637.pane.tabs;
 import versions.ver637.model.item.Item;
 import versions.ver637.model.item.ItemContainer;
 import versions.ver637.model.item.ItemContainerChangeHandler;
-import versions.ver637.model.player.EquipmentVariables;
+import versions.ver637.model.player.equipment.EquipmentVariables;
+import versions.ver637.model.player.equipment.UnequipItemScript;
 import versions.ver637.network.coders.frames.ContainerFrame;
 import versions.ver637.pane.ComponentClick;
 import versions.ver637.pane.GameInterfaceAdapter;
@@ -61,7 +62,7 @@ public class EquipmentTab extends GameInterfaceAdapter implements ItemContainerC
 				return;
 
 			if (option.equalsIgnoreCase("remove")) {
-				EquipmentVariables.unEquip(player, equipmentSlot);
+				player.getScripts().queue(new UnequipItemScript(equipmentSlot));
 			}
 		}
 	}

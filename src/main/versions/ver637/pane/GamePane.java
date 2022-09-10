@@ -3,6 +3,7 @@ package versions.ver637.pane;
 import java.util.ArrayList;
 
 import lombok.Getter;
+import lombok.NonNull;
 import versions.ver637.model.player.Player;
 import versions.ver637.network.coders.frames.CS2Frame;
 import versions.ver637.network.coders.frames.CS2StringFrame;
@@ -15,7 +16,8 @@ import versions.ver637.pane.chat.IntegerRequest;
 import versions.ver637.pane.chat.LongStringRequest;
 import versions.ver637.pane.chat.PrivateMessageInterface;
 import versions.ver637.pane.chat.StringRequest;
-import versions.ver637.pane.orbs.RunOrbInterface;
+import versions.ver637.pane.orbs.PrayerOrb;
+import versions.ver637.pane.orbs.RunOrb;
 import versions.ver637.pane.tabs.AchievementTab;
 import versions.ver637.pane.tabs.ClanChatTab;
 import versions.ver637.pane.tabs.EmoteTab;
@@ -27,6 +29,7 @@ import versions.ver637.pane.tabs.InventoryTab;
 import versions.ver637.pane.tabs.LogoutTab;
 import versions.ver637.pane.tabs.MusicTab;
 import versions.ver637.pane.tabs.NotesTab;
+import versions.ver637.pane.tabs.PrayerTab;
 import versions.ver637.pane.tabs.QuestTab;
 import versions.ver637.pane.tabs.SkillTab;
 
@@ -58,7 +61,7 @@ public class GamePane extends Interface {
 	 * 
 	 * @param window the interface to open
 	 */
-	public final void open(Interface window) {
+	public final void open(@NonNull Interface window) {
 		this.addChild(window);
 	}
 
@@ -67,12 +70,14 @@ public class GamePane extends Interface {
 	 * 
 	 * @param window the interface to close
 	 */
-	public void close(Interface window) {
+	public void close(@NonNull Interface window) {
 		this.removeChild(window.position(this));
 	}
 
 	public <T extends Interface> void close(Class<T> clazz) {
 		Interface window = this.getChild(clazz);
+		if (window == null)
+			return;
 		this.close(window);
 	}
 
@@ -246,11 +251,13 @@ public class GamePane extends Interface {
 		this.open(new EmoteTab());
 		this.open(new MusicTab());
 		this.open(new NotesTab());
+		this.open(new PrayerTab());
 
 		/**
 		 * Orbs
 		 */
-		this.open(new RunOrbInterface());
+		this.open(new RunOrb());
+		this.open(new PrayerOrb());
 
 		/**
 		 * Chat

@@ -17,7 +17,7 @@ public class PlayerLoginController {
 			ClanVariables.alertClan(player);
 		} else {
 			player.getLocationVariables().setRegionLocation(player.getLocation());
-			player.getAppearanceVariables().username(StringUtil.upperFirst(player.getAccount().getUsername()));
+			player.getAppearanceVariables().setUsername(StringUtil.upperFirst(player.getAccount().getUsername()));
 			player.getModel().setInWorld(true);
 			AppearanceVariables.updateAppearance(player);
 

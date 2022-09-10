@@ -4,6 +4,7 @@ import com.framework.RSFramework;
 
 import versions.ver637.cache.CacheResource;
 import versions.ver637.cache.EnumResource;
+import versions.ver637.cache.StructResource;
 import versions.ver637.cache.XTEAResource;
 import versions.ver637.map.GameObjectResource;
 import versions.ver637.model.GameProcessTick;
@@ -33,6 +34,7 @@ public final class Initializer637 {
 		RSFramework.queueResource(new GameObjectResource());
 		RSFramework.queueResource(new InterfaceResource());
 		RSFramework.queueResource(new EnumResource());
+		RSFramework.queueResource(new StructResource());
 		RSFramework.queueResource(new ClanLoadResource());
 		RSFramework.queueResource(new PluginResource());
 		RSFramework.queueResource(new MusicResource());

@@ -16,7 +16,7 @@ public record GameObjectReachRequest(Player player, String option) implements Co
 		GameObject target = GameObject.class.cast(route.target());
 		RSLocation center = target.getLocation().translate(target.getSizeX() / 2, target.getSizeY() / 2, 0);
 		player.getModel().registerFlag(new FaceLocationFlag(player.getLocation(), center));
-		RSFramework.post(new PlayerUseGameObjectEvent(player, target, option));
+		RSFramework.post(new PlayerReachObjectEvent(player, target, option));
 	}
 
 }

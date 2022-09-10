@@ -131,4 +131,36 @@ public class RSMap {
 		RSChunk chunk = getChunk(absoluteX, absoluteY, absoluteZ);
 		return chunk.hasNPCFlag(absoluteX % RSChunk.TilePlaneSize, absoluteY % RSChunk.TilePlaneSize);
 	}
+
+	/**
+	 * Sets the player flag to the given {@code flagged} value on the chunk based on
+	 * the given absolute coordinates.
+	 * 
+	 * @param absoluteX the absolute x coordinate
+	 * @param absoluteY the absolute y coordinate
+	 * @param absoluteZ the absolute z coordinate
+	 * @param flagged   the flag value to set
+	 */
+	public void setPlayerFlag(int absoluteX, int absoluteY, int absoluteZ, boolean flagged) {
+		RSChunk chunk = getChunk(absoluteX, absoluteY, absoluteZ);
+		if (flagged) {
+			chunk.setPlayerFlag(absoluteX % RSChunk.TilePlaneSize, absoluteY % RSChunk.TilePlaneSize);
+		} else {
+			chunk.removePlayerFlag(absoluteX % RSChunk.TilePlaneSize, absoluteY % RSChunk.TilePlaneSize);
+		}
+	}
+
+	/**
+	 * Returns true if the player flag at the given absolute coordinates is set to
+	 * true. Returns false otherwise.
+	 * 
+	 * @param absoluteX the absolute x coordinate
+	 * @param absoluteY the absolute y coordinate
+	 * @param absoluteZ the absolute z coordinate
+	 * @return true if player flag set; false otherwise
+	 */
+	public boolean hasPlayerFlag(int absoluteX, int absoluteY, int absoluteZ) {
+		RSChunk chunk = getChunk(absoluteX, absoluteY, absoluteZ);
+		return chunk.hasPlayerFlag(absoluteX % RSChunk.TilePlaneSize, absoluteY % RSChunk.TilePlaneSize);
+	}
 }

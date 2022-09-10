@@ -48,8 +48,8 @@ public class SkillTab extends GameInterfaceAdapter {
 			player.getPane().requestInteger(new IntegerRequest("Set XP Target") {
 				@Override
 				public void handleRequest(int value) {
-					if (value > 120) {
-						player.sendMessage("You can only set a target up to level 120.");
+					if (value > 200000000) {
+						player.sendMessage("You can only set target XP up to 200,000,000.");
 						return;
 					}
 					variables.setTarget(type, value, false);
@@ -57,7 +57,7 @@ public class SkillTab extends GameInterfaceAdapter {
 					player.sendMessage("Your target XP for {0} has been set to {1}", type.name(), String.format("%,d", value));
 				}
 			});
-		} else if (data.option() == 5) {
+		} else if (data.option() == 3) {
 			variables.clearTarget(type);
 			SkillVariables.updateTargetLevels(player);
 			player.sendMessage("Your target for {0} has been cleared", type.name());

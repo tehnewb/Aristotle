@@ -12,8 +12,8 @@ public class AddIgnoreFrame extends RSFrame {
 		super(AddIgnoreOpcode, VarByteType);
 		writeByte(0);
 
-		String displayName = account.getAppearanceVariables().username();
-		String previousName = account.getAppearanceVariables().previousUserName();
+		String displayName = account.getAppearanceVariables().getUsername();
+		String previousName = account.getAppearanceVariables().getPreviousUserName();
 
 		if (displayName == null)
 			displayName = account.getUsername();

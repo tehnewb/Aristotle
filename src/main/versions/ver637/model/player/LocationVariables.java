@@ -77,7 +77,7 @@ public class LocationVariables {
 						secondStep = route.next();
 
 					player.setLocation(secondStep == null ? firstStep.location() : secondStep.location());
-					player.getModel().registerFlag(new MovementFlag(firstStep, secondStep, variables.isRunning()));
+					player.getModel().registerFlag(new MovementFlag(firstStep, secondStep, route.isEmpty() ? false : variables.isRunning()));
 				}
 
 				if (player.getPane() != null)

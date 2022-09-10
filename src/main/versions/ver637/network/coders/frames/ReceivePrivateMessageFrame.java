@@ -20,7 +20,7 @@ public class ReceivePrivateMessageFrame extends RSFrame {
 		bytes[0] = (byte) text.length();
 		int length = 1 + Huffman.compress(text, bytes, 1);
 		writeByte(0); // has a previous name?
-		writeRSString(sender.getAppearanceVariables().username());
+		writeRSString(sender.getAppearanceVariables().getUsername());
 		writeShort((int) (messageID >> 32));
 		writeMedium((int) (messageID - ((messageID >> 32) << 32)));
 		writeByte(sender.getAccount().getRank());

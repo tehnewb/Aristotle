@@ -1,6 +1,8 @@
-package versions.ver637.model.player;
+package versions.ver637.model.player.mechanics;
 
 import com.framework.mechanics.queue.RSScriptQueue;
+
+import versions.ver637.model.player.Player;
 
 public class PlayerScriptQueue extends RSScriptQueue<Player> {
 
